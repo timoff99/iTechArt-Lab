@@ -77,6 +77,22 @@ export const colors = {
   background4: "#DADADA",
 };
 
+export const colors = {
+  primary: {
+    main: "#FFBC01",
+  },
+  secondary: {
+    main: "#181818",
+    light: "#494949",
+  },
+  background: {
+    main: "#FFFFFF",
+    light: "#F7F7F7",
+    dark: "#EDEDED",
+    contrast: "#DADADA",
+  },
+};
+
 export const fonts = {
   montserrat: "Montserrat",
   nunito: "Nunito",
