@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
-import { ReactComponent as Logo } from "../../static/logo.svg";
+import { ReactComponent as Logo } from "../../static/icons/logo.svg";
 import { Box } from "../Box";
 import { Button } from "../Button";
 import { Input } from "../Input";
-import { ReactComponent as Send } from "../../static/send.svg";
+import { ReactComponent as Send } from "../../static/icons/send.svg";
 
 const StyledSend = styled(Send)`
   display: flex;

@@ -6,26 +6,18 @@ import { variant } from "styled-system";
 import variants from "./inputVariants";
 import theme from "../../theme";
 import { Button } from "../Button";
-import { ReactComponent as EyeClose } from "./eye-close.svg";
-import smallSearch from "./smallSearch.svg";
-import bigSearch from "./bigSearch.svg";
+import { ReactComponent as EyeClose } from "../../static/icons/eye-close.svg";
+import smallSearch from "../../static/icons/smallSearch.svg";
+import bigSearch from "../../static/icons/bigSearch.svg";
 import { Box } from "../Box";
 
-const LableStyle = styled(Box)`
+const LabelStyle = styled(Box)`
   display: flex;
   flex-direction: column;
-  max-width: 488px;
   position: relative;
 
-  ${() => {
-    return variant({
-      prop: "variantLable",
-      variants: variants(),
-    });
-  }}
-
   ${(props) => {
-    switch (props.lableSize) {
+    switch (props.labelSize) {
       case "sm":
         return `margin-bottom: ${theme.space[0]};`;
       case "md":
@@ -38,17 +30,19 @@ const LableStyle = styled(Box)`
   }}
 `;
 
-const Lable = styled(Box)`
+const Label = styled(Box)`
   margin-bottom: ${theme.space[2]};
   margin-left: ${theme.space[1]};
+  ${({ labelBold }) =>
+    labelBold
+      ? `font-weight: 600; font-family: ${theme.fonts.montserrat}; color: ${theme.colors.secondary.main};`
+      : `font-weight: 400; font-family: ${theme.fonts.nunito}; color: ${theme.colors.secondary.light};`}
 `;
 
 const InputStyle = styled(Box)`
   border: 1px solid ${theme.colors.background.contrast};
   border-radius: 8px;
   height: 54px;
-  max-height: 54px;
-  max-width: 488px;
   padding: ${theme.space[5]};
   outline: none;
 
@@ -62,14 +56,11 @@ const InputStyle = styled(Box)`
   ${(props) => {
     switch (props.inputSize) {
       case "sm":
-        return `background: url(${smallSearch}) ${theme.colors.light} no-repeat 5%;
+        return `background: url(${smallSearch}) ${theme.colors.background.light} no-repeat 5%;
         padding: ${theme.space[5]} ${theme.space[9]};`;
       case "lg":
         return `background: url(${bigSearch}) ${theme.colors.background.main} no-repeat 2%;
-        padding: ${theme.space[5]} ${theme.space[10]};`;
-      default:
-        return `background: url(${smallSearch}) ${theme.colors.light} no-repeat 5%;
-        padding: ${theme.space[5]} ${theme.space[9]};`;
+        padding: ${theme.space[5]} 156px ${theme.space[5]} ${theme.space[10]};`;
     }
   }}
 `;
@@ -88,8 +79,9 @@ const EyeStyle = styled(EyeCloseStyle)`
 
 const StyledButton = styled(Button)`
   position: absolute;
-  right: 10px;
-  top: 12px;
+  right: 16px;
+  top: 50%;
+  transform: translate(0, -45%);
 `;
 
 export const Input = memo(
@@ -101,7 +93,7 @@ export const Input = memo(
     name,
     onChange,
     ClassName,
-    lableBold,
+    labelBold,
     ...props
   }) => {
     const [currentType, setCurrentType] = useState(type);
@@ -119,10 +111,10 @@ export const Input = memo(
       );
 
     return (
-      <LableStyle {...props}>
-        <Lable as="lable" lableBold={lableBold} htmlFor={id}>
-          {lable}
-        </Lable>
+      <LabelStyle {...props}>
+        <Label as="label" labelBold={labelBold} htmlFor={id}>
+          {label}
+        </Label>
         <InputStyle
           {...props}
           as="input"
@@ -134,7 +126,7 @@ export const Input = memo(
         />
         {name === "bigSearch" && <StyledButton size="md">primary</StyledButton>}
         {type === "password" && icon}
-      </LableStyle>
+      </LabelStyle>
     );
   }
 );

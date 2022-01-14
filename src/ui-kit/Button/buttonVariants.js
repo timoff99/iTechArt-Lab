@@ -1,4 +1,4 @@
-export default (disabled) => ({
+export default () => ({
   primary: {
     color: "secondary.main",
     bg: "primary.main",
@@ -9,3 +9,5 @@ export default (disabled) => ({
     bg: "background.main",
     border: "1px solid",
     borderColor: "primary.main",
+  },
+});
