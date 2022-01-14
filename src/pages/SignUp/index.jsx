@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { Button } from "../../ui-kit/Button";
 import { Input } from "../../ui-kit/Input";
-import { ReactComponent as Send } from "../../static/send.svg";
+import { ReactComponent as Send } from "../../static/icons/send.svg";
 
 const StyledSend = styled(Send)`
   display: flex;
