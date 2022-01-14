@@ -68,16 +68,6 @@ export const letterSpacings = [
 export const maxWidths = [433, 947, 1219, 1680];
 
 export const colors = {
-  primaryYellow: "#FFBC01",
-  textMain: "#181818",
-  textSecondary: "#494949",
-  backgroundMain: "#FFFFFF",
-  background2: "#F7F7F7",
-  background3: "#EDEDED",
-  background4: "#DADADA",
-};
-
-export const colors = {
   primary: {
     main: "#FFBC01",
   },
