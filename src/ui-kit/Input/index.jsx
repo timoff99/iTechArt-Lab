@@ -11,7 +11,7 @@ import smallSearch from "./smallSearch.svg";
 import bigSearch from "./bigSearch.svg";
 import { Box } from "../Box";
 
-const LableStyle = styled.label`
+const LableStyle = styled(Box)`
   display: flex;
   flex-direction: column;
   max-width: 488px;
@@ -38,7 +38,7 @@ const LableStyle = styled.label`
   }}
 `;
 
-const SpanStyle = styled.span`
+const Lable = styled(Box)`
   margin-bottom: ${theme.space[2]};
   margin-left: ${theme.space[1]};
 `;
@@ -64,13 +64,12 @@ const InputStyle = styled(Box)`
       case "sm":
         return `background: url(${smallSearch}) ${theme.colors.light} no-repeat 5%;
         padding: ${theme.space[5]} ${theme.space[9]};`;
-      case "md":
-        return ``;
       case "lg":
         return `background: url(${bigSearch}) ${theme.colors.background.main} no-repeat 2%;
         padding: ${theme.space[5]} ${theme.space[10]};`;
       default:
-        return ``;
+        return `background: url(${smallSearch}) ${theme.colors.light} no-repeat 5%;
+        padding: ${theme.space[5]} ${theme.space[9]};`;
     }
   }}
 `;
@@ -94,7 +93,17 @@ const StyledButton = styled(Button)`
 `;
 
 export const Input = memo(
-  ({ type, label, placeholder, name, onChange, ClassName, ...props }) => {
+  ({
+    id,
+    type,
+    label,
+    placeholder,
+    name,
+    onChange,
+    ClassName,
+    lableBold,
+    ...props
+  }) => {
     const [currentType, setCurrentType] = useState(type);
 
     const onEyeClick = () => {
@@ -110,24 +119,22 @@ export const Input = memo(
       );
 
     return (
-      <LableStyle htmlFor="input" {...props}>
+      <LableStyle {...props}>
+        <Lable as="lable" lableBold={lableBold} htmlFor={id}>
+          {lable}
+        </Lable>
         <InputStyle
           {...props}
           as="input"
+          id={id}
           type={currentType}
           name={name}
           placeholder={placeholder}
           // onChange={onChange}
         />
-        {name === "bigSearch" && (
-          <StyledButton size="md1">primary</StyledButton>
-        )}
+        {name === "bigSearch" && <StyledButton size="md">primary</StyledButton>}
         {type === "password" && icon}
       </LableStyle>
     );
   }
 );
-
-Input.defaultProps = {
-  variant: "smallLabel",
-};
