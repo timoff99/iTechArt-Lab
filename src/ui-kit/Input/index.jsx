@@ -1,7 +1,10 @@
 import React from "react";
 import { useState, memo } from "react";
 import styled from "styled-components";
+import { variant } from "styled-system";
 
+import variants from "./inputVariants";
+import theme from "../../theme";
 import { Button } from "../Button";
 import { ReactComponent as EyeClose } from "./eye-close.svg";
 import smallSearch from "./smallSearch.svg";
@@ -9,80 +12,67 @@ import bigSearch from "./bigSearch.svg";
 import { Box } from "../Box";
 
 const LableStyle = styled.label`
-  ${({ theme }) => `
-    display: flex;
-    flex-direction: column;
-    max-width: 488px;
-    margin-bottom: ${theme.space[8]};
-    position: relative;
-  `}
-`;
+  display: flex;
+  flex-direction: column;
+  max-width: 488px;
+  position: relative;
 
-const LableForSmallSearchStyle = styled(LableStyle)`
-  ${({ theme }) => `
-    max-height: 40px;
-    max-width: 284px;
-    margin-bottom: ${theme.space[0]};
-  `}
-`;
+  ${() => {
+    return variant({
+      prop: "variantLable",
+      variants: variants(),
+    });
+  }}
 
-const LableForBigSearchStyle = styled(LableStyle)`
-  ${({ theme }) => `
-    max-height: 70px;
-    max-width: 1016px;
-    margin-bottom: ${theme.space[9]};
-  `}
+  ${(props) => {
+    switch (props.lableSize) {
+      case "sm":
+        return `margin-bottom: ${theme.space[0]};`;
+      case "md":
+        return `margin-bottom: ${theme.space[8]};`;
+      case "lg":
+        return `margin-bottom: ${theme.space[9]};`;
+      default:
+        return `margin-bottom: ${theme.space[8]};`;
+    }
+  }}
 `;
 
 const SpanStyle = styled.span`
-  ${({ theme }) => `
-    margin-bottom: ${theme.space[2]};
-    margin-left: ${theme.space[1]};
-  `}
+  margin-bottom: ${theme.space[2]};
+  margin-left: ${theme.space[1]};
 `;
 
 const InputStyle = styled(Box)`
-  ${({ theme }) => `
-    border: 1px solid #dadada;
-    border-radius: 8px;
-    height: 54px;
-    max-height: 54px;
-    max-width: 488px;
-    padding: ${theme.space[5]};
-    outline: none;
-  `}
-`;
+  border: 1px solid ${theme.colors.background.contrast};
+  border-radius: 8px;
+  height: 54px;
+  max-height: 54px;
+  max-width: 488px;
+  padding: ${theme.space[5]};
+  outline: none;
 
-const InputForSmallSearchStyle = styled(InputStyle)`
-  ${({ theme }) => `
-    border: 0;
-    border-radius: 10px;
-    max-height: 40px;
-    max-width: 284px;
+  ${() => {
+    return variant({
+      prop: "variantInput",
+      variants: variants(),
+    });
+  }}
 
-    background: url(${smallSearch}) ${theme.colors.background2} no-repeat 5%;
-    padding: ${theme.space[5]} 36px;
-  `}
-`;
-
-const InputForBigSearchStyle = styled(InputStyle)`
-  ${({ theme }) => `
-    border: 0;
-    border-radius: 10px;
-    height: 70px;
-    max-height: 70px;
-    max-width: 1016px;
-
-    font-family: ${theme.fonts.nunito};
-    font-style: normal;
-    font-weight: normal;
-    font-size: 18px;
-    line-height: 22px;
-
-    background: url(${bigSearch}) ${theme.colors.backgroundMain} no-repeat 2%;
-    padding: ${theme.space[5]} 56px;
-    padding-right: 156px;
-  `}
+  ${(props) => {
+    switch (props.inputSize) {
+      case "sm":
+        return `background: url(${smallSearch}) ${theme.colors.light} no-repeat 5%;
+        padding: ${theme.space[5]} ${theme.space[9]};`;
+      case "md":
+        return ``;
+      case "lg":
+        return `background: url(${bigSearch}) ${theme.colors.background.main} no-repeat 2%;
+        padding: ${theme.space[5]} ${theme.space[10]};`;
+      default:
+        return ``;
+    }
+  }}
 `;
 
 const EyeCloseStyle = styled(EyeClose)`
@@ -104,7 +94,7 @@ const StyledButton = styled(Button)`
 `;
 
 export const Input = memo(
-  ({ type, label, placeholder, name, onChange, ClassName }) => {
+  ({ type, label, placeholder, name, onChange, ClassName, ...props }) => {
     const [currentType, setCurrentType] = useState(type);
 
     const onEyeClick = () => {
@@ -119,48 +109,25 @@ export const Input = memo(
         <EyeStyle onClick={onEyeClick} />
       );
 
-    if (name === "smallSearch") {
-      return (
-        <LableForSmallSearchStyle htmlFor="input">
-          <InputForSmallSearchStyle
-            as="input"
-            type={currentType}
-            name={name}
-            // onChange={onChange}
-          />
-        </LableForSmallSearchStyle>
-      );
-    }
-
-    if (name === "bigSearch") {
-      return (
-        <LableForBigSearchStyle htmlFor="input">
-          <InputForBigSearchStyle
-            as="input"
-            type={currentType}
-            name={name}
-            placeholder={placeholder}
-            // onChange={onChange}
-          />
+    return (
+      <LableStyle htmlFor="input" {...props}>
+        <InputStyle
+          {...props}
+          as="input"
+          type={currentType}
+          name={name}
+          placeholder={placeholder}
+          // onChange={onChange}
+        />
+        {name === "bigSearch" && (
           <StyledButton size="md1">primary</StyledButton>
-        </LableForBigSearchStyle>
-      );
-    }
-
-    if (name === "Password" || "Email") {
-      return (
-        <LableStyle htmlFor="input">
-          <SpanStyle>{label}</SpanStyle>
-          <InputStyle
-            as="input"
-            type={currentType}
-            placeholder={placeholder}
-            name={name}
-            // onChange={onChange}
-          />
-          {type === "password" && icon}
-        </LableStyle>
-      );
-    }
+        )}
+        {type === "password" && icon}
+      </LableStyle>
+    );
   }
 );
+
+Input.defaultProps = {
+  variant: "smallLabel",
+};
