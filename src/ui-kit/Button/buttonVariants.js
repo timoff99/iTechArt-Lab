@@ -1,13 +1,11 @@
-export default () => ({
+export default (disabled) => ({
   primary: {
-    color: "textMain",
-    bg: "primaryYellow",
+    color: "secondary.main",
+    bg: "primary.main",
   },
 
   outlined: {
-    color: "#FFBC01",
-    bg: "backgroundMain",
+    color: "primary.main",
+    bg: "background.main",
     border: "1px solid",
-    borderColor: "#FFBC01",
-  },
-});
+    borderColor: "primary.main",
