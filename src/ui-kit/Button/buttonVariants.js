@@ -9,5 +9,3 @@ export default (disabled) => ({
     bg: "background.main",
     border: "1px solid",
     borderColor: "primary.main",
-  },
-});
