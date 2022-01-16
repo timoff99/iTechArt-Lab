@@ -1,67 +1,30 @@
 import React from "react";
 import styled from "styled-components";
+import { Box } from "../../ui-kit/Box";
 
-import { Button } from "../../ui-kit/Button";
-import { Input } from "../../ui-kit/Input";
-import { ReactComponent as Send } from "../../static/icons/send.svg";
+import { Form } from "../../ui-kit/Form";
+import signUpBg from "../../static/images/signupBg.png";
+import { signUpData } from "./mockData";
 
-const StyledSend = styled(Send)`
+const StyledLogin = styled(Box)`
   display: flex;
-  align-items: center;
-  justify-content: center;
+  background: url(${signUpBg}) no-repeat left;
+  background-size: 66% 100%;
+  border-radius: 40px 10px;
+  margin: 32px;
+  justify-content: flex-end;
 `;
+
 export const SignUp = () => {
   return (
-    <div>
-      <Input
-        type="text"
-        label="Email"
-        name="Email"
-        placeholder="loremsdfsdfsdfsdfsdfsdfsdfdf"
-        onChange={undefined}
-        ClassName={undefined}
+    <StyledLogin>
+      <Form
+        title="Join Our Community"
+        description="Already have an account?"
+        link="Sign In"
+        inputData={signUpData}
+        buttonText="Sign Up"
       />
-      <Input
-        type="password"
-        label="Password"
-        name="Password"
-        placeholder="Secret word"
-        onChange={undefined}
-        ClassName={undefined}
-      />
-      <Input
-        type="text"
-        name="smallSearch"
-        variantLable="smallLabel"
-        variantInput="smallInput"
-        inputSize="sm"
-        lableSize="sm"
-        onChange={undefined}
-        ClassName={undefined}
-      />
-      <Input
-        type="text"
-        name="bigSearch"
-        variantLable="bigLable"
-        variantInput="bigInput"
-        inputSize="lg"
-        lableSize="lg"
-        placeholder="Find Best Recipies..."
-        onChange={undefined}
-        ClassName={undefined}
-      />
-      <Button size="sm" loading={false}>
-        <StyledSend />
-      </Button>
-      <Button size="md1" loading={false}>
-        primary
-      </Button>
-      <Button size="lg1" loading={false}>
-        efwefewfw wefewfewfw
-      </Button>
-      <Button size="lg2" loading={false} variant="outlined">
-        secondary
-      </Button>
-    </div>
+    </StyledLogin>
   );
 };

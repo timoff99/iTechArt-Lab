@@ -5,34 +5,55 @@ import { ReactComponent as Logo } from "../../static/icons/logo.svg";
 import { Box } from "../Box";
 import { Button } from "../Button";
 import { Input } from "../Input";
-import { ReactComponent as Send } from "../../static/icons/send.svg";
+import theme from "../../theme";
 
-const StyledSend = styled(Send)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
 const StyledForm = styled(Box)`
-  background: #cfc7c7;
+  background: ${theme.colors.background.main};
   width: 600px;
-  height: 654px;
   box-shadow: 0px 0px 16px rgba(0, 0, 0, 15%);
   margin: 100px;
   border-radius: 40px 10px;
   padding: 50px;
 `;
 
-export const Form = ({ title, description, inputData, buttonText }) => {
+const StyledH3 = styled(Box)`
+  font-family: ${theme.fonts.montserrat};
+  font-weight: bold;
+  font-size: ${theme.fontSizes[3]};
+  color: ${theme.colors.secondary.main};
+`;
+
+const StyledP = styled(Box)`
+  font-weight: 600;
+`;
+
+const StyledSpan = styled(StyledP)`
+  color: ${theme.colors.primary.main};
+  cursor: pointer;
+`;
+export const Form = ({
+  title,
+  description,
+  link,
+  inputData,
+  buttonText,
+  ...props
+}) => {
   return (
-    <StyledForm>
+    <StyledForm {...props}>
       <Logo />
-      <h3>{title}</h3>
-      <p>{description}</p>
+      <StyledH3 mt="42px">{title}</StyledH3>
+      <StyledP as="p" mb="40px">
+        {description}{" "}
+        <StyledSpan as="span" onClick={() => console.log(1)}>
+          {link}
+        </StyledSpan>
+      </StyledP>
       {inputData.map((props) => {
         return <Input {...props} />;
       })}
 
-      <Button>{buttonText}</Button>
+      <Button size="fit">{buttonText}</Button>
     </StyledForm>
   );
 };

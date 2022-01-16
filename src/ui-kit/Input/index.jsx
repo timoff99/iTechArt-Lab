@@ -84,6 +84,14 @@ const StyledButton = styled(Button)`
   transform: translate(0, -45%);
 `;
 
+const StyledSpan = styled(Box)`
+  font-weight: 600;
+  color: ${theme.colors.primary.main};
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+`;
+
 export const Input = memo(
   ({
     id,
@@ -124,6 +132,7 @@ export const Input = memo(
           placeholder={placeholder}
           // onChange={onChange}
         />
+        {name === "Password" && <StyledSpan>Forgot password?</StyledSpan>}
         {name === "bigSearch" && <StyledButton size="md">primary</StyledButton>}
         {type === "password" && icon}
       </LabelStyle>
