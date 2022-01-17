@@ -32,8 +32,11 @@ const LabelStyle = styled(Box)`
 `;
 
 const Label = styled(Box)`
-  margin-bottom: ${theme.space[2]};
-  margin-left: ${theme.space[1]};
+  ${({ label }) =>
+    label
+      ? `margin-bottom: ${theme.space[2]}; margin-left: ${theme.space[1]};`
+      : `margin-bottom: ${theme.space[0]}; margin-left: ${theme.space[0]};`};
+
   ${({ labelBold }) =>
     labelBold
       ? `font-weight: 600; font-family: ${theme.fonts.montserrat}; color: ${theme.colors.secondary.main};`
@@ -93,9 +96,8 @@ const StyledSpan = styled(Box)`
   right: 0;
 `;
 
-export const Input = memo(({ id, type, label, placeholder, name, labelBold, ...props }) => {
+export const Input = memo(({ id, type, label, placeholder, name, labelBold, labelSize, ...props }) => {
   const [currentType, setCurrentType] = useState(type);
-
   const onEyeClick = () => {
     if (currentType === "password") setCurrentType("text");
     else setCurrentType("password");
@@ -104,8 +106,8 @@ export const Input = memo(({ id, type, label, placeholder, name, labelBold, ...p
   const icon = currentType === "password" ? <EyeCloseStyle onClick={onEyeClick} /> : <EyeStyle onClick={onEyeClick} />;
 
   return (
-    <LabelStyle>
-      <Label as="label" labelBold={labelBold} htmlFor={id}>
+    <LabelStyle labelSize={labelSize}>
+      <Label as="label" label={label} labelBold={labelBold} htmlFor={id}>
         {label}
       </Label>
       <InputStyle {...props} as="input" id={id} type={currentType} name={name} placeholder={placeholder} />

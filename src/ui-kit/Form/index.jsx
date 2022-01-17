@@ -35,26 +35,16 @@ const Span = styled(P)`
   color: ${theme.colors.primary.main};
   cursor: pointer;
 `;
-export const Form = ({
-  title,
-  description,
-  link,
-  inputData,
-  buttonText,
-  ...props
-}) => {
+export const Form = ({ title, description, link, inputData, buttonText, ...props }) => {
   return (
     <StyledForm {...props}>
       <Logo />
       <H3>{title}</H3>
       <P as="p">
-        {description}{" "}
-        <Span as="span" onClick={() => console.log(1)}>
-          {link}
-        </Span>
+        {description} <Span as="span">{link}</Span>
       </P>
-      {inputData.map((props), index => {
-        return <Input key={index} {...props} />;
+      {inputData.map((data, index) => {
+        return <Input key={index} {...data} />;
       })}
 
       <Button size="fit" mt="14px">
@@ -70,4 +60,4 @@ Form.propTypes = {
   link: PropTypes.string,
   inputData: PropTypes.array,
   buttonText: PropTypes.string,
-}
+};

@@ -2,13 +2,19 @@ import React from "react";
 import styled from "styled-components";
 
 import { Container } from "../Container";
-import { Col } from "../Grid/Col";
 import { ReactComponent as Logo } from "../../static/icons/logo.svg";
 import person from "../../static/icons/person.svg";
 import { Input } from "../Input";
 import { Button } from "../Button";
 import { Box } from "../Box";
 import theme from "../../theme";
+
+const StyledContainer = styled(Container)`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 17px auto;
+`;
 
 const Ul = styled(Box)`
   display: flex;
@@ -17,12 +23,22 @@ const Ul = styled(Box)`
   color: ${theme.colors.secondary.main};
 `;
 
-const Li = styled(Box)``;
+const Li = styled(Box)`
+  margin-right: 72px;
+  &:last-child {
+    margin-right: 0px;
+  }
+`;
+
+const User = styled(Box)`
+  display: flex;
+  align-items: center;
+`;
 
 export const Header = () => {
   return (
     <Box boxShadow="0px 0px 16px rgba(0, 0, 0, 0.08)">
-      <Container display="flex" alignItems="center">
+      <StyledContainer>
         <Logo />
         <Ul as="ul">
           <Li as="li">Recepies</Li>
@@ -39,11 +55,11 @@ export const Header = () => {
         <Button size="sm" variant="outlined">
           Create cookBook
         </Button>
-        <div>
+        <User>
           <img src={person} alt="person" />
           <span>John Doe</span>
-        </div>
-      </Container>
+        </User>
+      </StyledContainer>
     </Box>
   );
 };
