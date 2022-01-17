@@ -6,9 +6,13 @@ export const breakpoints = breakpointsAsInts.map((bp) => `${bp}px`);
 /* Defining media queries for use as props */
 export const mediaQueries = {
   small: `@media screen and (max-width: ${breakpoints[0]})`,
-  medium: `@media screen and (min-width: ${breakpoints[0]} + 1px)`,
+  medium: `@media screen and (min-width: ${breakpoints[0]})`,
   large: `@media screen and (min-width: ${breakpoints[1]})`,
 };
+
+export const GUTTER = 24;
+
+export const GRID_COLS = [4, 12, 12];
 
 export const space = [
   "0",

@@ -1,4 +1,4 @@
-export const loginData = [
+export const signUpData = [
   {
     type: "text",
     label: "Email",
@@ -8,5 +8,10 @@ export const loginData = [
     type: "password",
     label: "Password",
     name: "Password",
+  },
+  {
+    type: "password",
+    label: "Confirm Password",
+    name: "Confirm Password",
   },
 ];

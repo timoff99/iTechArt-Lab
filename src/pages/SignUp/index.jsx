@@ -1,67 +1,50 @@
 import React from "react";
 import styled from "styled-components";
+import { Box } from "../../ui-kit/Box";
 
-import { Button } from "../../ui-kit/Button";
-import { Input } from "../../ui-kit/Input";
-import { ReactComponent as Send } from "../../static/icons/send.svg";
+import { Form } from "../../ui-kit/Form";
+import signUpBg from "../../static/images/signupBg.png";
+import { signUpData } from "./mockData";
+import { Grid } from "../../ui-kit/Grid";
+import { Container } from "../../ui-kit/Container";
+import { Col } from "../../ui-kit/Grid/Col";
+import { mediaQueries } from "../../theme";
 
-const StyledSend = styled(Send)`
+const StyledLogin = styled(Box)`
   display: flex;
-  align-items: center;
-  justify-content: center;
+  background: url(${signUpBg}) no-repeat left;
+  background-size: cover;
+  border-radius: 40px 10px;
+  justify-content: flex-end;
+  position: absolute;
+  height: calc(100% - 32px);
+  top: 16px;
+  width: 100%;
+  z-index: -1;
+  ${mediaQueries.medium} {
+    left: 0;
+  }
+  ${mediaQueries.large} {
+    left: -200px;
+  }
 `;
+
 export const SignUp = () => {
   return (
-    <div>
-      <Input
-        type="text"
-        label="Email"
-        name="Email"
-        placeholder="loremsdfsdfsdfsdfsdfsdfsdfdf"
-        onChange={undefined}
-        ClassName={undefined}
-      />
-      <Input
-        type="password"
-        label="Password"
-        name="Password"
-        placeholder="Secret word"
-        onChange={undefined}
-        ClassName={undefined}
-      />
-      <Input
-        type="text"
-        name="smallSearch"
-        variantLable="smallLabel"
-        variantInput="smallInput"
-        inputSize="sm"
-        lableSize="sm"
-        onChange={undefined}
-        ClassName={undefined}
-      />
-      <Input
-        type="text"
-        name="bigSearch"
-        variantLable="bigLable"
-        variantInput="bigInput"
-        inputSize="lg"
-        lableSize="lg"
-        placeholder="Find Best Recipies..."
-        onChange={undefined}
-        ClassName={undefined}
-      />
-      <Button size="sm" loading={false}>
-        <StyledSend />
-      </Button>
-      <Button size="md1" loading={false}>
-        primary
-      </Button>
-      <Button size="lg1" loading={false}>
-        efwefewfw wefewfewfw
-      </Button>
-      <Button size="lg2" loading={false} variant="outlined">
-        secondary
-      </Button>
-    </div>
+    <Container position="relative">
+      <StyledLogin />
+      <Grid nested minHeight="100vh" alignItems="center">
+        <Col offset={[0, 1, 6]} span={[4, 10, 6]}>
+          <Form
+            my={5}
+            title="Join Our Community"
+            description="Already have an account?"
+            link="Sign In"
+            inputData={signUpData}
+            buttonText="Sign Up"
+          />
+        </Col>
+      </Grid>
+    </Container>
   );
 };
