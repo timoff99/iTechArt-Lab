@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 import { ReactComponent as Logo } from "../../static/icons/logo.svg";
 import { Box } from "../Box";
@@ -52,8 +53,8 @@ export const Form = ({
           {link}
         </Span>
       </P>
-      {inputData.map((props) => {
-        return <Input {...props} />;
+      {inputData.map((props), index => {
+        return <Input key={index} {...props} />;
       })}
 
       <Button size="fit" mt="14px">
@@ -62,3 +63,11 @@ export const Form = ({
     </StyledForm>
   );
 };
+
+Form.propTypes = {
+  title: PropTypes.string,
+  description: PropTypes.string,
+  link: PropTypes.string,
+  inputData: PropTypes.array,
+  buttonText: PropTypes.string,
+}

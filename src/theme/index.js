@@ -69,7 +69,7 @@ export const letterSpacings = [
 ];
 
 /* Max-widths based on breakpoints */
-export const maxWidths = [433, 947, 1219, 1680];
+export const maxWidths = [433, 740, 1248, 1680];
 
 export const colors = {
   primary: {

@@ -1,6 +1,8 @@
 import styled from "styled-components";
+
 import { Box } from "../Box";
 import { GUTTER, mediaQueries } from "../../theme";
+import theme from "../../theme";
 
 export const Container = styled(Box)`
   width: 100%;
@@ -16,10 +18,10 @@ export const Container = styled(Box)`
     !fullBleed &&
     `
    ${mediaQueries.medium} {
-      max-width: 740px;
+      max-width: ${theme.maxWidths[1]}px;
    }
    ${mediaQueries.large} {
-      max-width: 1248px;
+      max-width: ${theme.maxWidths[2]}px;
    }
   `}
 `;

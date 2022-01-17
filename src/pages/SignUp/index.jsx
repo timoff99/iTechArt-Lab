@@ -21,11 +21,15 @@ const StyledLogin = styled(Box)`
   top: 16px;
   width: 100%;
   z-index: -1;
+  
   ${mediaQueries.medium} {
     left: 0;
   }
   ${mediaQueries.large} {
-    left: -200px;
+    left: -6vw;
+  }
+  @media (min-width: 1600px) {
+    left: -10vw;
   }
 `;
 

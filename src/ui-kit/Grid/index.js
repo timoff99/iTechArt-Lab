@@ -4,6 +4,7 @@ import { Box } from "../Box";
 import { Container } from "../Container";
 import { GUTTER } from "../../theme";
 import { Col } from "./Col";
+import PropTypes from 'prop-types';
 
 const BaseGrid = styled(Box)`
   display: flex;
@@ -33,3 +34,9 @@ export const Grid = ({ fullBleed, nested, ...props }) => {
     </Container>
   );
 };
+
+Grid.propTypes = {
+  fullBleed: PropTypes.bool,
+  nested: PropTypes.bool,
+  noPadding: PropTypes.bool,
+}

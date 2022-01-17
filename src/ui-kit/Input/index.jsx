@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, memo } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { variant } from "styled-system";
 
@@ -92,50 +93,34 @@ const StyledSpan = styled(Box)`
   right: 0;
 `;
 
-export const Input = memo(
-  ({
-    id,
-    type,
-    label,
-    placeholder,
-    name,
-    onChange,
-    ClassName,
-    labelBold,
-    ...props
-  }) => {
-    const [currentType, setCurrentType] = useState(type);
+export const Input = memo(({ id, type, label, placeholder, name, labelBold, ...props }) => {
+  const [currentType, setCurrentType] = useState(type);
 
-    const onEyeClick = () => {
-      if (currentType === "password") setCurrentType("text");
-      else setCurrentType("password");
-    };
+  const onEyeClick = () => {
+    if (currentType === "password") setCurrentType("text");
+    else setCurrentType("password");
+  };
 
-    const icon =
-      currentType === "password" ? (
-        <EyeCloseStyle onClick={onEyeClick} />
-      ) : (
-        <EyeStyle onClick={onEyeClick} />
-      );
+  const icon = currentType === "password" ? <EyeCloseStyle onClick={onEyeClick} /> : <EyeStyle onClick={onEyeClick} />;
 
-    return (
-      <LabelStyle {...props}>
-        <Label as="label" labelBold={labelBold} htmlFor={id}>
-          {label}
-        </Label>
-        <InputStyle
-          {...props}
-          as="input"
-          id={id}
-          type={currentType}
-          name={name}
-          placeholder={placeholder}
-          // onChange={onChange}
-        />
-        {name === "Password" && <StyledSpan>Forgot password?</StyledSpan>}
-        {name === "bigSearch" && <StyledButton size="md">primary</StyledButton>}
-        {type === "password" && icon}
-      </LabelStyle>
-    );
-  }
-);
+  return (
+    <LabelStyle>
+      <Label as="label" labelBold={labelBold} htmlFor={id}>
+        {label}
+      </Label>
+      <InputStyle {...props} as="input" id={id} type={currentType} name={name} placeholder={placeholder} />
+      {name === "Password" && <StyledSpan>Forgot password?</StyledSpan>}
+      {name === "bigSearch" && <StyledButton size="md">primary</StyledButton>}
+      {type === "password" && icon}
+    </LabelStyle>
+  );
+});
+
+Input.propTypes = {
+  id: PropTypes.number,
+  type: PropTypes.string,
+  label: PropTypes.string,
+  placeholder: PropTypes.string,
+  name: PropTypes.string,
+  labelBold: PropTypes.string,
+};
