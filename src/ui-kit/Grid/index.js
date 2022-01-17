@@ -1,8 +1,8 @@
+import React from "react";
 import styled from "styled-components";
 import { Box } from "../Box";
 import { Container } from "../Container";
 import { GUTTER } from "../../theme";
-import React from "react";
 import { Col } from "./Col";
 
 const BaseGrid = styled(Box)`

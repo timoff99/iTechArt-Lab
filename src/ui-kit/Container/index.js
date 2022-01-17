@@ -19,7 +19,7 @@ export const Container = styled(Box)`
       max-width: 740px;
    }
    ${mediaQueries.large} {
-      max-width: 1224px;
+      max-width: 1248px;
    }
   `}
 `;

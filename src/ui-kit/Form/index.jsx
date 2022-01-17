@@ -9,25 +9,28 @@ import theme from "../../theme";
 
 const StyledForm = styled(Box)`
   background: ${theme.colors.background.main};
-  width: 600px;
   box-shadow: 0px 0px 16px rgba(0, 0, 0, 15%);
-  margin: 100px;
   border-radius: 40px 10px;
-  padding: 50px;
+  padding: 72px 56px;
+  position: relative;
+  z-index: 2;
 `;
 
-const StyledH3 = styled(Box)`
+const H3 = styled(Box)`
   font-family: ${theme.fonts.montserrat};
   font-weight: bold;
   font-size: ${theme.fontSizes[3]};
   color: ${theme.colors.secondary.main};
+  margin-top: 48px;
+  margin-bottom: 8px;
 `;
 
-const StyledP = styled(Box)`
+const P = styled(Box)`
   font-weight: 600;
+  margin-bottom: 40px;
 `;
 
-const StyledSpan = styled(StyledP)`
+const Span = styled(P)`
   color: ${theme.colors.primary.main};
   cursor: pointer;
 `;
@@ -42,18 +45,20 @@ export const Form = ({
   return (
     <StyledForm {...props}>
       <Logo />
-      <StyledH3 mt="42px">{title}</StyledH3>
-      <StyledP as="p" mb="40px">
+      <H3>{title}</H3>
+      <P as="p">
         {description}{" "}
-        <StyledSpan as="span" onClick={() => console.log(1)}>
+        <Span as="span" onClick={() => console.log(1)}>
           {link}
-        </StyledSpan>
-      </StyledP>
+        </Span>
+      </P>
       {inputData.map((props) => {
         return <Input {...props} />;
       })}
 
-      <Button size="fit">{buttonText}</Button>
+      <Button size="fit" mt="14px">
+        {buttonText}
+      </Button>
     </StyledForm>
   );
 };
