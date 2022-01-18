@@ -6,12 +6,14 @@ import { Box } from "../../ui-kit/Box";
 import { Grid } from "../../ui-kit/Grid";
 import { Col } from "../../ui-kit/Grid/Col";
 import { Input } from "../../ui-kit/Input";
-import { listMenu } from "./mockData";
+import { listMenu, cardList } from "./mockData";
 import homeBg from "../../static/images/homeBg.png";
 import { Ul, Li } from "../../ui-kit/List";
-import { LinkRenderer, Heading } from "../../ui-kit/Text";
+import { LinkRenderer, Heading, Paragraph } from "../../ui-kit/Text";
 import { Container } from "../../ui-kit/Container";
 import { mediaQueries } from "../../theme";
+import { Card } from "../../ui-kit/Card";
+import { Button } from "../../ui-kit/Button";
 
 const StyledLinkRenderer = styled(LinkRenderer)`
   color: ${theme.colors.background.main};
@@ -72,6 +74,28 @@ export const Home = () => {
             })}
           </Ul>
         </Grid>
+      </Container>
+      <Container mt={105} textAlign="center">
+        <Paragraph uppercase fontSize={1} mb={8} color="primary.main">
+          users choice
+        </Paragraph>
+        <Heading as={"h2"} bold mb={8} color="secondary.main">
+          20 Highest-Rated Recipes
+        </Heading>
+        <Grid nested mb={11}>
+          {cardList.map((props, index) => {
+            return (
+              <Col key={index} span={[4, 6, 3]}>
+                <LinkRenderer href="/" color="secondary.main" inline>
+                  <Card {...props} sizes="sm" />
+                </LinkRenderer>
+              </Col>
+            );
+          })}
+        </Grid>
+        <Button size="lg" variant="outlined" mb={13}>
+          Show More
+        </Button>
       </Container>
     </Container>
   );
