@@ -11,6 +11,7 @@ import { ReactComponent as EyeClose } from "../../static/icons/eye-close.svg";
 import smallSearch from "../../static/icons/smallSearch.svg";
 import bigSearch from "../../static/icons/bigSearch.svg";
 import { Box } from "../Box";
+import { LinkRenderer } from "../Text";
 
 const LabelStyle = styled(Box)`
   display: flex;
@@ -22,11 +23,11 @@ const LabelStyle = styled(Box)`
       case "sm":
         return `margin-bottom: ${theme.space[0]};`;
       case "md":
-        return `margin-bottom: ${theme.space[8]};`;
-      case "lg":
         return `margin-bottom: ${theme.space[9]};`;
+      case "lg":
+        return `margin-bottom: ${theme.space[10]};`;
       default:
-        return `margin-bottom: ${theme.space[8]};`;
+        return `margin-bottom: ${theme.space[9]};`;
     }
   }}
 `;
@@ -39,8 +40,8 @@ const Label = styled(Box)`
 
   ${({ labelBold }) =>
     labelBold
-      ? `font-weight: 600; font-family: ${theme.fonts.montserrat}; color: ${theme.colors.secondary.main};`
-      : `font-weight: 400; font-family: ${theme.fonts.nunito}; color: ${theme.colors.secondary.light};`}
+      ? `font-weight: 600; font-family: ${theme.fonts.header}; color: ${theme.colors.secondary.main};`
+      : `font-weight: 400; font-family: ${theme.fonts.paragraph}; color: ${theme.colors.secondary.light};`}
 `;
 
 const InputStyle = styled(Box)`
@@ -61,10 +62,10 @@ const InputStyle = styled(Box)`
     switch (props.inputSize) {
       case "sm":
         return `background: url(${smallSearch}) ${theme.colors.background.light} no-repeat 5%;
-        padding: ${theme.space[5]} ${theme.space[9]};`;
+        padding: ${theme.space[5]} ${theme.space[10]};`;
       case "lg":
         return `background: url(${bigSearch}) ${theme.colors.background.main} no-repeat 2%;
-        padding: ${theme.space[5]} 156px ${theme.space[5]} ${theme.space[10]};`;
+        padding: ${theme.space[5]} 156px ${theme.space[5]} ${theme.space[11]};`;
     }
   }}
 `;
@@ -111,7 +112,11 @@ export const Input = memo(({ id, type, label, placeholder, name, labelBold, labe
         {label}
       </Label>
       <InputStyle {...props} as="input" id={id} type={currentType} name={name} placeholder={placeholder} />
-      {name === "Password" && <StyledSpan>Forgot password?</StyledSpan>}
+      {name === "Password" && (
+        <LinkRenderer href="/" semiBold position="absolute" top="0" right="0">
+          Forgot password?
+        </LinkRenderer>
+      )}
       {name === "bigSearch" && <StyledButton size="md">primary</StyledButton>}
       {type === "password" && icon}
     </LabelStyle>

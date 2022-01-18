@@ -21,7 +21,7 @@ const StyledLogin = styled(Box)`
   top: 16px;
   width: 100%;
   z-index: -1;
-  
+
   ${mediaQueries.medium} {
     left: 0;
   }
@@ -46,6 +46,7 @@ export const SignUp = () => {
             link="Sign In"
             inputData={signUpData}
             buttonText="Sign Up"
+            href="/login"
           />
         </Col>
       </Grid>

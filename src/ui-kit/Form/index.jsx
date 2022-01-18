@@ -7,7 +7,7 @@ import { Box } from "../Box";
 import { Button } from "../Button";
 import { Input } from "../Input";
 import theme from "../../theme";
-import {Heading, Paragraph} from "../Text";
+import { Heading, Paragraph, LinkRenderer } from "../Text";
 
 const StyledForm = styled(Box)`
   background: ${theme.colors.background.main};
@@ -18,17 +18,18 @@ const StyledForm = styled(Box)`
   z-index: 2;
 `;
 
-const Span = styled(P)`
-  color: ${theme.colors.primary.main};
-  cursor: pointer;
-`;
-export const Form = ({ title, description, link, inputData, buttonText, ...props }) => {
+export const Form = ({ title, description, link, inputData, href, buttonText, ...props }) => {
   return (
     <StyledForm {...props}>
       <Logo />
-      <Heading mt={8} mb={2} as={'h3'}>{title}</Heading>
-      <Paragraph semiBold mb={9}>
-        {description} <Span as="span">{link}</Span>
+      <Heading mt={8} mb={2} as={"h2"} bold>
+        {title}
+      </Heading>
+      <Paragraph semiBold mb={9} fontSize={1}>
+        {description}{" "}
+        <LinkRenderer href={href} inline>
+          {link}
+        </LinkRenderer>
       </Paragraph>
       {inputData.map((data, index) => {
         return <Input key={index} {...data} />;

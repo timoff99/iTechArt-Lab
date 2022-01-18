@@ -12,7 +12,7 @@ import { mediaQueries } from "../../theme";
 
 const StyledLogin = styled(Box)`
   display: flex;
-  background: url(${loginBg}) no-repeat right;
+  background: url(${loginBg}) no-repeat left;
   background-size: cover;
   border-radius: 40px 10px;
   position: absolute;
@@ -24,7 +24,7 @@ const StyledLogin = styled(Box)`
     left: 0;
   }
   ${mediaQueries.large} {
-    left: -200px;
+    left: 200px;
   }
 `;
 
@@ -33,7 +33,7 @@ export const LogIn = () => {
     <Container position="relative">
       <StyledLogin />
       <Grid nested minHeight="100vh" alignItems="center">
-        <Col offset={[0, 1, 6]} span={[4, 10, 6]}>
+        <Col span={[4, 10, 6]}>
           <Form
             my={5}
             title="Welcome back"
@@ -41,6 +41,7 @@ export const LogIn = () => {
             link="Create an account"
             inputData={loginData}
             buttonText="Sign In"
+            href="/signup"
           />
         </Col>
       </Grid>

@@ -6,6 +6,8 @@ import { Container } from "../Container";
 import { ReactComponent as Logo2 } from "../../static/icons/logo2.svg";
 import { ReactComponent as ITechArtLogo } from "../../static/icons/iTechArt-logo.svg";
 import theme from "../../theme";
+import { Li, Ul } from "../List";
+import { LinkRenderer, Paragraph } from "../Text";
 
 const StyledContainer = styled(Container)`
   display: flex;
@@ -18,36 +20,32 @@ const StyledContainer = styled(Container)`
   line-height: 22px;
 `;
 
-const Ul = styled(Box)`
-  display: flex;
-  list-style-type: none;
-`;
-
-const Li = styled(Box)`
-  margin-right: 72px;
-  &:last-child {
-    margin-right: 0px;
-  }
-  cursor: pointer;
-`;
-const Email = styled(Box)`
-  color: ${theme.colors.primary.main};
-  margin: 0 80px;
-  cursor: pointer;
-`;
-
 export const Footer = () => {
   return (
     <Box background={theme.colors.secondary.main}>
       <StyledContainer>
         <Logo2 />
         <Ul>
-          <Li>Cookbooks</Li>
-          <Li>Recepies</Li>
-          <Li>About Us</Li>
+          <Li>
+            <LinkRenderer href="/" color="background.main" inline>
+              Cookbooks
+            </LinkRenderer>
+          </Li>
+          <Li>
+            <LinkRenderer href="/" color="background.main" inline>
+              Recepies
+            </LinkRenderer>
+          </Li>
+          <Li>
+            <LinkRenderer href="/" color="background.main" inline>
+              About Us
+            </LinkRenderer>
+          </Li>
         </Ul>
-        <Email>plzfeedme@itechart.com</Email>
-        <Box>Study Project, 2020</Box>
+        <Paragraph color="primary.main" fontSize={1} mx={80} my={0}>
+          plzfeedme@itechart.com
+        </Paragraph>
+        <Paragraph fontSize={1}>Study Project, 2020</Paragraph>
         <Box>
           <ITechArtLogo />
         </Box>
