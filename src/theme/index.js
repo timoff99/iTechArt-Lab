@@ -88,8 +88,8 @@ export const colors = {
 };
 
 export const fonts = {
-  montserrat: "Montserrat",
-  nunito: "Nunito",
+  header: "Montserrat",
+  paragraph: "Nunito",
 };
 
 const theme = {

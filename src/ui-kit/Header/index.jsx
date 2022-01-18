@@ -8,32 +8,7 @@ import { Input } from "../Input";
 import { Button } from "../Button";
 import { Box } from "../Box";
 import theme from "../../theme";
-
-const StyledContainer = styled(Container)`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 17px auto;
-`;
-
-const Ul = styled(Box)`
-  display: flex;
-  list-style-type: none;
-
-  color: ${theme.colors.secondary.main};
-`;
-
-const Li = styled(Box)`
-  margin-right: 72px;
-  &:last-child {
-    margin-right: 0px;
-  }
-`;
-
-const User = styled(Box)`
-  display: flex;
-  align-items: center;
-`;
+import {Li, StyledContainer, Ul, User} from "./styles";
 
 export const Header = () => {
   return (
