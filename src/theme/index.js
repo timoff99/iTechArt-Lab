@@ -27,46 +27,43 @@ export const space = [
   // 4:
   "16px",
   // 5:
-  "20px",
+  "18px",
   // 6:
-  "24px",
+  "20px",
   // 7:
-  "32px",
+  "24px",
   // 8:
-  "36px",
+  "32px",
   // 9:
-  "56px",
+  "36px",
   // 10:
-  "64px",
+  "56px",
   // 11:
-  "100px",
+  "64px",
   // 12:
-  "200px",
+  "100px",
   // 13:
+  "200px",
+  // 14:
 ];
 
 export const fontSizes = [
   "14px",
   // 0:
-  "18px",
+  "16px",
   // 1:
-  "20px",
+  "18px",
   // 2:
-  "40px",
+  "20px",
   // 3:
+  "40px",
+  // 4:
 ];
 
 /* Standardizing line-heights across fonts */
 export const lineHeights = [1, 1.125, 1.25, 1.5];
 
-export const letterSpacings = [
-  "0",
-  "0.025em",
-  "0.05em",
-  "0.075em",
-  "0.1em",
-  "0.15em",
-];
+export const letterSpacings = ["0", "0.025em", "0.05em", "0.075em", "0.1em", "0.15em"];
 
 /* Max-widths based on breakpoints */
 export const maxWidths = [433, 740, 1248, 1680];
@@ -88,8 +85,8 @@ export const colors = {
 };
 
 export const fonts = {
-  montserrat: "Montserrat",
-  nunito: "Nunito",
+  header: "Montserrat",
+  paragraph: "Nunito",
 };
 
 const theme = {

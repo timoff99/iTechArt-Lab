@@ -41,16 +41,16 @@ const StyledButton = styled(Box)`
   ${(props) => {
     switch (props.size) {
       case "sm":
-        return `padding: ${props.theme.space[2]} ${props.theme.space[8]};`;
+        return `padding: ${props.theme.space[2]} ${props.theme.space[9]};`;
       case "md":
-        return `padding: ${props.theme.space[3]} ${props.theme.space[8]};`;
+        return `padding: ${props.theme.space[3]} ${props.theme.space[9]};`;
       case "fit":
         return `width: 100%; 
         padding: ${props.theme.space[3]} 0;`;
       case "lg":
-        return `padding: ${props.theme.space[5]} ${props.theme.space[8]};`;
+        return `padding: ${props.theme.space[5]} ${props.theme.space[9]};`;
       default:
-        return `padding: ${props.theme.space[3]} ${props.theme.space[8]};`;
+        return `padding: ${props.theme.space[3]} ${props.theme.space[9]};`;
     }
   }}
 `;

@@ -18,17 +18,7 @@ export const Box = styled("div")(
     boxSizing: "border-box",
     margin: 0,
     minWidth: 0,
-    fontFamily: `${theme.fonts.nunito}`,
+    fontFamily: `${theme.fonts.paragraph}`,
   },
-  compose(
-    space,
-    layout,
-    typography,
-    color,
-    border,
-    flexbox,
-    position,
-    shadow,
-    background
-  )
+  compose(space, layout, typography, color, border, flexbox, position, shadow, background)
 );
