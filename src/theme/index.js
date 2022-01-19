@@ -14,6 +14,8 @@ export const GUTTER = 24;
 
 export const GRID_COLS = [4, 12, 12];
 
+export const BORDER_RADIUS = 10;
+
 export const space = [
   "0",
   // 0:

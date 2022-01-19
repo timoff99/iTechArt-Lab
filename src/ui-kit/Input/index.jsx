@@ -86,7 +86,7 @@ const StyledButton = styled(Button)`
   position: absolute;
   right: 16px;
   top: 50%;
-  transform: translate(0, -45%);
+  transform: translate(0, -50%);
 `;
 
 const StyledSpan = styled(Box)`
