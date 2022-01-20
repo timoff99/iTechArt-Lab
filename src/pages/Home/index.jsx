@@ -2,18 +2,23 @@ import React from "react";
 import styled from "styled-components";
 
 import theme from "../../theme";
-import { Box } from "../../ui-kit/Box";
-import { Grid } from "../../ui-kit/Grid";
-import { Col } from "../../ui-kit/Grid/Col";
-import { Input } from "../../ui-kit/Input";
-import { listMenu, cardList } from "./mockData";
+import { Box } from "../../shared/helpers/Box";
+import { Grid } from "../../shared/helpers/Grid";
+import { Col } from "../../shared/helpers/Grid/Col";
+import { Input } from "../../shared/ui-kit/Input";
+
+import { listMenu, cardListHighRate, cardListTrending } from "./mockData";
+import Slider from "react-slick";
+import { breakpointsAsInts } from "../../theme";
+import { ReactComponent as Arrow } from "../../static/icons/rightArrow.svg";
 import homeBg from "../../static/images/homeBg.png";
-import { Ul, Li } from "../../ui-kit/List";
-import { LinkRenderer, Heading, Paragraph } from "../../ui-kit/Text";
-import { Container } from "../../ui-kit/Container";
-import { mediaQueries } from "../../theme";
-import { Card } from "../../ui-kit/Card";
-import { Button } from "../../ui-kit/Button";
+import { Ul, Li } from "../../shared/helpers/List";
+import { LinkRenderer, Heading, Paragraph } from "../../shared/helpers/Text";
+import { Container } from "../../shared/helpers/Container";
+import { Card } from "../../shared/ui-kit/Card";
+import { Button } from "../../shared/ui-kit/Button";
+import pear from "../../static/icons/pear.svg";
+import { Swiper } from "../../shared/ui-kit/Swiper";
 
 const StyledLinkRenderer = styled(LinkRenderer)`
   color: ${theme.colors.background.main};
@@ -25,56 +30,55 @@ const StyledLinkRenderer = styled(LinkRenderer)`
 
 const StyledLogin = styled(Box)`
   background: url(${homeBg}) no-repeat;
-  background-size: contain;
+  background-size: cover;
   border-radius: 40px 10px;
-  position: absolute;
-  height: 100%;
-  width: calc(100% - 32px);
+
+  width: 96%;
   max-height: 814px;
-  max-width: 1616px;
-  z-index: -1;
-  ${mediaQueries.medium} {
-    left: -200px;
-    width: 1300px;
-  }
-  ${mediaQueries.large} {
-    left: -100px;
-    width: 1500px;
-  }
+`;
+
+const SwiperBox = styled(Box)`
+  background: url(${pear}) ${theme.colors.primary.main} right no-repeat;
+
+  padding-right: 196px;
+  padding-left: 196px;
+  border-radius: 40px 10px;
+  text-align: center;
 `;
 
 export const Home = () => {
   return (
-    <Container position="relative">
-      <StyledLogin />
-      <Container py={[50, 180, 243]}>
-        <Heading as={"h1"} semiBold mb={11} color="background.main" maxWidth={808}>
-          Find Recipies and Сreate Your Favourite Сookbooks
-        </Heading>
-        <Grid nested>
-          <Col span={[4, 12, 10]}>
-            <Input
-              type="text"
-              name="bigSearch"
-              variantInput="bigInput"
-              inputSize="lg"
-              lableSize="lg"
-              placeholder="Find Best Recipies..."
-            />
-          </Col>
-          <Ul>
-            {listMenu.map(({ menu }, index) => {
-              return (
-                <Li key={index}>
-                  <StyledLinkRenderer href="/" inline fontSize={2}>
-                    {menu}
-                  </StyledLinkRenderer>
-                </Li>
-              );
-            })}
-          </Ul>
-        </Grid>
-      </Container>
+    <>
+      <StyledLogin mx={9}>
+        <Container py={[50, 110, 243]}>
+          <Heading as={"h1"} semiBold mb={11} color="background.main" maxWidth={808}>
+            Find Recipies and Сreate Your Favourite Сookbooks
+          </Heading>
+          <Grid nested>
+            <Col span={[4, 12, 10]}>
+              <Input
+                type="text"
+                name="bigSearch"
+                variantInput="bigInput"
+                inputSize="lg"
+                lableSize="lg"
+                placeholder="Find Best Recipies..."
+              />
+            </Col>
+            <Ul>
+              {listMenu.map(({ menu }, index) => {
+                return (
+                  <Li key={index}>
+                    <StyledLinkRenderer href="/" inline fontSize={2}>
+                      {menu}
+                    </StyledLinkRenderer>
+                  </Li>
+                );
+              })}
+            </Ul>
+          </Grid>
+        </Container>
+      </StyledLogin>
       <Container mt={105} textAlign="center">
         <Paragraph uppercase fontSize={1} mb={8} color="primary.main">
           users choice
@@ -83,12 +87,10 @@ export const Home = () => {
           20 Highest-Rated Recipes
         </Heading>
         <Grid nested mb={11}>
-          {cardList.map((props, index) => {
+          {cardListHighRate.map((props, index) => {
             return (
               <Col key={index} span={[4, 6, 3]}>
-                <LinkRenderer href="/" color="secondary.main" inline>
-                  <Card {...props} sizes="sm" />
-                </LinkRenderer>
+                <Card {...props} sizes="sm" place="no-rates" />
               </Col>
             );
           })}
@@ -97,6 +99,28 @@ export const Home = () => {
           Show More
         </Button>
       </Container>
-    </Container>
+      <SwiperBox mb={8} mx={9}>
+        <Paragraph uppercase fontSize={1} pt={13} color="background.main">
+          top 10
+        </Paragraph>
+        <Heading as={"h2"} bold mt={8} color="secondary.main">
+          Trending Recepies
+        </Heading>
+        <Container mt="48px" mb="112px">
+          <Swiper>
+            {cardListTrending.map((props, index) => {
+              return (
+                <Box key={index} px={"12px"}>
+                  <Card {...props} width={310} />
+                </Box>
+              );
+            })}
+          </Swiper>
+        </Container>
+        <Button size="lg" variant="outlined" mb={13}>
+          Show More
+        </Button>
+      </SwiperBox>
+    </>
   );
 };
