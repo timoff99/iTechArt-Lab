@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import { Box } from "../../ui-kit/Box";
+import { Box } from "../../shared/helpers/Box";
 
-import { Form } from "../../ui-kit/Form";
+import { Form } from "../../shared/ui-kit/Form";
 import loginBg from "../../static/images/loginBg.png";
 import { loginData } from "./mockData";
-import { Grid } from "../../ui-kit/Grid";
-import { Container } from "../../ui-kit/Container";
-import { Col } from "../../ui-kit/Grid/Col";
+import { Grid } from "../../shared/helpers/Grid";
+import { Container } from "../../shared/helpers/Container";
+import { Col } from "../../shared/helpers/Grid/Col";
 import { mediaQueries } from "../../theme";
 
 const StyledLogin = styled(Box)`

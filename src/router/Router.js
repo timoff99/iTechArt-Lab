@@ -6,7 +6,7 @@ import { ROUTE_NAMES } from "./routeNames";
 import { Home } from "../pages/Home";
 import { LogIn } from "../pages/LogIn";
 import { SignUp } from "../pages/SignUp";
-import { Layout } from "../ui-kit/Layout";
+import { Layout } from "../shared/ui-kit/Layout";
 
 export const Router = () => {
   return (
