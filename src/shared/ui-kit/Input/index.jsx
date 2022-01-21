@@ -117,7 +117,7 @@ export const Input = memo(({ id, type, label, placeholder, name, labelBold, labe
           Forgot password?
         </LinkRenderer>
       )}
-      {name === "bigSearch" && <StyledButton size="md">primary</StyledButton>}
+      {name === "bigSearch" && <StyledButton size="md">SEARCH</StyledButton>}
       {type === "password" && icon}
     </LabelStyle>
   );

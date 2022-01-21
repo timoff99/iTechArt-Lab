@@ -100,3 +100,46 @@ export const cardListTrending = [
     image: trendingCard3,
   },
 ];
+
+export const cardListHorizontal = [
+  {
+    views: 12000,
+    recept: "Fresh meat",
+    author: "John Doe",
+    likes: 499,
+    comments: 12,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Leo non ac eros, velit dapibus consequat vestibulum sapien pharetra. Bibendum vel sollicitudin at purus egestas tincidunt. Vulputate ac, ullamcorper etiam interdum vitae semper.",
+    image: img1,
+  },
+  {
+    views: 12000,
+    recept: "Fresh meat",
+    author: "John Doe",
+    likes: 499,
+    comments: 12,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Leo non ac eros, velit dapibus consequat vestibulum sapien pharetra. Bibendum vel sollicitudin at purus egestas tincidunt. Vulputate ac, ullamcorper etiam interdum vitae semper.",
+    image: img2,
+  },
+  {
+    views: 11700,
+    recept: "Pancakes",
+    author: "Viktoria Katmer",
+    likes: 328,
+    comments: 32,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Leo non ac eros, velit dapibus consequat vestibulum sapien pharetra. Bibendum vel sollicitudin at purus egestas tincidunt. Vulputate ac, ullamcorper etiam interdum vitae semper.",
+    image: img3,
+  },
+  {
+    views: 12000,
+    recept: "Fresh meat",
+    author: "John Doe",
+    likes: 499,
+    comments: 12,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Leo non ac eros, velit dapibus consequat vestibulum sapien pharetra. Bibendum vel sollicitudin at purus egestas tincidunt. Vulputate ac, ullamcorper etiam interdum vitae semper.",
+    image: img4,
+  },
+];

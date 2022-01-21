@@ -40,6 +40,16 @@ export const StyledCard = styled(Box)`
     }
   }`;
 
+      case "horizontal":
+        return `
+        &:hover {
+     path, circle {
+      fill: ${theme.colors.primary.main};
+      circle: ${theme.colors.primary.main};
+      transition: all 0.4s;
+    }
+  }`;
+
       default:
         return `
         &:hover {
