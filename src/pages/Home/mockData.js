@@ -8,7 +8,7 @@ import trendingCard3 from "../../static/images/trendingCard3.png";
 
 export const listMenu = [
   {
-    menu: "Vegeterian",
+    menu: "Vegetarian",
   },
   {
     menu: "Mexican",
