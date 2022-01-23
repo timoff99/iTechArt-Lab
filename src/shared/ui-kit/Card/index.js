@@ -7,7 +7,7 @@ import { ReactComponent as Options } from "../../../static/icons/options.svg";
 import { ReactComponent as Heart } from "../../../static/icons/heart.svg";
 import { ReactComponent as Comment } from "../../../static/icons/comment.svg";
 import { LinkRenderer, Paragraph } from "../../helpers/Text";
-import { StyledHeading, StyledCard } from "./styles";
+import { StyledHeading, StyledCard, StyledImg } from "./styles";
 
 export const Card = ({ views, recept, author, likes, comments, image, description, place, ...props }) => {
   return (
@@ -24,7 +24,7 @@ export const Card = ({ views, recept, author, likes, comments, image, descriptio
         </FlexAlignCenter>
         <LinkRenderer href="/" color="secondary.main">
           <FlexCenter>
-            <img src={image} alt="cardImage" />
+            <StyledImg src={image} alt="cardImage" />
           </FlexCenter>
         </LinkRenderer>
 

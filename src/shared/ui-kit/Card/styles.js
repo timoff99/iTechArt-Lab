@@ -64,3 +64,7 @@ export const StyledCard = styled(Box)`
     }
   }} */
 `;
+
+export const StyledImg = styled("img")({
+  minWidth: "0px",
+});

@@ -6,8 +6,8 @@ import { ReactComponent as Eye } from "../../../static/icons/small-eye.svg";
 import { ReactComponent as Options } from "../../../static/icons/options.svg";
 import { ReactComponent as Heart } from "../../../static/icons/heart.svg";
 import { ReactComponent as Comment } from "../../../static/icons/comment.svg";
-import { LinkRenderer, Paragraph } from "../../helpers/Text";
-import { StyledHeading, StyledCard } from "./styles";
+import { LinkRenderer, Paragraph, Heading } from "../../helpers/Text";
+import { StyledCard } from "./styles";
 
 export const HorizontalCard = ({ views, recept, author, likes, comments, image, description, place, ...props }) => {
   return (
@@ -18,21 +18,25 @@ export const HorizontalCard = ({ views, recept, author, likes, comments, image, 
             <img src={image} alt="cardImage" />
           </Box>
         </LinkRenderer>
-        <Box p={8} bg="pink">
-          <FlexBetween>
-            <StyledHeading as={"h3"} semiBold>
+        <Box p={8}>
+          <FlexBetween pb={5}>
+            <Heading as={"h3"} semiBold>
               {recept}
-            </StyledHeading>
+            </Heading>
             <Paragraph>{author}</Paragraph>
           </FlexBetween>
-          {description && <Paragraph textAlign="left">{description}</Paragraph>}
+          {description && (
+            <Paragraph textAlign="left" pb={48}>
+              {description}
+            </Paragraph>
+          )}
           <FlexBetween>
             <Flex flexWrap="wrap">
-              <FlexAlignCenter>
+              <FlexAlignCenter pr={8}>
                 <Eye />
                 <Paragraph ml={2}>{views} views</Paragraph>
               </FlexAlignCenter>
-              <FlexAlignCenter>
+              <FlexAlignCenter pr={8}>
                 <Heart />
                 <Paragraph ml={2}>{likes} likes</Paragraph>
               </FlexAlignCenter>
