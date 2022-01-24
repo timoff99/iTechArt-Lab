@@ -5,8 +5,6 @@ import { Heading } from "../../helpers/Text";
 import { BORDER_RADIUS } from "../../../theme";
 import theme from "../../../theme";
 
-export const StyledHeading = styled(Heading)``;
-
 export const StyledCard = styled(Box)`
   display: inline-block;
   background: ${theme.colors.background.main};
@@ -24,7 +22,7 @@ export const StyledCard = styled(Box)`
       case "highest-rates":
         return `
         &:hover {
-    ${StyledHeading},
+    ${Heading},
     svg {
       fill: ${theme.colors.primary.main};
       color: ${theme.colors.primary.main};
@@ -40,10 +38,20 @@ export const StyledCard = styled(Box)`
     }
   }`;
 
+      case "horizontal":
+        return `
+        &:hover {
+     path, circle {
+      fill: ${theme.colors.primary.main};
+      circle: ${theme.colors.primary.main};
+      transition: all 0.4s;
+    }
+  }`;
+
       default:
         return `
         &:hover {
-    ${StyledHeading},
+    ${Heading},
     svg {
       fill: ${theme.colors.primary.main};
       color: ${theme.colors.primary.main};
@@ -64,7 +72,3 @@ export const StyledCard = styled(Box)`
     }
   }} */
 `;
-
-export const StyledImg = styled("img")({
-  minWidth: "0px",
-});

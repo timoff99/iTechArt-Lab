@@ -4,6 +4,11 @@ export default () => ({
     bg: "primary.main",
   },
 
+  secondary: {
+    color: "secondary.main",
+    bg: "background.main",
+  },
+
   outlined: {
     color: "primary.main",
     bg: "background.main",
