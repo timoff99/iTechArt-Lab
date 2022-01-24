@@ -7,10 +7,7 @@ import { Grid } from "../../shared/helpers/Grid";
 import { Col } from "../../shared/helpers/Grid/Col";
 import { Input } from "../../shared/ui-kit/Input";
 
-import { listMenu, cardListHighRate, cardListTrending } from "./mockData";
-import Slider from "react-slick";
-import { breakpointsAsInts } from "../../theme";
-import { ReactComponent as Arrow } from "../../static/icons/rightArrow.svg";
+import { listMenu, cardListHighRate, cardListTrending, cardListPopular } from "./mockData";
 import homeBg from "../../static/images/homeBg.png";
 import { Ul, Li } from "../../shared/helpers/List";
 import { LinkRenderer, Heading, Paragraph } from "../../shared/helpers/Text";
@@ -19,6 +16,7 @@ import { Card } from "../../shared/ui-kit/Card";
 import { Button } from "../../shared/ui-kit/Button";
 import pear from "../../static/icons/pear.svg";
 import { Swiper } from "../../shared/ui-kit/Swiper";
+import { PopularCard } from "../../components/Home/PopularCard";
 
 const StyledLinkRenderer = styled(LinkRenderer)`
   color: ${theme.colors.background.main};
@@ -96,6 +94,18 @@ export const Home = () => {
           })}
         </Grid>
         <Button size="lg" variant="outlined" mb={13}>
+          Show More
+        </Button>
+      </Container>
+      <Container mt={5} textAlign="center">
+        <Paragraph uppercase fontSize={1} mb={8} color="primary.main">
+          Our choice
+        </Paragraph>
+        <Heading as={"h2"} bold mb={8} color="secondary.main">
+          Most Popular CookBooks
+        </Heading>
+        <PopularCard items={cardListPopular} variant={"secondary"} mb={100} />
+        <Button size="lg" variant="outlined" mt={10} mb={13}>
           Show More
         </Button>
       </Container>
