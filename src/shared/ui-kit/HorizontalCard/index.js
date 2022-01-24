@@ -10,47 +10,49 @@ import { LinkRenderer, Paragraph, Heading } from "../../helpers/Text";
 import { StyledCard } from "./styles";
 
 export const HorizontalCard = ({ views, recept, author, likes, comments, image, description, place, ...props }) => {
+  const handleOption = (event) => {
+    event.preventDefault();
+    console.log(2);
+  };
   return (
-    <StyledCard place={place} mb={3} {...props}>
-      <Flex>
-        <LinkRenderer href="/" color="secondary.main" minimalWidth>
-          <Box>
-            <img src={image} alt="cardImage" />
+    <LinkRenderer href="/" color="secondary.main">
+      <StyledCard place={place} mb={3} {...props}>
+        <Flex>
+          <img src={image} alt="cardImage" />
+          <Box p={8}>
+            <FlexBetween pb={5}>
+              <Heading as={"h3"} semiBold>
+                {recept}
+              </Heading>
+              <Paragraph>{author}</Paragraph>
+            </FlexBetween>
+            {description && (
+              <Paragraph textAlign="left" pb={48}>
+                {description}
+              </Paragraph>
+            )}
+            <FlexBetween>
+              <Flex flexWrap="wrap">
+                <FlexAlignCenter pr={8}>
+                  <Eye />
+                  <Paragraph ml={2}>{views} views</Paragraph>
+                </FlexAlignCenter>
+                <FlexAlignCenter pr={8}>
+                  <Heart />
+                  <Paragraph ml={2}>{likes} likes</Paragraph>
+                </FlexAlignCenter>
+                <FlexAlignCenter>
+                  <Comment />
+                  <Paragraph ml={2}>{comments} comments</Paragraph>
+                </FlexAlignCenter>
+              </Flex>
+              <FlexAlignCenter onClick={(e) => handleOption(e)} height={20}>
+                <Options />
+              </FlexAlignCenter>
+            </FlexBetween>
           </Box>
-        </LinkRenderer>
-        <Box p={8}>
-          <FlexBetween pb={5}>
-            <Heading as={"h3"} semiBold>
-              {recept}
-            </Heading>
-            <Paragraph>{author}</Paragraph>
-          </FlexBetween>
-          {description && (
-            <Paragraph textAlign="left" pb={48}>
-              {description}
-            </Paragraph>
-          )}
-          <FlexBetween>
-            <Flex flexWrap="wrap">
-              <FlexAlignCenter pr={8}>
-                <Eye />
-                <Paragraph ml={2}>{views} views</Paragraph>
-              </FlexAlignCenter>
-              <FlexAlignCenter pr={8}>
-                <Heart />
-                <Paragraph ml={2}>{likes} likes</Paragraph>
-              </FlexAlignCenter>
-              <FlexAlignCenter>
-                <Comment />
-                <Paragraph ml={2}>{comments} comments</Paragraph>
-              </FlexAlignCenter>
-            </Flex>
-            <Flex>
-              <Options onClick={() => console.log(2)} />
-            </Flex>
-          </FlexBetween>
-        </Box>
-      </Flex>
-    </StyledCard>
+        </Flex>
+      </StyledCard>
+    </LinkRenderer>
   );
 };
