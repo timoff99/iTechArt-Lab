@@ -12,7 +12,7 @@ import popularCard4 from "../../static/images/popularCard4.png";
 
 export const listMenu = [
   {
-    menu: "Vegeterian",
+    menu: "Vegetarian",
   },
   {
     menu: "Mexican",

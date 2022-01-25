@@ -33,7 +33,7 @@ export const Footer = () => {
           </Li>
           <Li>
             <LinkRenderer href="/" color="background.main" inline>
-              Recepies
+              Recipes
             </LinkRenderer>
           </Li>
           <Li>

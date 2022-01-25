@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import theme from "../../theme";
@@ -50,7 +50,7 @@ export const Home = () => {
       <StyledLogin mx={9}>
         <Container py={[50, 110, 243]}>
           <Heading as={"h1"} semiBold mb={11} color="background.main" maxWidth={808}>
-            Find Recipies and Сreate Your Favourite Сookbooks
+            Find Recipes and Сreate Your Favourite Сookbooks
           </Heading>
           <Grid nested>
             <Col span={[4, 12, 10]}>
@@ -59,8 +59,8 @@ export const Home = () => {
                 name="bigSearch"
                 variantInput="bigInput"
                 inputSize="lg"
-                lableSize="lg"
-                placeholder="Find Best Recipies..."
+                labelSize="lg"
+                placeholder="Find Best Recipes..."
               />
             </Col>
             <Ul>
@@ -114,7 +114,7 @@ export const Home = () => {
           top 10
         </Paragraph>
         <Heading as={"h2"} bold mt={8} color="secondary.main">
-          Trending Recepies
+          Trending Recipes
         </Heading>
         <Container mt="48px" mb="112px">
           <Swiper>
