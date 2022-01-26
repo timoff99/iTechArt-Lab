@@ -23,7 +23,7 @@ export const Router = () => {
 
       <Route path={ROUTE_NAMES.LOGIN} element={<LogIn />} />
       <Route path={ROUTE_NAMES.SIGNUP} element={<SignUp />} />
-      <Route path={ROUTE_NAMES.COOKBOOKSEARCH} element={<CookBookSearch />} />
+      <Route path={ROUTE_NAMES.COOKBOOK_SEARCH} element={<CookBookSearch />} />
     </Routes>
   );
 };
