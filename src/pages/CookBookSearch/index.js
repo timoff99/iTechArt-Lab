@@ -32,26 +32,36 @@ export const CookBookSearch = () => {
     console.log(location);
   };
 
-  const params = {};
-
-  params.tabo = "barr";
-  params.too = "to";
-  params.search = "boom";
-
   const { query, updateQuery } = useUrl();
 
-  const second = () => {
-    updateQuery(params);
+  const tabo = () => {
+    updateQuery({
+      ...query,
+      tabo: "barr",
+    });
+  };
+  const too = () => {
+    updateQuery({
+      ...query,
+      too: "to",
+    });
+  };
+  const search = () => {
+    updateQuery({
+      ...query,
+      search: "boom",
+    });
   };
 
   const del = () => {
-    delete params.too;
-    updateQuery(params);
+    updateQuery("search");
   };
   return (
     <div>
       <TabBar tabs={tabs} currentTab={currentTab} onChange={(tab) => onTabChange(tab)} />
-      <button onClick={() => second()}>add</button>
+      <button onClick={() => tabo()}>tabo</button>
+      <button onClick={() => too()}>too</button>
+      <button onClick={() => search()}>search</button>
       <button onClick={() => del()}>delete</button>
     </div>
   );
