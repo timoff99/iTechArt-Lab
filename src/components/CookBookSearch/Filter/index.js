@@ -6,9 +6,10 @@ import { FlexBetween, FlexColumn } from "../../../shared/helpers/Flex";
 import { Slider } from "../Slider";
 import { getCustomSelectStyle, Label, Title, Wrapper, Checkbox } from "./styles";
 import { Box } from "../../../shared/helpers/Box";
+import { CheckboxData } from "./mockData";
 
 export const Filter = ({ label, options, value, onChange, timeRange, setTimeRange }) => {
-  const route = "tab=recipes";
+  const route = "tab=cookbook";
   const handleTypeChange = (e) => {
     if (e.target.checked) {
       console.log(e.target.value);
@@ -37,54 +38,29 @@ export const Filter = ({ label, options, value, onChange, timeRange, setTimeRang
         />
       </FlexColumn>
       {route === "tab=cookbook" && (
-        <>
-          <Heading as={"h3"} semiBold mb={5}>
-            Cookbook type
-          </Heading>
-          <FlexColumn>
-            <Label as="label">
-              <Checkbox
-                as="input"
-                onChange={(e) => handleTypeChange(e)}
-                type="checkbox"
-                name="fruit"
-                value="vegetarian"
-              />
-              Vegetarian
-            </Label>
-            <Label as="label">
-              <Checkbox
-                as="input"
-                onChange={(e) => handleTypeChange(e)}
-                type="checkbox"
-                name="fruit"
-                value="without-milk"
-              />
-              Without Milk
-            </Label>
-            <Label as="label" mb={8}>
-              <Checkbox
-                as="input"
-                onChange={(e) => handleTypeChange(e)}
-                type="checkbox"
-                name="fruit"
-                value="without-eggs"
-              />
-              Without Eggs
-            </Label>
-            <Label as="label">
-              <Checkbox
-                as="input"
-                onChange={(e) => handleTypeChange(e)}
-                type="checkbox"
-                name="fruit"
-                value="hide-my-cookbooks"
-              />
-              Hide My CookBooks
-            </Label>
-          </FlexColumn>{" "}
-        </>
+        <Heading as={"h3"} semiBold mb={5}>
+          Cookbook type
+        </Heading>
       )}
+      {route === "tab=cookbook" &&
+        CheckboxData.map(({ value, children, mb }, index) => {
+          return (
+            <Box key={index}>
+              <FlexColumn>
+                <Label as="label" mb={mb}>
+                  <Checkbox
+                    as="input"
+                    onChange={(e) => handleTypeChange(e)}
+                    type="checkbox"
+                    name="fruit"
+                    value={value}
+                  />
+                  {children}
+                </Label>
+              </FlexColumn>
+            </Box>
+          );
+        })}
       {route === "tab=recipes" && (
         <>
           <Heading as={"h3"} semiBold mb={5}>

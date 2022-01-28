@@ -30,6 +30,13 @@ const LabelStyle = styled(Box)`
         return `margin-bottom: ${theme.space[9]};`;
     }
   }}
+
+  ${() => {
+    return variant({
+      prop: "variantLabel",
+      variants: variants(),
+    });
+  }}
 `;
 
 const Label = styled(Box)`
@@ -97,7 +104,7 @@ const StyledSpan = styled(Box)`
   right: 0;
 `;
 
-export const Input = memo(({ id, type, label, placeholder, name, labelBold, labelSize, ...props }) => {
+export const Input = memo(({ id, type, label, placeholder, name, labelBold, labelSize, variantLabel, ...props }) => {
   const [currentType, setCurrentType] = useState(type);
   const onEyeClick = () => {
     if (currentType === "password") setCurrentType("text");
@@ -107,7 +114,7 @@ export const Input = memo(({ id, type, label, placeholder, name, labelBold, labe
   const icon = currentType === "password" ? <EyeCloseStyle onClick={onEyeClick} /> : <EyeStyle onClick={onEyeClick} />;
 
   return (
-    <LabelStyle labelSize={labelSize}>
+    <LabelStyle labelSize={labelSize} variantLabel={variantLabel}>
       <Label as="label" label={label} labelBold={labelBold} htmlFor={id}>
         {label}
       </Label>

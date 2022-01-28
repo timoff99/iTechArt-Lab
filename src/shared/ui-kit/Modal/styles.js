@@ -34,5 +34,4 @@ export const Content = styled(Box)`
   border-radius: 4px;
   box-shadow: 0px 18px 60px rgba(24, 24, 24, 0.7);
   outline: none;
-  padding: 20px;
 `;

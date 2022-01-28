@@ -166,3 +166,38 @@ export const cardListPopular = [
     image: popularCard4,
   },
 ];
+
+export const cookBook = [
+  {
+    cookBook: "Delicious fruits and pancakes",
+    author: "Sir John Reed",
+    likes: 499,
+    comments: 12,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Bibendum tempus viverra augue ac elit. Interdum libero at tristique fames faucibus. Massa a, consectetur et viverra vulputate urna enim felis metus. Consequat morbi cras elit mauris phasellus at fames eget. Nunc, at vitae integer morbi nibh dignissim non tempus pellentesque. Erat platea augue sed amet, tempor, sed sollicitudin. Viverra tincidunt eu nulla pulvinar eget dolor. Dui, lacus sed ut id egestas elit, mi. Pretium elementum commodo amet cursus massa dictum. Ac, pharetra nisi, morbi maecenas facilisi.",
+    image: popularCard1,
+  },
+];
+
+export const cookBookResepies = [
+  {
+    views: 12000,
+    recept: "Fresh meat with potato and cheeze",
+    author: "John Doe",
+    likes: 499,
+    comments: 12,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Leo non ac eros, velit dapibus consequat vestibulum sapien pharetra. Bibendum vel sollicitudin at purus egestas tincidunt. Vulputate ac, ullamcorper etiam interdum vitae semper.",
+    image: img3,
+  },
+  {
+    views: 12000,
+    recept: "Fresh meat with potato and cheeze",
+    author: "John Doe",
+    likes: 499,
+    comments: 12,
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Leo non ac eros, velit dapibus consequat vestibulum sapien pharetra. Bibendum vel sollicitudin at purus egestas tincidunt. Vulputate ac, ullamcorper etiam interdum vitae semper.",
+    image: img4,
+  },
+];
