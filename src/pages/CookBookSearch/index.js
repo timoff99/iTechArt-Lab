@@ -5,9 +5,11 @@ import { useUrl } from "../../hooks/useUrl";
 import { TabBar } from "../../shared/ui-kit/TabBar";
 import { Filter } from "../../components/CookBookSearch/Filter";
 import { Modal } from "../../shared/ui-kit/Modal";
-import { cookBook, cookBookResepies } from "../../pages/Home/mockData";
-
+import { cookBook, recipes, cookBookResepies } from "../../pages/Home/mockData";
 import { CookBooks } from "../../shared/ui-kit/ModalContent/CookBook";
+import { Recipes } from "../../shared/ui-kit/ModalContent/Recipes";
+import { CreateCookBook } from "../../shared/ui-kit/ModalContent/CreateCookBook";
+import { CreateRecipes } from "../../shared/ui-kit/ModalContent/CreateRecipes";
 
 const tabs = [
   {
@@ -92,9 +94,7 @@ export const CookBookSearch = () => {
     <div style={{ background: "#8a5858", height: "100vh", padding: "100px" }}>
       {showModal && (
         <Modal showModal={showModal} setShowModal={setShowModal} openModal={openModal}>
-          {cookBook.map((props, index) => {
-            return <CookBooks key={index} cookBookResepies={cookBookResepies} {...props} />;
-          })}
+          <CreateRecipes />
         </Modal>
       )}
       <div>

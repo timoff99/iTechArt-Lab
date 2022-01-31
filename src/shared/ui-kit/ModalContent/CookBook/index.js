@@ -3,13 +3,12 @@ import styled from "styled-components";
 
 import { ReactComponent as Heart } from "../../../../static/icons/heart.svg";
 import { ReactComponent as Comment } from "../../../../static/icons/comment.svg";
-import { ReactComponent as Send } from "../../../../static/icons/send.svg";
 import { Box } from "../../../helpers/Box";
-import { Flex, FlexBetween, FlexColumn, FlexAlignCenter } from "../../../helpers/Flex";
+import { FlexBetween, FlexColumn, FlexAlignCenter } from "../../../helpers/Flex";
 import { Paragraph, Heading } from "../../../helpers/Text";
 import { Button } from "../../Button";
 import { HorizontalCard } from "../../HorizontalCard";
-import { Input } from "../../Input";
+import { Comments } from "../../Comments";
 
 const BoxImage = styled(Box)`
   width: 100%;
@@ -23,18 +22,7 @@ const Image = styled(Box)`
   object-fit: cover;
 `;
 
-const StyledSend = styled(Send)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-export const CookBooks = ({ cookBookResepies, cookBook, author, likes, comments, description, image }) => {
-  console.log(cookBookResepies);
-  const foo = (e) => {
-    e.preventDefault();
-    console.log(e.target[0].value);
-  };
+export const CookBook = ({ cookBookResepies, cookBook, author, likes, comments, description, image }) => {
   return (
     <Box px={56} py={72}>
       <FlexBetween mb={10}>
@@ -78,29 +66,11 @@ export const CookBooks = ({ cookBookResepies, cookBook, author, likes, comments,
           Recipes
         </Heading>
         {cookBookResepies.map((props, index) => {
-          return <HorizontalCard key={index} modal place={"no-rates"} {...props} />;
+          return <HorizontalCard key={index} modalCookBook place={"no-rates"} {...props} />;
         })}
       </FlexColumn>
       <FlexColumn mb={10}>
-        <Heading as={"h3"} semiBold mb={8}>
-          Comments (count)
-        </Heading>
-        <form onSubmit={(e) => foo(e)}>
-          <Flex>
-            <Input
-              type="text"
-              name="comments"
-              placeholder="Express yourself..."
-              variantInput="commentsInput"
-              variantLabel="commentsLabel"
-              labelSize="sm"
-            />
-
-            <Button size="sm" ml={5}>
-              <StyledSend />
-            </Button>
-          </Flex>
-        </form>
+        <Comments />
       </FlexColumn>
     </Box>
   );

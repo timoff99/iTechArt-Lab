@@ -40,6 +40,8 @@ const StyledButton = styled(Box)`
   
   ${(props) => {
     switch (props.size) {
+      case "box":
+        return `padding: ${props.theme.space[2]} ${props.theme.space[5]};`;
       case "sm":
         return `padding: ${props.theme.space[2]} ${props.theme.space[9]};`;
       case "md":

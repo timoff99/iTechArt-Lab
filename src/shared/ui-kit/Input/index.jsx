@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, memo } from "react";
+import React, { useState, memo }from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { variant } from "styled-system";
@@ -97,38 +96,39 @@ const StyledButton = styled(Button)`
 `;
 
 const StyledSpan = styled(Box)`
-  font-weight: 600;
   color: ${theme.colors.primary.main};
-  cursor: pointer;
-  position: absolute;
-  right: 0;
+  display: inline-block;
 `;
 
-export const Input = memo(({ id, type, label, placeholder, name, labelBold, labelSize, variantLabel, ...props }) => {
-  const [currentType, setCurrentType] = useState(type);
-  const onEyeClick = () => {
-    if (currentType === "password") setCurrentType("text");
-    else setCurrentType("password");
-  };
+export const Input = memo(
+  ({ id, type, label, placeholder, name, labelBold, labelSize, variantLabel, require, ...props }) => {
+    const [currentType, setCurrentType] = useState(type);
+    const onEyeClick = () => {
+      if (currentType === "password") setCurrentType("text");
+      else setCurrentType("password");
+    };
 
-  const icon = currentType === "password" ? <EyeCloseStyle onClick={onEyeClick} /> : <EyeStyle onClick={onEyeClick} />;
+    const icon =
+      currentType === "password" ? <EyeCloseStyle onClick={onEyeClick} /> : <EyeStyle onClick={onEyeClick} />;
 
-  return (
-    <LabelStyle labelSize={labelSize} variantLabel={variantLabel}>
-      <Label as="label" label={label} labelBold={labelBold} htmlFor={id}>
-        {label}
-      </Label>
-      <InputStyle {...props} as="input" id={id} type={currentType} name={name} placeholder={placeholder} />
-      {name === "Password" && (
-        <LinkRenderer href="/" semiBold position="absolute" top="0" right="0">
-          Forgot password?
-        </LinkRenderer>
-      )}
-      {name === "bigSearch" && <StyledButton size="md">SEARCH</StyledButton>}
-      {type === "password" && icon}
-    </LabelStyle>
-  );
-});
+    return (
+      <LabelStyle labelSize={labelSize} variantLabel={variantLabel}>
+        <Label as="label" label={label} labelBold={labelBold} htmlFor={id}>
+          {label}
+          {require && <StyledSpan>*</StyledSpan>}
+        </Label>
+        <InputStyle {...props} as="input" id={id} type={currentType} name={name} placeholder={placeholder} />
+        {name === "Password" && (
+          <LinkRenderer href="/" semiBold position="absolute" top="0" right="0">
+            Forgot password?
+          </LinkRenderer>
+        )}
+        {name === "bigSearch" && <StyledButton size="md">SEARCH</StyledButton>}
+        {type === "password" && icon}
+      </LabelStyle>
+    );
+  }
+);
 
 Input.propTypes = {
   id: PropTypes.number,

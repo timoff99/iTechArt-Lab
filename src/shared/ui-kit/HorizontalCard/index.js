@@ -19,7 +19,7 @@ export const HorizontalCard = ({
   image,
   description,
   place,
-  modal,
+  modalCookBook,
   ...props
 }) => {
   const handleOption = (event) => {
@@ -58,7 +58,7 @@ export const HorizontalCard = ({
                   <Paragraph ml={2}>{comments} comments</Paragraph>
                 </FlexAlignCenter>
               </Flex>
-              {modal ? (
+              {modalCookBook ? (
                 <Button variant="outlined">Save</Button>
               ) : (
                 <FlexAlignCenter onClick={(e) => handleOption(e)} height={20}>
