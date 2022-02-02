@@ -1,7 +1,12 @@
-import React, { useRef, useEffect, useCallback } from "react";
+import React, { useRef, useEffect, useCallback, useMemo } from "react";
+import { createPortal } from "react-dom";
 import { Overlay, StyledX, Content } from "./styles";
 
+const modalRootElement = document.querySelector("#modal");
+
 export const Modal = ({ showModal, setShowModal, openModal, children }) => {
+  const element = useMemo(() => document.createElement("div"), []);
+
   const modalRef = useRef();
 
   const closeModal = (e) => {
@@ -24,10 +29,17 @@ export const Modal = ({ showModal, setShowModal, openModal, children }) => {
     return () => document.removeEventListener("keydown", keyPress);
   }, [keyPress]);
 
-  return (
+  useEffect(() => {
+    modalRootElement.appendChild(element);
+    return () => {
+      modalRootElement.removeChild(element);
+    };
+  });
+  return createPortal(
     <Overlay ref={modalRef} onClick={closeModal}>
       <StyledX onClick={openModal} />
       <Content>{children}</Content>
-    </Overlay>
+    </Overlay>,
+    element
   );
 };

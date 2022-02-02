@@ -8,8 +8,20 @@ import { ReactComponent as Heart } from "../../../static/icons/heart.svg";
 import { ReactComponent as Comment } from "../../../static/icons/comment.svg";
 import { LinkRenderer, Paragraph, Heading } from "../../helpers/Text";
 import { StyledCard } from "./styles";
+import { Button } from "../Button";
 
-export const HorizontalCard = ({ views, recept, author, likes, comments, image, description, place, ...props }) => {
+export const HorizontalCard = ({
+  views,
+  recept,
+  author,
+  likes,
+  comments,
+  image,
+  description,
+  place,
+  modalCookBook,
+  ...props
+}) => {
   const handleOption = (event) => {
     event.preventDefault();
     console.log(2);
@@ -46,9 +58,13 @@ export const HorizontalCard = ({ views, recept, author, likes, comments, image, 
                   <Paragraph ml={2}>{comments} comments</Paragraph>
                 </FlexAlignCenter>
               </Flex>
-              <FlexAlignCenter onClick={(e) => handleOption(e)} height={20}>
-                <Options />
-              </FlexAlignCenter>
+              {modalCookBook ? (
+                <Button variant="outlined">Save</Button>
+              ) : (
+                <FlexAlignCenter onClick={(e) => handleOption(e)} height={20}>
+                  <Options />
+                </FlexAlignCenter>
+              )}
             </FlexBetween>
           </Box>
         </Flex>
