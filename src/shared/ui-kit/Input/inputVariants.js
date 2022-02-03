@@ -24,4 +24,7 @@ export default () => ({
   commentsLabel: {
     width: "100%",
   },
+  loginInput: {
+    width: "100%",
+  },
 });

@@ -1,4 +1,4 @@
-import React, { useState, memo }from "react";
+import React, { useState, memo } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { variant } from "styled-system";
@@ -11,6 +11,7 @@ import smallSearch from "../../../static/icons/smallSearch.svg";
 import bigSearch from "../../../static/icons/bigSearch.svg";
 import { Box } from "../../helpers/Box";
 import { LinkRenderer } from "../../helpers/Text";
+import { ErrorMessage } from "formik";
 
 const LabelStyle = styled(Box)`
   display: flex;
@@ -101,7 +102,20 @@ const StyledSpan = styled(Box)`
 `;
 
 export const Input = memo(
-  ({ id, type, label, placeholder, name, labelBold, labelSize, variantLabel, require, ...props }) => {
+  ({
+    id,
+    type,
+    label,
+    placeholder,
+    handleChange,
+    name,
+    errors,
+    labelBold,
+    labelSize,
+    variantLabel,
+    require,
+    ...props
+  }) => {
     const [currentType, setCurrentType] = useState(type);
     const onEyeClick = () => {
       if (currentType === "password") setCurrentType("text");
@@ -117,14 +131,27 @@ export const Input = memo(
           {label}
           {require && <StyledSpan>*</StyledSpan>}
         </Label>
-        <InputStyle {...props} as="input" id={id} type={currentType} name={name} placeholder={placeholder} />
-        {name === "Password" && (
+        <Box position="relative">
+          <InputStyle
+            {...props}
+            as="input"
+            id={id}
+            type={currentType}
+            onChange={handleChange}
+            name={name}
+            placeholder={placeholder}
+          />
+          {type === "password" && icon}
+        </Box>
+        {name === "password" && (
           <LinkRenderer href="/" semiBold position="absolute" top="0" right="0">
             Forgot password?
           </LinkRenderer>
         )}
         {name === "bigSearch" && <StyledButton size="md">SEARCH</StyledButton>}
-        {type === "password" && icon}
+        <Box color="red">
+          <ErrorMessage name={name} />
+        </Box>
       </LabelStyle>
     );
   }
