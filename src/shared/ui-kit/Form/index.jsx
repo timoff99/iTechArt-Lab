@@ -27,25 +27,38 @@ const StyledForm = styled(Box)`
 const schema = yup.object().shape({
   email: yup.string().email().required(),
   password: yup.string().trim().required(),
-  confirmPassword: yup.string().trim().required(),
+  confirmPassword: yup.string().oneOf([yup.ref("password"), null], "Passwords must match"),
 });
 
 export const Form = ({ title, description, link, inputData, href, buttonText, auth, ...props }) => {
-  const notify = (errors, values) => {
+  const errorNotify = (errors) => {
     if (errors.message) {
+      console.log(errors);
       return toast.error(errors.message);
     }
-    if (Object.keys(errors).length == 0 && Object.values(values)[0].length !== 0) {
-      return toast.success("user signup");
+  };
+
+  const successNotify = (msg) => {
+    return toast.success(msg);
+  };
+
+  const asyncHandleSubmit = async (values) => {
+    if (auth === "signup") {
+      try {
+        const signinData = await AuthService.signup(values.email, values.password);
+        console.log(signinData.data.token);
+        Cookies.set("token", signinData.data.token);
+        return successNotify("user signup");
+      } catch (e) {
+        return errorNotify(e.response.data);
+      }
     }
-    if (errors.email) {
-      toast.error(errors.email);
-    }
-    if (errors.password) {
-      toast.error(errors.password);
-    }
-    if (errors.confirmPassword) {
-      toast.error(errors.confirmPassword);
+    try {
+      const loginData = await AuthService.login(values.email, values.password);
+      Cookies.set("token", loginData.data.token);
+      return successNotify("user login");
+    } catch (e) {
+      return errorNotify(e.response.data);
     }
   };
 
@@ -54,33 +67,13 @@ export const Form = ({ title, description, link, inputData, href, buttonText, au
       initialValues={{
         email: "",
         password: "",
-        confirmPassword: "",
       }}
       validationSchema={schema}
-      onSubmit={async (values) => {
-        if (auth === "signup") {
-          if (values.password !== values.confirmPassword) {
-            return;
-          }
-          console.log("signup");
-          try {
-            Cookies.set("token", "123");
-            const data = await AuthService.signup(values.email, values.password);
-            Cookies.set("token", data.token);
-            console.log(data);
-            return data;
-          } catch (e) {
-            console.log(e);
-
-            return notify(e.response.data, values);
-          }
-        }
-        console.log("login");
-        const loginData = await AuthService.login(values.email, values.password);
-        // localStorage.setItem("token", loginData.data.token);
+      onSubmit={(values) => {
+        asyncHandleSubmit(values);
       }}
     >
-      {({ values, errors, handleChange, handleSubmit }) => (
+      {({ handleChange, handleSubmit }) => (
         <StyledForm as="form" {...props} onSubmit={handleSubmit}>
           <Logo />
           <Heading mt={8} mb={2} as={"h2"} bold>
@@ -96,7 +89,7 @@ export const Form = ({ title, description, link, inputData, href, buttonText, au
             return <Input handleChange={handleChange} key={index} {...data} variantInput="loginInput" />;
           })}
 
-          <Button size="fit" mt="14px" type="submit" onClick={() => notify(errors, values)}>
+          <Button size="fit" mt="14px" type="submit">
             {buttonText}
           </Button>
           <ToastContainer theme="colored" />

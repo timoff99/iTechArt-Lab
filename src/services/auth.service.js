@@ -2,16 +2,14 @@ import api from "./api.service.js";
 
 export default class AuthService {
   static async signup(email, password) {
-    const token = api.post("/signup ", { email, password });
-    Cookie.set("token", token);
+    return api.post("/signup ", { email, password });
   }
 
   static async login(email, password) {
-    const token = await api.post("/login", { email, password });
-    Cookie.set("token", token);
+    return api.post("/login", { email, password });
   }
 
   static async logout() {
-    return api.post("/logout");
+    await api.post("/logout");
   }
 }
