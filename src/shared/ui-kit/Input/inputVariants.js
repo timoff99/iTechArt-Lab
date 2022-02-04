@@ -13,6 +13,7 @@ export default () => ({
 
     fontSize: "18px",
     lineHeight: "22px",
+    width: "100%",
   },
   commentsInput: {
     borderRadius: "10px",

@@ -114,6 +114,7 @@ export const Input = memo(
     labelSize,
     variantLabel,
     require,
+    form,
     ...props
   }) => {
     const [currentType, setCurrentType] = useState(type);
@@ -149,9 +150,7 @@ export const Input = memo(
           </LinkRenderer>
         )}
         {name === "bigSearch" && <StyledButton size="md">SEARCH</StyledButton>}
-        <Box color="red">
-          <ErrorMessage name={name} />
-        </Box>
+        <Box color="red">{form && <ErrorMessage name={name} />}</Box>
       </LabelStyle>
     );
   }

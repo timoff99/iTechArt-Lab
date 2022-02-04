@@ -3,4 +3,5 @@ export const ROUTE_NAMES = {
   LOGIN: "/login",
   SIGNUP: "/signup",
   COOKBOOK_SEARCH: "/cookbook-search",
+  PROFILE: "/profile",
 };

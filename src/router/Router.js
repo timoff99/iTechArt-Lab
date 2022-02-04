@@ -11,6 +11,7 @@ import { Layout } from "../shared/ui-kit/Layout";
 import { Test } from "../pages/Test";
 
 import { CookBookSearch } from "../pages/CookBookSearch";
+import { Profile } from "../pages/Profile";
 
 export const Router = () => {
   return (
@@ -30,7 +31,14 @@ export const Router = () => {
       <Route path="/test" element={<Test />} />
 
       <Route path={ROUTE_NAMES.COOKBOOK_SEARCH} element={<CookBookSearch />} />
-
+      <Route
+        path={ROUTE_NAMES.PROFILE}
+        element={
+          <Layout>
+            <Profile />
+          </Layout>
+        }
+      />
     </Routes>
   );
 };

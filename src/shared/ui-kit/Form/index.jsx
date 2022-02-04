@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
 import { ReactComponent as Logo } from "../../../static/icons/logo.svg";
@@ -14,6 +15,7 @@ import { Input } from "../Input";
 import theme from "../../../theme";
 import { Heading, Paragraph, LinkRenderer } from "../../helpers/Text";
 import AuthService from "../../../services/auth.service";
+import { UserContext } from "../UserProvider";
 
 const StyledForm = styled(Box)`
   background: ${theme.colors.background.main};
@@ -31,8 +33,10 @@ const schema = yup.object().shape({
 });
 
 export const Form = ({ title, description, link, inputData, href, buttonText, auth, ...props }) => {
+  const { setUser } = useContext(UserContext);
+  const navigation = useNavigate();
   const errorNotify = (errors) => {
-    if (errors.message) {
+    if (errors?.message) {
       console.log(errors);
       return toast.error(errors.message);
     }
@@ -46,19 +50,28 @@ export const Form = ({ title, description, link, inputData, href, buttonText, au
     if (auth === "signup") {
       try {
         const signinData = await AuthService.signup(values.email, values.password);
-        console.log(signinData.data.token);
         Cookies.set("token", signinData.data.token);
-        return successNotify("user signup");
+        successNotify("user signup");
+        setUser(signinData.data.user);
+        setTimeout(() => {
+          navigation("/profile");
+        }, 1000);
+        return true;
       } catch (e) {
-        return errorNotify(e.response.data);
+        return errorNotify(e?.response?.data);
       }
     }
     try {
       const loginData = await AuthService.login(values.email, values.password);
       Cookies.set("token", loginData.data.token);
-      return successNotify("user login");
+      successNotify("user login");
+      setUser(loginData.data.user);
+      setTimeout(() => {
+        navigation("/profile");
+      }, 1000);
+      return true;
     } catch (e) {
-      return errorNotify(e.response.data);
+      return errorNotify(e?.response?.data);
     }
   };
 
@@ -86,7 +99,7 @@ export const Form = ({ title, description, link, inputData, href, buttonText, au
             </LinkRenderer>
           </Paragraph>
           {inputData.map((data, index) => {
-            return <Input handleChange={handleChange} key={index} {...data} variantInput="loginInput" />;
+            return <Input handleChange={handleChange} key={index} {...data} variantInput="loginInput" form />;
           })}
 
           <Button size="fit" mt="14px" type="submit">
