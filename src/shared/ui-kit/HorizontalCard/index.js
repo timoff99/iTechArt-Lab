@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import { Box } from "../../helpers/Box";
 import { Flex, FlexBetween, FlexCenter, FlexAlignCenter } from "../../helpers/Flex";
@@ -7,36 +7,54 @@ import { ReactComponent as Options } from "../../../static/icons/options.svg";
 import { ReactComponent as Heart } from "../../../static/icons/heart.svg";
 import { ReactComponent as Comment } from "../../../static/icons/comment.svg";
 import { LinkRenderer, Paragraph, Heading } from "../../helpers/Text";
-import { StyledCard } from "./styles";
+import { StyledCard, Img } from "./styles";
 import { Button } from "../Button";
+import { Modal } from "../../ui-kit/Modal";
+import { Recipes } from "../../ui-kit/ModalContent/Recipes";
 
 export const HorizontalCard = ({
-  views,
-  recept,
+  title,
+  description,
   author,
+  views,
   likes,
   comments,
   image,
-  description,
   place,
+  steps,
+  ingredients,
   modalCookBook,
   ...props
 }) => {
+  const [showModal, setShowModal] = useState(false);
   const handleOption = (event) => {
     event.preventDefault();
     console.log(2);
   };
+
+  const foo = (e) => {
+    e.stopPropagation();
+    console.log("vover");
+  };
+
+  const boo = (e) => {
+    e.stopPropagation();
+    console.log("bober");
+  };
+
+  const toggleModal = () => {
+    setShowModal((prev) => !prev);
+  };
   return (
-    <LinkRenderer href="/" color="secondary.main">
-      <StyledCard place={place} mb={3} {...props}>
+    <StyledCard place={place} mb={3} {...props} onClick={toggleModal} width={"100%"}>
+      <FlexBetween width={"100%"}>
         <Flex>
-          <img src={image} alt="cardImage" />
+          <Img as="img" src={image} alt="cardImage" />
           <Box p={8}>
             <FlexBetween pb={5}>
               <Heading as={"h3"} semiBold>
-                {recept}
+                {title}
               </Heading>
-              <Paragraph>{author}</Paragraph>
             </FlexBetween>
             {description && (
               <Paragraph textAlign="left" pb={48}>
@@ -55,20 +73,40 @@ export const HorizontalCard = ({
                 </FlexAlignCenter>
                 <FlexAlignCenter>
                   <Comment />
-                  <Paragraph ml={2}>{comments} comments</Paragraph>
+                  <Paragraph ml={2}>{comments?.count} comments</Paragraph>
                 </FlexAlignCenter>
               </Flex>
-              {modalCookBook ? (
-                <Button variant="outlined">Save</Button>
-              ) : (
-                <FlexAlignCenter onClick={(e) => handleOption(e)} height={20}>
-                  <Options />
-                </FlexAlignCenter>
-              )}
             </FlexBetween>
           </Box>
         </Flex>
-      </StyledCard>
-    </LinkRenderer>
+        <FlexBetween flexDirection="column" p={8} alignItems="end">
+          <Paragraph>{author}</Paragraph>
+          {modalCookBook ? (
+            <Button variant="outlined" ml={5} onClick={(e) => foo(e)}>
+              Save
+            </Button>
+          ) : (
+            <FlexAlignCenter onClick={(e) => handleOption(e)} height={20} mb={5}>
+              <Options />
+            </FlexAlignCenter>
+          )}
+        </FlexBetween>
+      </FlexBetween>
+      {showModal && (
+        <Modal showModal={showModal} setShowModal={toggleModal}>
+          <Recipes
+            title={title}
+            description={description}
+            author={author}
+            views={views}
+            likes={likes}
+            comments={comments}
+            image={image}
+            steps={steps}
+            ingredients={ingredients}
+          />
+        </Modal>
+      )}
+    </StyledCard>
   );
 };

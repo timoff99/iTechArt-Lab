@@ -4,12 +4,13 @@ import { Overlay, StyledX, Content } from "./styles";
 
 const modalRootElement = document.querySelector("#modal");
 
-export const Modal = ({ showModal, setShowModal, openModal, children }) => {
+export const Modal = ({ showModal, setShowModal, children }) => {
   const element = useMemo(() => document.createElement("div"), []);
 
   const modalRef = useRef();
 
   const closeModal = (e) => {
+    e.stopPropagation();
     if (modalRef.current === e.target) {
       setShowModal(false);
     }
@@ -37,7 +38,7 @@ export const Modal = ({ showModal, setShowModal, openModal, children }) => {
   });
   return createPortal(
     <Overlay ref={modalRef} onClick={closeModal}>
-      <StyledX onClick={openModal} />
+      <StyledX onClick={setShowModal} />
       <Content>{children}</Content>
     </Overlay>,
     element

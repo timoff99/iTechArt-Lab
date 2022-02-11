@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-export const API_URL = "http://localhost:5000/auth";
+export const API_URL = "http://localhost:5000/api";
 
 const api = axios.create({
   withCredentials: true,

@@ -54,7 +54,7 @@ export const Form = ({ title, description, link, inputData, href, buttonText, au
         successNotify("user signup");
         setUser(signinData.data.user);
         setTimeout(() => {
-          navigation("/profile");
+          navigation("/profile?tab=cookbooks", { replace: true });
         }, 1000);
         return true;
       } catch (e) {
@@ -67,7 +67,7 @@ export const Form = ({ title, description, link, inputData, href, buttonText, au
       successNotify("user login");
       setUser(loginData.data.user);
       setTimeout(() => {
-        navigation("/profile");
+        navigation("/profile?tab=cookbooks", { replace: true });
       }, 1000);
       return true;
     } catch (e) {

@@ -156,6 +156,9 @@ export const Input = memo(
   }
 );
 
+Input.defaultProps = {
+  variantInput: "loginInput",
+};
 Input.propTypes = {
   id: PropTypes.number,
   type: PropTypes.string,
