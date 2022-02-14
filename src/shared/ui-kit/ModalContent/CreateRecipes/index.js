@@ -1,12 +1,11 @@
-import React, { useRef } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import { Formik, Form } from "formik";
 
 import RecipeService from "../../../../services/recipe.service";
-import CookBookService from "../../../../services/cookbook.service";
 import ImageService from "../../../../services/image.service";
 
-import { Flex, FlexColumn } from "../../../helpers/Flex";
+import { Flex } from "../../../helpers/Flex";
 import { Box } from "../../../helpers/Box";
 import { Heading, Paragraph } from "../../../helpers/Text";
 import { Button } from "../../Button";
@@ -25,15 +24,18 @@ const FileUploader = styled(Box)`
 `;
 
 export const CreateRecipes = ({ setShowModal }) => {
+  const [cookbookImage, setCookbookImage] = useState("");
+
   const formData = new FormData();
   const refFileInput = useRef();
 
   const setImage = (e) => {
-    formData.append("image", e.target.files[0]);
+    setCookbookImage(e.target.files[0]);
   };
 
   const CreateImage = async () => {
     try {
+      formData.append("image", cookbookImage);
       const image = await ImageService.addImage(formData);
       return image;
     } catch (error) {

@@ -18,12 +18,13 @@ import { MultiSelect } from "../../MultiSelect";
 import { createCookBookData } from "./mockData";
 
 const FileUploader = styled(Box)`
-  display: block;
+  display: none;
 `;
 
 export const CreateCookBook = memo(({ setShowModal }) => {
   const [allAvailableRecipes, setAllAvailableRecipes] = useState([]);
   const [selectedRecipes, SetSelectedRecipes] = useState([]);
+  const [cookbookImage, setCookbookImage] = useState("");
   const formData = new FormData();
   const refFileInput = useRef();
 
@@ -40,7 +41,7 @@ export const CreateCookBook = memo(({ setShowModal }) => {
   }, []);
 
   const setImage = (e) => {
-    formData.append("image", e.target.files[0]);
+    setCookbookImage(e.target.files[0]);
   };
 
   const handleSelectedRecipes = (recipes) => {
@@ -49,6 +50,7 @@ export const CreateCookBook = memo(({ setShowModal }) => {
 
   const CreateImage = async () => {
     try {
+      formData.append("image", cookbookImage);
       const image = await ImageService.addImage(formData);
       return image;
     } catch (error) {
