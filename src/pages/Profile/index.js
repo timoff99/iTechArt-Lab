@@ -59,17 +59,10 @@ export const Profile = () => {
   const [showModal, setShowModal] = useState(false);
   const [searchData, setSearchData] = useState([]);
   const { user } = useContext(UserContext);
-  // console.log(user);
   const navigation = useNavigate();
   const location = useLocation();
 
-  let currentTab = tabs.find((t) => location.search.search(t.path) >= 0);
-  useEffect(() => {
-    if (currentTab === undefined) {
-      currentTab = tabs[0];
-      navigation(`?${tabs[0].path}`);
-    }
-  }, []);
+  const currentTab = tabs.find((t) => location.search.search(t.path) >= 0) || tabs[0];
 
   const onTabChange = (tab) => {
     navigation(`?${tab.path}`);
@@ -99,7 +92,7 @@ export const Profile = () => {
         <UserImage as="img" src={userImage} alt="userImage" />
         <Box ml={10}>
           <Heading as={"h2"} bold mb={5}>
-            {user.username ? user.username : "John Doe"}
+            {user.username}
           </Heading>
           <Paragraph maxWidth={504}>
             {user.description

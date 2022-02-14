@@ -15,6 +15,7 @@ import { Input } from "../Input";
 import theme from "../../../theme";
 import { Heading, Paragraph, LinkRenderer } from "../../helpers/Text";
 import AuthService from "../../../services/auth.service";
+import UserService from "../../../services/user.service";
 import { UserContext } from "../UserProvider";
 
 const StyledForm = styled(Box)`
@@ -51,8 +52,9 @@ export const Form = ({ title, description, link, inputData, href, buttonText, au
       try {
         const signinData = await AuthService.signup(values.email, values.password);
         Cookies.set("token", signinData.data.token);
+        const user = await UserService.getUser();
+        setUser(user.data.user);
         successNotify("user signup");
-        setUser(signinData.data.user);
         setTimeout(() => {
           navigation("/profile?tab=cookbooks", { replace: true });
         }, 1000);
@@ -64,8 +66,9 @@ export const Form = ({ title, description, link, inputData, href, buttonText, au
     try {
       const loginData = await AuthService.login(values.email, values.password);
       Cookies.set("token", loginData.data.token);
+      const user = await UserService.getUser();
+      setUser(user.data.user);
       successNotify("user login");
-      setUser(loginData.data.user);
       setTimeout(() => {
         navigation("/profile?tab=cookbooks", { replace: true });
       }, 1000);

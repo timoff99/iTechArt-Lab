@@ -1,8 +1,8 @@
 import api from "./api.service.js";
 
 export default class CookBookService {
-  static async addCookBook(title, description, image, recipes) {
-    return api.post("cookbook/create", { title, description, image, recipes });
+  static async addCookBook(cookbookData) {
+    return api.post("cookbook/create", cookbookData);
   }
   static async getAllCookBooks() {
     return api.get("cookbook/get-all");

@@ -5,7 +5,7 @@ import { ReactComponent as Heart } from "../../../../static/icons/heart.svg";
 import { ReactComponent as Comment } from "../../../../static/icons/comment.svg";
 import { ReactComponent as Eye } from "../../../../static/icons/small-eye.svg";
 import { Box } from "../../../helpers/Box";
-import { Flex, FlexBetween, FlexColumn, FlexAlignCenter } from "../../../helpers/Flex";
+import { FlexBetween, FlexColumn, FlexAlignCenter } from "../../../helpers/Flex";
 import { Paragraph, Heading } from "../../../helpers/Text";
 import { Button } from "../../Button";
 import { Comments } from "../../Comments";
@@ -28,7 +28,6 @@ const Circle = styled(Box)`
 `;
 
 export const Recipes = ({ title, description, author, views, likes, comments, image, steps, ingredients }) => {
-  console.log("ingredients", ingredients);
   return (
     <Box>
       <FlexBetween>
@@ -58,7 +57,7 @@ export const Recipes = ({ title, description, author, views, likes, comments, im
                 Directions
               </Heading>
               {steps &&
-                steps.map(({ step }, i) => (
+                steps.map((step, i) => (
                   <Box key={i}>
                     <Paragraph bold inline>
                       Step {i + 1}:
@@ -74,7 +73,7 @@ export const Recipes = ({ title, description, author, views, likes, comments, im
                 Ingredients
               </Heading>
               {ingredients &&
-                ingredients.map(({ ingredient }, i) => (
+                ingredients.map((ingredient, i) => (
                   <Box key={i}>
                     <Circle />
                     <Paragraph inline ml={2}>

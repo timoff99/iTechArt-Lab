@@ -1,8 +1,8 @@
 import api from "./api.service.js";
 
 export default class RecipeService {
-  static async addRecipe(title, description, image) {
-    return api.post("recipe/create", { title, description, image });
+  static async addRecipe(recipesData) {
+    return api.post("recipe/create", recipesData);
   }
 
   static async getAllRecipes() {

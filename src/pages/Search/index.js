@@ -50,13 +50,7 @@ export const Search = () => {
   const navigation = useNavigate();
   const location = useLocation();
 
-  let currentTab = tabs.find((t) => location.search.search(t.path) >= 0);
-  useEffect(() => {
-    if (currentTab === undefined) {
-      currentTab = tabs[0];
-      navigation(`?${tabs[0].path}`);
-    }
-  }, []);
+  const currentTab = tabs.find((t) => location.search.search(t.path) >= 0) || tabs[0];
 
   const onTabChange = (tab) => {
     navigation(`?${tab.path}`);

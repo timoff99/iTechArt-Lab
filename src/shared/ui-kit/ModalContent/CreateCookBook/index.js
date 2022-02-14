@@ -52,16 +52,18 @@ export const CreateCookBook = memo(({ setShowModal }) => {
     try {
       formData.append("image", cookbookImage);
       const image = await ImageService.addImage(formData);
-      return image;
+      return image.data;
     } catch (error) {
       console.log("error occurred  while uploading image", error);
     }
     return true;
   };
-  const createCookBook = async (values, image) => {
+  const createCookBook = async (values) => {
     try {
+      const image = await CreateImage();
       const { title, description } = values;
-      const recept = await CookBookService.addCookBook(title, description, image, selectedRecipes);
+      const cookbookData = { title, description, image, selectedRecipes };
+      const recept = await CookBookService.addCookBook(cookbookData);
       console.log("cookBook upl seccess");
     } catch (error) {
       console.log("error cookBook", error);
@@ -79,8 +81,7 @@ export const CreateCookBook = memo(({ setShowModal }) => {
         description: "",
       }}
       onSubmit={async (values) => {
-        const image = await CreateImage();
-        await createCookBook(values, image.data);
+        await createCookBook(values);
       }}
     >
       {({ handleChange }) => (

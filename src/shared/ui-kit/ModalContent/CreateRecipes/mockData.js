@@ -19,8 +19,8 @@ export const createRecipeData = [
   },
   {
     type: "text",
-    label: "Directions",
-    placeholder: "Directions",
-    name: "directions",
+    label: "Steps",
+    placeholder: "steps",
+    name: "steps",
   },
 ];

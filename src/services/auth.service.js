@@ -8,12 +8,4 @@ export default class AuthService {
   static async login(email, password) {
     return api.post("auth/login", { email, password });
   }
-
-  static async logout() {
-    await api.post("auth/logout");
-  }
-
-  static async getUser() {
-    await api.get("/user/get-user");
-  }
 }
