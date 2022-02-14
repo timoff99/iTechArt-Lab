@@ -2,6 +2,7 @@ import React from "react";
 import { Router } from "./router/Router";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 import theme from "./theme";
+import { UserProvider } from "./shared/ui-kit/UserProvider";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -18,7 +19,9 @@ function App() {
     <ThemeProvider theme={theme}>
       <div className="App">
         <GlobalStyle />
-        <Router />
+        <UserProvider>
+          <Router />
+        </UserProvider>
       </div>
     </ThemeProvider>
   );

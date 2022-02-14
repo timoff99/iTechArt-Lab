@@ -42,6 +42,7 @@ export const LogIn = () => {
             inputData={loginData}
             buttonText="Sign In"
             href="/signup"
+            auth="login"
           />
         </Col>
       </Grid>

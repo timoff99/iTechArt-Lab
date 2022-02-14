@@ -2,16 +2,16 @@ export const signUpData = [
   {
     type: "text",
     label: "Email",
-    name: "Email",
+    name: "email",
   },
   {
     type: "password",
     label: "Password",
-    name: "Password",
+    name: "password",
   },
   {
     type: "password",
     label: "Confirm Password",
-    name: "Confirm Password",
+    name: "confirmPassword",
   },
 ];

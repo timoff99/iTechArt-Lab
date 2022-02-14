@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import theme from "../../theme";
@@ -84,7 +84,7 @@ export const Home = () => {
         <Heading as={"h2"} bold mb={8} color="secondary.main">
           20 Highest-Rated Recipes
         </Heading>
-        <Grid nested mb={11}>
+        <Grid nested mt={10}>
           {cardListHighRate.map((props, index) => {
             return (
               <Col key={index} span={[4, 6, 3]}>

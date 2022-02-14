@@ -5,7 +5,7 @@ import { ReactComponent as Heart } from "../../../../static/icons/heart.svg";
 import { ReactComponent as Comment } from "../../../../static/icons/comment.svg";
 import { ReactComponent as Eye } from "../../../../static/icons/small-eye.svg";
 import { Box } from "../../../helpers/Box";
-import { Flex, FlexBetween, FlexColumn, FlexAlignCenter } from "../../../helpers/Flex";
+import { FlexBetween, FlexColumn, FlexAlignCenter } from "../../../helpers/Flex";
 import { Paragraph, Heading } from "../../../helpers/Text";
 import { Button } from "../../Button";
 import { Comments } from "../../Comments";
@@ -14,6 +14,7 @@ import theme from "../../../../theme";
 const Image = styled(Box)`
   width: 100%;
   max-height: 660px;
+  max-width: 440px;
   border-radius: 50px 0px 10px;
   object-fit: cover;
 `;
@@ -26,15 +27,15 @@ const Circle = styled(Box)`
   display: inline-block;
 `;
 
-export const Recipes = ({ recipe, author, image, description, views, likes, comments, steps, ingredients }) => {
+export const Recipes = ({ title, description, author, views, likes, comments, image, steps, ingredients }) => {
   return (
     <Box>
-      <Flex>
+      <FlexBetween>
         <Image as="img" src={image} alt="image" />
         <FlexColumn pl={40} pr={56} pt={72}>
           <FlexBetween>
             <Heading as={"h2"} bold mb={5} maxWidth={427}>
-              {recipe}
+              {title}
             </Heading>
             <Box>
               <Button size="box" variant="outlined">
@@ -51,33 +52,35 @@ export const Recipes = ({ recipe, author, image, description, views, likes, comm
           </Heading>
           <Paragraph>{description}</Paragraph>
           <FlexBetween mt={8}>
-            <Box>
+            <Box mr={11}>
               <Heading as={"h3"} semiBold mb={5}>
                 Directions
               </Heading>
-              {steps.map(({ step }, i) => (
-                <Box key={i}>
-                  <Paragraph bold inline>
-                    Step {i + 1}:
-                  </Paragraph>
-                  <Paragraph inline ml={2}>
-                    {step}
-                  </Paragraph>
-                </Box>
-              ))}
+              {steps &&
+                steps.map((step, i) => (
+                  <Box key={i}>
+                    <Paragraph bold inline>
+                      Step {i + 1}:
+                    </Paragraph>
+                    <Paragraph inline ml={2}>
+                      {step}
+                    </Paragraph>
+                  </Box>
+                ))}
             </Box>
             <Box>
               <Heading as={"h3"} semiBold mb={5}>
                 Ingredients
               </Heading>
-              {ingredients.map(({ ingredient }, i) => (
-                <Box key={i}>
-                  <Circle />
-                  <Paragraph inline ml={2}>
-                    {ingredient}
-                  </Paragraph>
-                </Box>
-              ))}
+              {ingredients &&
+                ingredients.map((ingredient, i) => (
+                  <Box key={i}>
+                    <Circle />
+                    <Paragraph inline ml={2}>
+                      {ingredient}
+                    </Paragraph>
+                  </Box>
+                ))}
             </Box>
           </FlexBetween>
           <FlexAlignCenter pt={9}>
@@ -91,11 +94,11 @@ export const Recipes = ({ recipe, author, image, description, views, likes, comm
             </FlexAlignCenter>
             <FlexAlignCenter>
               <Comment />
-              <Paragraph ml={2}>{comments} comments</Paragraph>
+              <Paragraph ml={2}>{comments.count} comments</Paragraph>
             </FlexAlignCenter>
           </FlexAlignCenter>
         </FlexColumn>
-      </Flex>
+      </FlexBetween>
       <Box px={56} py={72}>
         <FlexColumn mb={10}>
           <Comments />

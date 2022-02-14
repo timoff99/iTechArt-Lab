@@ -51,20 +51,13 @@ export const StyledCard = styled(Box)`
     }
   }`;
     }
-  }}/* ${(props) => {
-    /////becouse of display: inline-block
-    switch (props.sizes) {
-      case "sm":
-        return `max-width: 288px;`;
-      case "lg":
-        return `max-width: 392px;`;
-
-      default:
-        return `max-width: 288px;`;
-    }
-  }} */
+  }}
 `;
 
 export const StyledImg = styled("img")({
   minWidth: "0px",
+  borderRadius: "50px 10px",
+  objectFit: "cover",
+  maxHeight: "240px",
+  width: "240px",
 });

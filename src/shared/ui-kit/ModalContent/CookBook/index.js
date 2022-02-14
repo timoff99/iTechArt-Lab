@@ -22,13 +22,13 @@ const Image = styled(Box)`
   object-fit: cover;
 `;
 
-export const CookBook = ({ cookBookResepies, cookBook, author, likes, comments, description, image }) => {
+export const CookBook = ({ recipes, title, description, author, likes, comments, image }) => {
   return (
     <Box px={56} py={72}>
       <FlexBetween mb={10}>
         <FlexColumn>
           <Heading as={"h2"} bold mb={5} maxWidth={600}>
-            {cookBook}
+            {title}
           </Heading>
           <Paragraph color="primary.main" fontSize={2}>
             {author}
@@ -50,7 +50,7 @@ export const CookBook = ({ cookBookResepies, cookBook, author, likes, comments, 
             </FlexAlignCenter>
             <FlexAlignCenter>
               <Comment />
-              <Paragraph ml={2}>{comments} comments</Paragraph>
+              <Paragraph ml={2}>{comments?.count} comments</Paragraph>
             </FlexAlignCenter>
           </FlexAlignCenter>
         </BoxImage>
@@ -65,9 +65,10 @@ export const CookBook = ({ cookBookResepies, cookBook, author, likes, comments, 
         <Heading as={"h3"} semiBold mb={10}>
           Recipes
         </Heading>
-        {cookBookResepies.map((props, index) => {
-          return <HorizontalCard key={index} modalCookBook place={"no-rates"} {...props} />;
-        })}
+        {recipes &&
+          recipes.map((props, index) => {
+            return <HorizontalCard key={index} modalCookBook place={"no-rates"} {...props} />;
+          })}
       </FlexColumn>
       <FlexColumn mb={10}>
         <Comments />

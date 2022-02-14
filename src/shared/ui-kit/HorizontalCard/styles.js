@@ -5,6 +5,12 @@ import { Heading } from "../../helpers/Text";
 import { BORDER_RADIUS } from "../../../theme";
 import theme from "../../../theme";
 
+export const Img = styled(Box)`
+  max-width: 288px;
+  max-height: 212px;
+  border-radius: 50px 10px;
+`;
+
 export const StyledCard = styled(Box)`
   display: inline-block;
   background: ${theme.colors.background.main};

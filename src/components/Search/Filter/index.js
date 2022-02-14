@@ -1,15 +1,14 @@
 import React from "react";
-import ReactSelect from "react-select";
 
 import { Heading, Paragraph } from "../../../shared/helpers/Text";
 import { FlexBetween, FlexColumn } from "../../../shared/helpers/Flex";
 import { Slider } from "../Slider";
-import { getCustomSelectStyle, Label, Title, Wrapper, Checkbox } from "./styles";
+import { Label, Title, Wrapper, Checkbox } from "./styles";
 import { Box } from "../../../shared/helpers/Box";
 import { CheckboxData } from "./mockData";
+import { Select } from "../../../shared/ui-kit/Select";
 
-export const Filter = ({ label, options, value, onChange, timeRange, setTimeRange }) => {
-  const route = "tab=cookbook";
+export const Filter = ({ label, options, value, onChange, timeRange, setTimeRange, route }) => {
   const handleTypeChange = (e) => {
     if (e.target.checked) {
       console.log(e.target.value);
@@ -25,24 +24,14 @@ export const Filter = ({ label, options, value, onChange, timeRange, setTimeRang
       </FlexBetween>
       <FlexColumn as="label" htmlFor="select" mb={8}>
         {label && <Title as="span">{label}</Title>}
-        <ReactSelect
-          name="select"
-          blurInputOnSelect
-          classNamePrefix="select"
-          hideSelectedOptions={false}
-          styles={getCustomSelectStyle()}
-          isFocused={false}
-          options={options}
-          value={value}
-          onChange={onChange}
-        />
+        <Select options={options} value={value} onChange={onChange} />
       </FlexColumn>
-      {route === "tab=cookbook" && (
+      {route === "tab=cookbooks" && (
         <Heading as={"h3"} semiBold mb={5}>
           Cookbook type
         </Heading>
       )}
-      {route === "tab=cookbook" &&
+      {route === "tab=cookbooks" &&
         CheckboxData.map(({ value, children, mb }, index) => {
           return (
             <Box key={index}>

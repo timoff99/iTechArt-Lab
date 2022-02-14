@@ -1,29 +1,124 @@
-import React from "react";
+import React, { useState, useEffect, useRef, memo } from "react";
+import styled from "styled-components";
+import { Formik, Form } from "formik";
+
+import RecipeService from "../../../../services/recipe.service";
+import CookBookService from "../../../../services/cookbook.service";
+import ImageService from "../../../../services/image.service";
 
 import { Box } from "../../../helpers/Box";
 import { Heading } from "../../../helpers/Text";
+import { Flex } from "../../../helpers/Flex";
 import { Button } from "../../Button";
 import { Input } from "../../Input";
 import { HorizontalCard } from "../../HorizontalCard";
-import { createCookBookData } from "./mockData";
 import { Textarea } from "../../Textarea";
+import { MultiSelect } from "../../MultiSelect";
 
-export const CreateCookBook = ({ cookBookResepies }) => {
+import { createCookBookData } from "./mockData";
+
+const FileUploader = styled(Box)`
+  display: none;
+`;
+
+export const CreateCookBook = memo(({ setShowModal }) => {
+  const [allAvailableRecipes, setAllAvailableRecipes] = useState([]);
+  const [selectedRecipes, SetSelectedRecipes] = useState([]);
+  const [cookbookImage, setCookbookImage] = useState("");
+  const formData = new FormData();
+  const refFileInput = useRef();
+
+  const loadRecipes = async () => {
+    const userRecipe = await RecipeService.getRecipeWithoutCookBook();
+    const listOfRecipes = userRecipe.data.map((el) => {
+      return { ...el, label: el.title, value: el._id };
+    });
+    setAllAvailableRecipes((prev) => [...prev, ...listOfRecipes]);
+  };
+
+  useEffect(() => {
+    loadRecipes();
+  }, []);
+
+  const setImage = (e) => {
+    setCookbookImage(e.target.files[0]);
+  };
+
+  const handleSelectedRecipes = (recipes) => {
+    SetSelectedRecipes([...recipes]);
+  };
+
+  const CreateImage = async () => {
+    try {
+      formData.append("image", cookbookImage);
+      const image = await ImageService.addImage(formData);
+      return image.data;
+    } catch (error) {
+      console.log("error occurred  while uploading image", error);
+    }
+    return true;
+  };
+  const createCookBook = async (values) => {
+    try {
+      const image = await CreateImage();
+      const { title, description } = values;
+      const cookbookData = { title, description, image, selectedRecipes };
+      const recept = await CookBookService.addCookBook(cookbookData);
+      console.log("cookBook upl seccess");
+    } catch (error) {
+      console.log("error cookBook", error);
+    }
+    return true;
+  };
+  const handleClickFileUploader = (e) => {
+    e.preventDefault();
+    refFileInput.current.click();
+  };
   return (
-    <Box px={56} py={72}>
-      <Heading as={"h2"} bold mb={10}>
-        Create New CookBook
-      </Heading>
-      <Input labelBold="labelBold" {...createCookBookData[0]} require />
-      <Button size="md" variant="primary" mb={10}>
-        Upload CookBook Image
-      </Button>
-      <Textarea labelBold {...createCookBookData[1]} />
-      <Input labelBold="labelBold" {...createCookBookData[2]} />
+    <Formik
+      initialValues={{
+        title: "",
+        description: "",
+      }}
+      onSubmit={async (values) => {
+        await createCookBook(values);
+      }}
+    >
+      {({ handleChange }) => (
+        <Form>
+          <Box px={56} py={72}>
+            <Heading as={"h2"} bold mb={10}>
+              Create New CookBook
+            </Heading>
+            <Input handleChange={handleChange} labelBold="labelBold" {...createCookBookData[0]} require />
+            <FileUploader as="input" ref={refFileInput} type="file" id="img" name="img" onChange={(e) => setImage(e)} />
+            <Button size="md" variant="primary" mb={10} onClick={handleClickFileUploader}>
+              Upload CookBook Image
+            </Button>
+            <Textarea labelBold {...createCookBookData[1]} />
 
-      {cookBookResepies.map((props, index) => {
-        return <HorizontalCard key={index} place={"no-rates"} {...props} />;
-      })}
-    </Box>
+            <MultiSelect
+              options={allAvailableRecipes}
+              value={selectedRecipes}
+              onChange={handleSelectedRecipes}
+              placeholder={"Recipe Title"}
+            />
+
+            {selectedRecipes &&
+              selectedRecipes.map((props, index) => {
+                return <HorizontalCard key={index} place={"no-rates"} {...props} />;
+              })}
+            <Flex justifyContent="flex-end" mt={11}>
+              <Button size="md" variant="outlined" mr={10} onClick={setShowModal}>
+                Cancel
+              </Button>
+              <Button size="md" variant="primary" type="submit">
+                Confirm
+              </Button>
+            </Flex>
+          </Box>
+        </Form>
+      )}
+    </Formik>
   );
-};
+});

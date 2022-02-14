@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-
+import { useField } from "formik";
 import { Box } from "../../helpers/Box";
 import theme from "../../../theme";
 
@@ -31,13 +31,15 @@ const TextareaStyle = styled(Box)`
   outline: none;
 `;
 
-export const Textarea = ({ id, label, placeholder, labelBold, name }) => {
+export const Textarea = ({ id, label, placeholder, labelBold, ...props }) => {
+  const [field] = useField(props);
+
   return (
     <LabelStyle>
       <Label as="label" label={label} labelBold={labelBold} htmlFor={id}>
         {label}
       </Label>
-      <TextareaStyle as="textarea" id={id} name={name} placeholder={placeholder} />
+      <TextareaStyle as="textarea" id={id} name={name} placeholder={placeholder} {...field} />
     </LabelStyle>
   );
 };
