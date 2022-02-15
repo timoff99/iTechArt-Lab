@@ -27,6 +27,9 @@ export default class RecipeService {
   static async updateRecipe(_id) {
     return api.put("recipe/update", { _id });
   }
+  static async updateRecipeViews(_id) {
+    return api.put("recipe/update-views", { _id });
+  }
   static async deleteRecipe(_id) {
     await api.delete("recipe", { _id });
   }

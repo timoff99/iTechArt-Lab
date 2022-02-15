@@ -51,6 +51,8 @@ const StyledButton = styled(Box)`
         padding: ${props.theme.space[3]} 0;`;
       case "lg":
         return `padding: ${props.theme.space[5]} ${props.theme.space[9]};`;
+      case "link":
+        return `padding: 0;`;
       default:
         return `padding: ${props.theme.space[3]} ${props.theme.space[9]};`;
     }

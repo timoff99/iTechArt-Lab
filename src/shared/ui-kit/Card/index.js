@@ -26,6 +26,7 @@ export const Card = ({
   _id,
   ...props
 }) => {
+  console.log(likes?.length);
   const [showModal, setShowModal] = useState(false);
   const [currentCookBook, setCurrentCookBook] = useState([]);
   const handleOption = (event) => {
@@ -38,9 +39,11 @@ export const Card = ({
   };
 
   const openCookBook = async () => {
+    const updateViews = await CookBookService.updateCookBookViews(_id).then((res) => res.data);
+    console.log(updateViews);
     const cookbook = await CookBookService.getCookBook(_id).then((res) => res.data);
     await setCurrentCookBook(cookbook);
-    await toggleModal();
+    toggleModal();
   };
 
   return (
@@ -71,11 +74,11 @@ export const Card = ({
             {description}
           </Paragraph>
         )}
-        {likes && comments.count && (
+        {likes?.length && comments.count && (
           <FlexAlignCenter pt={9} justifyContent="space-between">
             <FlexAlignCenter>
               <Heart />
-              <Paragraph ml={2}>{likes} likes</Paragraph>
+              <Paragraph ml={2}>{likes?.length} likes</Paragraph>
             </FlexAlignCenter>
             <FlexAlignCenter>
               <Comment />

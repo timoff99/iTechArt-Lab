@@ -90,7 +90,7 @@ export const Recipes = ({ title, description, author, views, likes, comments, im
             </FlexAlignCenter>
             <FlexAlignCenter mr={8}>
               <Heart />
-              <Paragraph ml={2}>{likes} likes</Paragraph>
+              <Paragraph ml={2}>{likes?.length} likes</Paragraph>
             </FlexAlignCenter>
             <FlexAlignCenter>
               <Comment />

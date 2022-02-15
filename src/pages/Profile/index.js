@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -19,6 +19,10 @@ import { CreateCookBook } from "../../shared/ui-kit/ModalContent/CreateCookBook"
 import { CreateRecipes } from "../../shared/ui-kit/ModalContent/CreateRecipes";
 import { CookBookCard } from "../../shared/ui-kit/CookBookCard";
 import { RecipesCard } from "../../shared/ui-kit/RecipesCard";
+import { Input } from "../../shared/ui-kit/Input";
+import UserService from "../../services/user.service";
+import { ToastContainer, toast } from "react-toastify";
+import ImageService from "../../services/image.service";
 
 const UserImage = styled(Box)`
   border-radius: 50%;
@@ -35,9 +39,8 @@ const ProfileInfo = styled(Paragraph)`
   font-size: ${theme.fontSizes[2]};
 `;
 
-const ProfileInfoChange = styled(ProfileInfo)`
-  cursor: pointer;
-  color: ${theme.colors.primary.main};
+const FileUploader = styled(Box)`
+  display: none;
 `;
 
 const tabs = [
@@ -58,15 +61,30 @@ const tabs = [
 export const Profile = () => {
   const [showModal, setShowModal] = useState(false);
   const [searchData, setSearchData] = useState([]);
-  const { user } = useContext(UserContext);
+  const [personName, setPersonName] = useState("none");
+  const [personEmail, setPersonEmail] = useState("none");
+  const [personPassword, setPersonPassword] = useState("none");
+  const { user, setUser } = useContext(UserContext);
   const navigation = useNavigate();
   const location = useLocation();
-
+  const refFileInput = useRef();
+  const formData = new FormData();
   const currentTab = tabs.find((t) => location.search.search(t.path) >= 0) || tabs[0];
 
   const onTabChange = (tab) => {
     navigation(`?${tab.path}`);
     console.log(location);
+  };
+
+  const errorNotify = (errors) => {
+    if (errors?.message) {
+      console.log(errors);
+      return toast.error(errors.message);
+    }
+  };
+
+  const successNotify = (msg) => {
+    return toast.success(msg);
   };
 
   const getStartData = async () => {
@@ -86,10 +104,72 @@ export const Profile = () => {
   const toggleModal = () => {
     setShowModal((prev) => !prev);
   };
+
+  const handleOpenNameInput = () => {
+    setPersonName((prev) => (prev === "none" ? "block" : "none"));
+  };
+  const handleOpenEmailInput = () => {
+    setPersonEmail((prev) => (prev === "none" ? "block" : "none"));
+  };
+  const handleOpenPasswordInput = () => {
+    setPersonPassword((prev) => (prev === "none" ? "block" : "none"));
+  };
+
+  const saveNewUserInfo = async (e) => {
+    try {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        console.log(e.target);
+        const updatedValue = e.target.value;
+        const inputName = e.target.name;
+        const updatedFiled = { [inputName]: updatedValue };
+        const { data } = await UserService.updateUser(updatedFiled);
+        setUser(data.updateUser);
+        e.target.value = "";
+        setPersonName("none");
+        setPersonEmail("none");
+        successNotify(`user ${inputName} updated`);
+      }
+    } catch (e) {
+      return errorNotify(e?.response?.data);
+    }
+  };
+  const saveNewUserPassword = async (e) => {
+    try {
+      e.preventDefault();
+      const updatedFiled = { oldPassword: e.target[0].value, newPassword: e.target[1].value };
+      const { data } = await UserService.updateUser(updatedFiled);
+      setUser(data.updateUser);
+      e.target[0].value = "";
+      e.target[1].value = "";
+      setPersonPassword("none");
+      successNotify("user password updated");
+    } catch (e) {
+      return errorNotify(e?.response?.data);
+    }
+  };
+
+  const setImage = async (e) => {
+    formData.append("image", e.target.files[0]);
+    const image = await ImageService.addImage(formData);
+    const updatedFiled = { image: image.data.secure_url, cloudinary_id: image.data.public_id };
+    const { data } = await UserService.updateUser(updatedFiled);
+    setUser(data.updateUser);
+  };
+  const handleClickFileUploader = (e) => {
+    e.preventDefault();
+    refFileInput.current.click();
+  };
   return (
     <Container my={104}>
-      <Flex mb={11}>
-        <UserImage as="img" src={userImage} alt="userImage" />
+      <Flex mb={11} alignItems="center">
+        <FileUploader as="input" ref={refFileInput} type="file" id="img" name="img" onChange={(e) => setImage(e)} />
+        <UserImage
+          as="img"
+          src={user.image ? user.image : userImage}
+          alt="userImage"
+          onClick={(e) => handleClickFileUploader(e)}
+        />
         <Box ml={10}>
           <Heading as={"h2"} bold mb={5}>
             {user.username}
@@ -134,34 +214,52 @@ export const Profile = () => {
                 <Box>
                   <Flex alignItems="center" mb={8}>
                     <ProfileInfo fontSize={2}>Name</ProfileInfo>
-
-                    <Flex alignItems="center" fontSize={2} ml={5}>
-                      <ProfileInfo fontSize={2}>{user.username ? user.username : "John Doe"}</ProfileInfo>{" "}
-                      <ProfileInfoChange color="primary.main" semiBold ml={5} fontSize={2} cursor="pointer">
-                        Edit
-                      </ProfileInfoChange>
-                    </Flex>
+                    <ProfileInfo ml={5} fontSize={2}>
+                      {user.username ? user.username : "John Doe"}
+                    </ProfileInfo>
+                    <Button variant="link" size="link" ml={5} alignItems="center" onClick={handleOpenNameInput}>
+                      Edit
+                    </Button>
+                    <Input ml={5} labelSize="sm" name="username" display={personName} onKeyPress={saveNewUserInfo} />
                   </Flex>
 
                   <Flex alignItems="center" mb={8}>
                     <ProfileInfo fontSize={2}>Email</ProfileInfo>
-
-                    <Flex alignItems="center" fontSize={2} ml={5}>
-                      <ProfileInfo fontSize={2}>{user.email ? user.email : "testmail@test.com"} </ProfileInfo>{" "}
-                      <ProfileInfoChange color="primary.main" semiBold ml={5} fontSize={2} cursor="pointer">
-                        Edit
-                      </ProfileInfoChange>
-                    </Flex>
+                    <ProfileInfo ml={5} fontSize={2}>
+                      {user.email ? user.email : "testmail@test.com"}
+                    </ProfileInfo>
+                    <Button variant="link" size="link" ml={5} alignItems="center" onClick={handleOpenEmailInput}>
+                      Edit
+                    </Button>
+                    <Input ml={5} labelSize="sm" name="email" display={personEmail} onKeyPress={saveNewUserInfo} />
                   </Flex>
 
                   <Flex alignItems="center">
                     <ProfileInfo fontSize={2}>Password</ProfileInfo>
-
-                    <Flex alignItems="center" fontSize={2} ml={5}>
-                      <ProfileInfo fontSize={2}>*********</ProfileInfo>{" "}
-                      <ProfileInfoChange color="primary.main" semiBold ml={5} fontSize={2} cursor="pointer">
-                        Change My Password
-                      </ProfileInfoChange>
+                    <ProfileInfo ml={5} fontSize={2}>
+                      *********
+                    </ProfileInfo>
+                    <Button variant="link" size="link" ml={5} alignItems="center" onClick={handleOpenPasswordInput}>
+                      Change My Password
+                    </Button>
+                    <Flex as="form" onSubmit={saveNewUserPassword}>
+                      <Input
+                        ml={5}
+                        labelSize="sm"
+                        name="password"
+                        display={personPassword}
+                        noForm
+                        placeholder="Old Password"
+                      />
+                      <Input
+                        ml={5}
+                        labelSize="sm"
+                        name="password"
+                        display={personPassword}
+                        noForm
+                        placeholder="New Password"
+                      />
+                      <Input type="submit" display="none" />
                     </Flex>
                   </Flex>
                 </Box>
@@ -176,6 +274,7 @@ export const Profile = () => {
           {currentTab?.path === tabs[1].path && <CreateRecipes setShowModal={toggleModal} />}
         </Modal>
       )}
+      <ToastContainer theme="colored" />
     </Container>
   );
 };

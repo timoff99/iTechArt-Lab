@@ -11,8 +11,10 @@ import { StyledCard, Img } from "./styles";
 import { Button } from "../Button";
 import { Modal } from "../../ui-kit/Modal";
 import { Recipes } from "../../ui-kit/ModalContent/Recipes";
+import RecipeService from "../../../services/recipe.service";
 
 export const HorizontalCard = ({
+  _id,
   title,
   description,
   author,
@@ -42,11 +44,17 @@ export const HorizontalCard = ({
     console.log("bober");
   };
 
-  const toggleModal = () => {
+  const toggleModal = async () => {
     setShowModal((prev) => !prev);
   };
+
+  const openRecipe = async () => {
+    const updateViews = await RecipeService.updateRecipeViews(_id).then((res) => res.data);
+    console.log(updateViews);
+    toggleModal();
+  };
   return (
-    <StyledCard place={place} mb={3} {...props} onClick={toggleModal} width={"100%"}>
+    <StyledCard place={place} mb={3} {...props} onClick={openRecipe} width={"100%"}>
       <FlexBetween width={"100%"}>
         <Flex>
           <Img as="img" src={image} alt="cardImage" />
@@ -69,7 +77,7 @@ export const HorizontalCard = ({
                 </FlexAlignCenter>
                 <FlexAlignCenter pr={8}>
                   <Heart />
-                  <Paragraph ml={2}>{likes} likes</Paragraph>
+                  <Paragraph ml={2}>{likes?.length} likes</Paragraph>
                 </FlexAlignCenter>
                 <FlexAlignCenter>
                   <Comment />

@@ -20,6 +20,9 @@ export default class CookBookService {
   static async updateCookBook(_id) {
     return api.put("cookbook/update", { _id });
   }
+  static async updateCookBookViews(_id) {
+    return api.put("cookbook/update-views", { _id });
+  }
   static async deleteCookBook() {
     await api.delete("cookbook/delete", { _id });
   }

@@ -46,7 +46,7 @@ export const CookBook = ({ recipes, title, description, author, likes, comments,
           <FlexAlignCenter pt={9}>
             <FlexAlignCenter mr={8}>
               <Heart />
-              <Paragraph ml={2}>{likes} likes</Paragraph>
+              <Paragraph ml={2}>{likes?.length} likes</Paragraph>
             </FlexAlignCenter>
             <FlexAlignCenter>
               <Comment />
