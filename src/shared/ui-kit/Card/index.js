@@ -10,7 +10,7 @@ import { Paragraph } from "../../helpers/Text";
 import { StyledHeading, StyledCard, StyledImg } from "./styles";
 import { CookBook } from "../../ui-kit/ModalContent/CookBook";
 import { Modal } from "../../ui-kit/Modal";
-import CookBookService from "../../../services/cookbook.service";
+import { cookBookApi } from "../../../services/cookbook.service";
 
 export const Card = ({
   title,
@@ -26,9 +26,11 @@ export const Card = ({
   _id,
   ...props
 }) => {
-  console.log(likes?.length);
   const [showModal, setShowModal] = useState(false);
-  const [currentCookBook, setCurrentCookBook] = useState([]);
+  // const [currentCookBook, setCurrentCookBook] = useState([]);
+  const [skip, setSkip] = useState(true);
+  const { data: cookBook } = cookBookApi.useGetCookBookQuery(_id, { skip });
+  // console.log(cookBook);
   const handleOption = (event) => {
     event.preventDefault();
     console.log(2);
@@ -38,11 +40,8 @@ export const Card = ({
     setShowModal((prev) => !prev);
   };
 
-  const openCookBook = async () => {
-    const updateViews = await CookBookService.updateCookBookViews(_id).then((res) => res.data);
-    console.log(updateViews);
-    const cookbook = await CookBookService.getCookBook(_id).then((res) => res.data);
-    await setCurrentCookBook(cookbook);
+  const openCookBook = () => {
+    setSkip((prev) => !prev);
     toggleModal();
   };
 
@@ -89,7 +88,7 @@ export const Card = ({
       </Box>
       {showModal && (
         <Modal showModal={showModal} setShowModal={toggleModal}>
-          <CookBook {...currentCookBook} />
+          <CookBook {...cookBook} />
         </Modal>
       )}
     </StyledCard>

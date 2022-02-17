@@ -23,6 +23,7 @@ const Image = styled(Box)`
 `;
 
 export const CookBook = ({ recipes, title, description, author, likes, comments, image }) => {
+  console.log("kek", title);
   return (
     <Box px={56} py={72}>
       <FlexBetween mb={10}>

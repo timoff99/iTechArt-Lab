@@ -28,6 +28,7 @@ const Circle = styled(Box)`
 `;
 
 export const Recipes = ({ title, description, author, views, likes, comments, image, steps, ingredients }) => {
+  console.log("lol", title);
   return (
     <Box>
       <FlexBetween>
@@ -94,7 +95,7 @@ export const Recipes = ({ title, description, author, views, likes, comments, im
             </FlexAlignCenter>
             <FlexAlignCenter>
               <Comment />
-              <Paragraph ml={2}>{comments.count} comments</Paragraph>
+              <Paragraph ml={2}>{comments?.count} comments</Paragraph>
             </FlexAlignCenter>
           </FlexAlignCenter>
         </FlexColumn>

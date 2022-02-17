@@ -11,10 +11,9 @@ import { StyledCard, Img } from "./styles";
 import { Button } from "../Button";
 import { Modal } from "../../ui-kit/Modal";
 import { Recipes } from "../../ui-kit/ModalContent/Recipes";
-import RecipeService from "../../../services/recipe.service";
+import { recipeApi } from "../../../services/recipe.service";
 
 export const HorizontalCard = ({
-  _id,
   title,
   description,
   author,
@@ -26,9 +25,12 @@ export const HorizontalCard = ({
   steps,
   ingredients,
   modalCookBook,
+  _id,
   ...props
 }) => {
   const [showModal, setShowModal] = useState(false);
+  const [skip, setSkip] = useState(true);
+  const { data: recipe } = recipeApi.useGetRecipeQuery(_id, { skip });
   const handleOption = (event) => {
     event.preventDefault();
     console.log(2);
@@ -44,15 +46,15 @@ export const HorizontalCard = ({
     console.log("bober");
   };
 
-  const toggleModal = async () => {
+  const toggleModal = () => {
     setShowModal((prev) => !prev);
   };
 
-  const openRecipe = async () => {
-    const updateViews = await RecipeService.updateRecipeViews(_id).then((res) => res.data);
-    console.log(updateViews);
+  const openRecipe = () => {
+    setSkip((prev) => !prev);
     toggleModal();
   };
+
   return (
     <StyledCard place={place} mb={3} {...props} onClick={openRecipe} width={"100%"}>
       <FlexBetween width={"100%"}>
@@ -102,17 +104,7 @@ export const HorizontalCard = ({
       </FlexBetween>
       {showModal && (
         <Modal showModal={showModal} setShowModal={toggleModal}>
-          <Recipes
-            title={title}
-            description={description}
-            author={author}
-            views={views}
-            likes={likes}
-            comments={comments}
-            image={image}
-            steps={steps}
-            ingredients={ingredients}
-          />
+          <Recipes {...recipe} />
         </Modal>
       )}
     </StyledCard>

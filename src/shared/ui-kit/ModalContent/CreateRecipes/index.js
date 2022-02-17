@@ -2,7 +2,7 @@ import React, { useState, useRef, memo } from "react";
 import styled from "styled-components";
 import { Formik, Form } from "formik";
 
-import RecipeService from "../../../../services/recipe.service";
+import { recipeApi } from "../../../../services/recipe.service";
 import ImageService from "../../../../services/image.service";
 
 import { Flex, FlexColumn } from "../../../helpers/Flex";
@@ -27,7 +27,7 @@ export const CreateRecipes = memo(({ setShowModal }) => {
   const [cookbookImage, setCookbookImage] = useState("");
   const [ingredients, setIngredients] = useState([]);
   const [steps, setSteps] = useState([]);
-
+  const [addRecipe] = recipeApi.useAddRecipeMutation();
   const formData = new FormData();
   const refFileInput = useRef();
 
@@ -51,8 +51,7 @@ export const CreateRecipes = memo(({ setShowModal }) => {
       const image = await CreateImage();
       const { title, description } = values;
       const recipesData = { title, description, image, steps, ingredients };
-      console.log(recipesData);
-      const recept = await RecipeService.addRecipe(recipesData);
+      addRecipe(recipesData);
       console.log("recept upl seccess");
     } catch (error) {
       console.log("error recept", error);

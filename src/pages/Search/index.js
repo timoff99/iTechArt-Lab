@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useUrl } from "../../hooks/useUrl";
 
 import { CookBookCard } from "../../shared/ui-kit/CookBookCard";
 import { RecipesCard } from "../../shared/ui-kit/RecipesCard";
@@ -11,8 +10,8 @@ import { Container } from "../../shared/helpers/Container";
 import { Grid } from "../../shared/helpers/Grid";
 import { Col } from "../../shared/helpers/Grid/Col";
 
-import CookBookService from "../../services/cookbook.service";
-import RecipeService from "../../services/recipe.service";
+import { cookBookApi } from "../../services/cookbook.service";
+import { recipeApi } from "../../services/recipe.service";
 
 const tabs = [
   {
@@ -43,7 +42,15 @@ const options = [
 export const Search = () => {
   const [timeRange, setTimeRange] = useState([0, 240]);
   const [sort, setSort] = useState(options[0]);
-  const [searchData, setSearchData] = useState([]);
+  const [skipCook, setSkipCook] = useState(true);
+  const [skipRecipe, setSkipRecipe] = useState(true);
+  const _ = [];
+  const { data: allCookbooks } = cookBookApi.useGetAllCookBooksQuery(_, {
+    skip: skipCook,
+  });
+  const { data: allRecipes } = recipeApi.useGetAllRecipesQuery(_, {
+    skip: skipRecipe,
+  });
   const handleSort = (e) => {
     setSort({ value: e.value, label: e.label });
   };
@@ -57,40 +64,13 @@ export const Search = () => {
     console.log(location);
   };
 
-  const { query, updateQuery } = useUrl();
-
-  const tabo = () => {
-    updateQuery({
-      ...query,
-      tabo: "barr",
-    });
-  };
-  const too = () => {
-    updateQuery({
-      ...query,
-      too: "to",
-    });
-  };
-  const search = () => {
-    updateQuery({
-      ...query,
-      search: "boom",
-    });
-  };
-
-  const del = () => {
-    updateQuery("search");
-  };
-
-  const getStartData = async () => {
-    let data;
+  const getStartData = () => {
     if (currentTab.path === tabs[0].path) {
-      data = await CookBookService.getUserCookBooks().then((res) => res.data);
+      setSkipCook((prev) => !prev);
     }
     if (currentTab.path === tabs[1].path) {
-      data = await RecipeService.getUserRecipes().then((res) => res.data);
+      setSkipRecipe((prev) => !prev);
     }
-    setSearchData(data);
   };
   useEffect(() => {
     getStartData();
@@ -114,11 +94,14 @@ export const Search = () => {
           <TabBar tabs={tabs} currentTab={currentTab} onChange={(tab) => onTabChange(tab)} />
           <Container>
             <Grid nested mt={11}>
-              {searchData &&
-                searchData.map((props, index) => {
+              {allCookbooks &&
+                allCookbooks.map((props, index) => {
                   if (currentTab?.path === tabs[0].path) {
                     return <CookBookCard key={index} spanList={[4, 9, 4]} {...props} />;
                   }
+                })}
+              {allRecipes &&
+                allRecipes.map((props, index) => {
                   if (currentTab?.path === tabs[1].path) {
                     return <RecipesCard key={index} {...props} />;
                   }
@@ -127,11 +110,6 @@ export const Search = () => {
           </Container>
         </Col>
       </Grid>
-
-      <button onClick={() => tabo()}>tabo</button>
-      <button onClick={() => too()}>too</button>
-      <button onClick={() => search()}>search</button>
-      <button onClick={() => del()}>delete</button>
     </Container>
   );
 };

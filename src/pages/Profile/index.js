@@ -11,8 +11,8 @@ import { Heading, Paragraph } from "../../shared/helpers/Text";
 import userImage from "../../static/images/userImage.jpeg";
 import { UserContext } from "../../shared/ui-kit/UserProvider";
 import { Grid } from "../../shared/helpers/Grid";
-import CookBookService from "../../services/cookbook.service";
-import RecipeService from "../../services/recipe.service";
+import { cookBookApi } from "../../services/cookbook.service";
+import { recipeApi } from "../../services/recipe.service";
 import theme from "../../theme";
 import { Modal } from "../../shared/ui-kit/Modal";
 import { CreateCookBook } from "../../shared/ui-kit/ModalContent/CreateCookBook";
@@ -60,11 +60,20 @@ const tabs = [
 
 export const Profile = () => {
   const [showModal, setShowModal] = useState(false);
-  const [searchData, setSearchData] = useState([]);
+  // const [searchData, setSearchData] = useState([]);
   const [personName, setPersonName] = useState("none");
   const [personEmail, setPersonEmail] = useState("none");
   const [personPassword, setPersonPassword] = useState("none");
   const { user, setUser } = useContext(UserContext);
+  const [skipCook, setSkipCook] = useState(true);
+  const [skipRecipe, setSkipRecipe] = useState(true);
+  const _ = [];
+  const { data: userCookBooks } = cookBookApi.useGetUserCookBooksQuery(_, {
+    skip: skipCook,
+  });
+  const { data: userRecipes } = recipeApi.useGetUserRecipesQuery(_, {
+    skip: skipRecipe,
+  });
   const navigation = useNavigate();
   const location = useLocation();
   const refFileInput = useRef();
@@ -88,14 +97,12 @@ export const Profile = () => {
   };
 
   const getStartData = async () => {
-    let data;
     if (currentTab.path === tabs[0].path) {
-      data = await CookBookService.getUserCookBooks().then((res) => res.data);
+      setSkipCook((prev) => !prev);
     }
     if (currentTab.path === tabs[1].path) {
-      data = await RecipeService.getUserRecipes().then((res) => res.data);
+      setSkipRecipe((prev) => !prev);
     }
-    setSearchData(data);
   };
   useEffect(() => {
     getStartData();
@@ -196,11 +203,14 @@ export const Profile = () => {
       </FlexBetween>
       <Box>
         <Grid nested mb={11}>
-          {searchData &&
-            searchData.map((props, index) => {
+          {userCookBooks &&
+            userCookBooks.map((props, index) => {
               if (currentTab?.path === tabs[0].path) {
                 return <CookBookCard key={index} spanList={[4, 6, 3]} {...props} />;
               }
+            })}
+          {userRecipes &&
+            userRecipes.map((props, index) => {
               if (currentTab?.path === tabs[1].path) {
                 return <RecipesCard key={index} {...props} />;
               }

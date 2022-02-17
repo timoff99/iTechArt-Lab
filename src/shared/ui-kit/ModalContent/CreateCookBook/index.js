@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef, memo } from "react";
 import styled from "styled-components";
 import { Formik, Form } from "formik";
 
-import RecipeService from "../../../../services/recipe.service";
-import CookBookService from "../../../../services/cookbook.service";
+import { recipeApi } from "../../../../services/recipe.service";
+import { cookBookApi } from "../../../../services/cookbook.service";
 import ImageService from "../../../../services/image.service";
 
 import { Box } from "../../../helpers/Box";
@@ -25,20 +25,22 @@ export const CreateCookBook = memo(({ setShowModal }) => {
   const [allAvailableRecipes, setAllAvailableRecipes] = useState([]);
   const [selectedRecipes, SetSelectedRecipes] = useState([]);
   const [cookbookImage, setCookbookImage] = useState("");
+  const [addCookBook] = cookBookApi.useAddCookBookMutation();
+  const { data: recipeWithCookbook } = recipeApi.useGetRecipeWithoutCookBookQuery();
+  const [updateRecipesCookBookId] = recipeApi.useUpdateRecipeCookBookIdMutation();
   const formData = new FormData();
   const refFileInput = useRef();
 
   const loadRecipes = async () => {
-    const userRecipe = await RecipeService.getRecipeWithoutCookBook();
-    const listOfRecipes = userRecipe.data.map((el) => {
+    const listOfRecipes = recipeWithCookbook?.map((el) => {
       return { ...el, label: el.title, value: el._id };
     });
-    setAllAvailableRecipes((prev) => [...prev, ...listOfRecipes]);
+    listOfRecipes && setAllAvailableRecipes((prev) => [...prev, ...listOfRecipes]);
   };
 
   useEffect(() => {
     loadRecipes();
-  }, []);
+  }, [recipeWithCookbook]);
 
   const setImage = (e) => {
     setCookbookImage(e.target.files[0]);
@@ -62,9 +64,15 @@ export const CreateCookBook = memo(({ setShowModal }) => {
     try {
       const image = await CreateImage();
       const { title, description } = values;
-      const cookbookData = { title, description, image, selectedRecipes };
-      const recept = await CookBookService.addCookBook(cookbookData);
+      const cookbookData = { title, description, selectedRecipes };
+      console.log(cookbookData);
+      const recept = await addCookBook(formData, cookbookData);
+      console.log(recept);
+      const { _id } = recept.data;
+      console.log(_id, selectedRecipes);
       console.log("cookBook upl seccess");
+      updateRecipesCookBookId({ selectedRecipes, _id });
+      console.log("cookBook_id add seccess");
     } catch (error) {
       console.log("error cookBook", error);
     }

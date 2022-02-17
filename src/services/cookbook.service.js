@@ -1,29 +1,58 @@
+import { createApi } from "@reduxjs/toolkit/query/react";
+import ImageService from "./image.service";
 import api from "./api.service.js";
 
-export default class CookBookService {
-  static async addCookBook(cookbookData) {
-    return api.post("cookbook/create", cookbookData);
-  }
-  static async getAllCookBooks() {
-    return api.get("cookbook/get-all");
-  }
-  static async getUserCookBooks() {
-    return api.get("cookbook/get-user-cookbooks");
-  }
-  static async getCookBook(_id) {
-    return api.request({
-      method: "GET",
-      url: "cookbook/get",
-      params: { _id },
-    });
-  }
-  static async updateCookBook(_id) {
-    return api.put("cookbook/update", { _id });
-  }
-  static async updateCookBookViews(_id) {
-    return api.put("cookbook/update-views", { _id });
-  }
-  static async deleteCookBook() {
-    await api.delete("cookbook/delete", { _id });
-  }
-}
+const axiosBaseQuery =
+  () =>
+  async ({ url, method, data, params }) => {
+    try {
+      // console.log("a", `cookbook/${url}`, method, data, params);
+      const result = await api({ url: `cookbook/${url}`, method, data, params });
+      return { data: result.data };
+    } catch (axiosError) {
+      const err = axiosError;
+      return {
+        error: { status: err.response?.status, data: err.response?.data },
+      };
+    }
+  };
+
+export const cookBookApi = createApi({
+  reducerPath: "cookBookApi",
+  baseQuery: axiosBaseQuery(),
+  tagTypes: ["CookBook"],
+  endpoints(builder) {
+    return {
+      addCookBook: builder.mutation({
+        query: (cookbookData) => ({ url: `create`, method: "post", data: cookbookData }),
+        invalidatesTags: [{ type: "CookBook", id: "COOKBOOK" }],
+      }),
+      getAllCookBooks: builder.query({
+        query: () => ({ url: `get-all-cookbooks`, method: "get" }),
+        providesTags: [{ type: "CookBook", id: "COOKBOOK" }],
+      }),
+      getUserCookBooks: builder.query({
+        query: () => ({ url: `get-user-cookbooks`, method: "get" }),
+        providesTags: [{ type: "CookBook", id: "COOKBOOK" }],
+      }),
+      getCookBook: builder.query({
+        query: (_id) => ({ url: `get`, method: "get", params: _id }),
+        providesTags: [{ type: "CookBook", id: "COOKBOOK" }],
+      }),
+      updateCookBook: builder.mutation({
+        query: (_id) => ({ url: `update`, method: "put", data: _id }),
+        invalidatesTags: [{ type: "CookBook", id: "COOKBOOK" }],
+      }),
+      updateCookBookLikes: builder.mutation({
+        query: (_id) => ({ url: `update-likes`, method: "put", data: _id }),
+        invalidatesTags: [{ type: "CookBook", id: "COOKBOOK" }],
+      }),
+      deleteCookBook: builder.mutation({
+        query: (_id) => ({ url: `delete`, method: "delete", data: _id }),
+        invalidatesTags: [{ type: "CookBook", id: "COOKBOOK" }],
+      }),
+    };
+  },
+});
+
+export const { useAddCookBookMutation, useGetAllCookBooksQuery } = cookBookApi; //  и без экспорта работает
