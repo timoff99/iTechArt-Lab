@@ -8,21 +8,13 @@ import { Box } from "../../../shared/helpers/Box";
 import { CheckboxData } from "./mockData";
 import { Select } from "../../../shared/ui-kit/Select";
 import { useUrl } from "../../../hooks/useUrl";
+import { cookBookApi } from "../../../services/cookbook.service";
 
 export const Filter = ({ label, options, value, onChange, timeRange, setTimeRange, route }) => {
-  const { query, updateQuery } = useUrl();
+  const { query, updateQuery, ClearAll } = useUrl();
   const [filterType, setFilterType] = useState(CheckboxData);
+
   const handleTypeChange = (e) => {
-    // console.log(e);
-    // const data = [];
-    // filterType.map(({ value, children, mb, checked }) => {
-    //   if (e.target.value === value) {
-    //     data.push([value, children, mb, !checked]);
-    //   }
-    //   data.push([value, children, mb, checked]);
-    // });
-    // setFilterType(data);
-    // CheckboxData = data;
     if (!e.target.checked) {
       return updateQuery(e.target.value);
     }
@@ -31,10 +23,14 @@ export const Filter = ({ label, options, value, onChange, timeRange, setTimeRang
     });
   };
 
-  const handleClearAll = (e) => {
-    CheckboxData.map(({ value }) => {
-      return updateQuery(value);
+  const handleSort = (e) => {
+    onChange(e);
+    updateQuery({
+      sort: e.value,
     });
+  };
+  const handleClearAll = (e) => {
+    ClearAll();
   };
 
   return (
@@ -49,7 +45,7 @@ export const Filter = ({ label, options, value, onChange, timeRange, setTimeRang
       </FlexBetween>
       <FlexColumn as="label" htmlFor="select" mb={8}>
         {label && <Title as="span">{label}</Title>}
-        <Select options={options} value={value} onChange={onChange} />
+        <Select options={options} value={value} onChange={handleSort} />
       </FlexColumn>
       {route === "tab=cookbooks" && (
         <Heading as={"h3"} semiBold mb={5}>

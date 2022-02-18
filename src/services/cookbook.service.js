@@ -39,6 +39,23 @@ export const cookBookApi = createApi({
         query: (_id) => ({ url: `get`, method: "get", params: _id }),
         providesTags: [{ type: "CookBook", id: "COOKBOOK" }],
       }),
+      getSortedCookBook: builder.query({
+        query: (sortedCookBook, query) => ({
+          url: `get-sorted-cookbooks`,
+          method: "get",
+          data: sortedCookBook,
+          params: query,
+        }),
+        providesTags: [{ type: "CookBook", id: "COOKBOOK" }],
+      }),
+      getCookBooksSortBy: builder.query({
+        query: (query) => ({
+          url: `get-cookbooks-sort-by`,
+          method: "get",
+          params: query,
+        }),
+        providesTags: [{ type: "CookBook", id: "COOKBOOK" }],
+      }),
       updateCookBook: builder.mutation({
         query: (_id) => ({ url: `update`, method: "put", data: _id }),
         invalidatesTags: [{ type: "CookBook", id: "COOKBOOK" }],
@@ -55,4 +72,4 @@ export const cookBookApi = createApi({
   },
 });
 
-export const { useAddCookBookMutation, useGetAllCookBooksQuery } = cookBookApi; //  и без экспорта работает
+export const { useAddCookBookMutation, useGetAllCookBooksQuery } = cookBookApi; //  и без экспорта работает или писать?

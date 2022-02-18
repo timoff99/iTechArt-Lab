@@ -12,6 +12,7 @@ import { Col } from "../../shared/helpers/Grid/Col";
 
 import { cookBookApi } from "../../services/cookbook.service";
 import { recipeApi } from "../../services/recipe.service";
+import { useUrl } from "../../hooks/useUrl";
 
 const tabs = [
   {
@@ -26,15 +27,15 @@ const tabs = [
 
 const options = [
   {
-    value: "Views",
+    value: "views",
     label: "Views",
   },
   {
-    value: "Likes",
+    value: "likes",
     label: "Likes",
   },
   {
-    value: "Comments",
+    value: "comments",
     label: "Comments",
   },
 ];
@@ -44,8 +45,13 @@ export const Search = () => {
   const [sort, setSort] = useState(options[0]);
   const [skipCook, setSkipCook] = useState(true);
   const [skipRecipe, setSkipRecipe] = useState(true);
+  const [skip, setSkip] = useState(false);
+  const { query, updateQuery, ClearAll } = useUrl();
   const _ = [];
-  const { data: allCookbooks } = cookBookApi.useGetAllCookBooksQuery(_, {
+  const { data: sortedCookBook } = cookBookApi.useGetSortedCookBookQuery(query, {
+    skip: skipCook,
+  });
+  const { data: cookBooksSortBy } = cookBookApi.useGetCookBooksSortByQuery(query, sortedCookBook, {
     skip: skipCook,
   });
   const { data: allRecipes } = recipeApi.useGetAllRecipesQuery(_, {
@@ -60,8 +66,11 @@ export const Search = () => {
   const currentTab = tabs.find((t) => location.search.search(t.path) >= 0) || tabs[0];
 
   const onTabChange = (tab) => {
-    navigation(`?${tab.path}`);
-    console.log(location);
+    if (!location.search.includes("tab")) {
+      navigation(`?${tab.path}&${location.search.slice(1)}`);
+    } else {
+      navigation(`?${tab.path}`);
+    }
   };
 
   const getStartData = () => {
@@ -94,8 +103,8 @@ export const Search = () => {
           <TabBar tabs={tabs} currentTab={currentTab} onChange={(tab) => onTabChange(tab)} />
           <Container>
             <Grid nested mt={11}>
-              {allCookbooks &&
-                allCookbooks.map((props, index) => {
+              {cookBooksSortBy &&
+                cookBooksSortBy.map((props, index) => {
                   if (currentTab?.path === tabs[0].path) {
                     return <CookBookCard key={index} spanList={[4, 9, 4]} {...props} />;
                   }
