@@ -6,15 +6,14 @@ import { ReactComponent as Eye } from "../../../static/icons/small-eye.svg";
 import { ReactComponent as Options } from "../../../static/icons/options.svg";
 import { ReactComponent as Heart } from "../../../static/icons/heart.svg";
 import { ReactComponent as Comment } from "../../../static/icons/comment.svg";
-import { LinkRenderer, Paragraph, Heading } from "../../helpers/Text";
+import { Paragraph, Heading } from "../../helpers/Text";
 import { StyledCard, Img } from "./styles";
 import { Button } from "../Button";
-import { Modal } from "../../ui-kit/Modal";
-import { Recipes } from "../../ui-kit/ModalContent/Recipes";
 
 export const HorizontalCard = ({
   title,
   description,
+  openRecipe,
   author,
   views,
   likes,
@@ -24,9 +23,9 @@ export const HorizontalCard = ({
   steps,
   ingredients,
   modalCookBook,
+  _id,
   ...props
 }) => {
-  const [showModal, setShowModal] = useState(false);
   const handleOption = (event) => {
     event.preventDefault();
     console.log(2);
@@ -42,11 +41,8 @@ export const HorizontalCard = ({
     console.log("bober");
   };
 
-  const toggleModal = () => {
-    setShowModal((prev) => !prev);
-  };
   return (
-    <StyledCard place={place} mb={3} {...props} onClick={toggleModal} width={"100%"}>
+    <StyledCard place={place} mb={3} {...props} onClick={() => openRecipe(_id)} width={"100%"}>
       <FlexBetween width={"100%"}>
         <Flex>
           <Img as="img" src={image} alt="cardImage" />
@@ -69,7 +65,7 @@ export const HorizontalCard = ({
                 </FlexAlignCenter>
                 <FlexAlignCenter pr={8}>
                   <Heart />
-                  <Paragraph ml={2}>{likes} likes</Paragraph>
+                  <Paragraph ml={2}>{likes?.length} likes</Paragraph>
                 </FlexAlignCenter>
                 <FlexAlignCenter>
                   <Comment />
@@ -92,21 +88,6 @@ export const HorizontalCard = ({
           )}
         </FlexBetween>
       </FlexBetween>
-      {showModal && (
-        <Modal showModal={showModal} setShowModal={toggleModal}>
-          <Recipes
-            title={title}
-            description={description}
-            author={author}
-            views={views}
-            likes={likes}
-            comments={comments}
-            image={image}
-            steps={steps}
-            ingredients={ingredients}
-          />
-        </Modal>
-      )}
     </StyledCard>
   );
 };

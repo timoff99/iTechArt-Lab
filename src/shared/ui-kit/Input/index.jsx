@@ -115,6 +115,7 @@ export const Input = memo(
     variantLabel,
     require,
     form,
+    noForm,
     ...props
   }) => {
     const [currentType, setCurrentType] = useState(type);
@@ -144,7 +145,7 @@ export const Input = memo(
           />
           {type === "password" && icon}
         </Box>
-        {name === "password" && (
+        {name === "password" && !noForm && (
           <LinkRenderer href="/" semiBold position="absolute" top="0" right="0">
             Forgot password?
           </LinkRenderer>

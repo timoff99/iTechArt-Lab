@@ -65,16 +65,5 @@ export const StyledCard = styled(Box)`
     }
   }`;
     }
-  }}/* ${(props) => {
-    /////becouse of display: inline-block
-    switch (props.sizes) {
-      case "sm":
-        return `max-width: 288px;`;
-      case "lg":
-        return `max-width: 392px;`;
-
-      default:
-        return `max-width: 288px;`;
-    }
-  }} */
+  }}
 `;

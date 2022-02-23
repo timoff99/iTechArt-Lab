@@ -1,9 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useUrl } from "../../hooks/useUrl";
 
-import { CookBookCard } from "../../shared/ui-kit/CookBookCard";
-import { RecipesCard } from "../../shared/ui-kit/RecipesCard";
 import { Filter } from "../../components/Search/Filter";
 
 import { TabBar } from "../../shared/ui-kit/TabBar";
@@ -11,8 +8,9 @@ import { Container } from "../../shared/helpers/Container";
 import { Grid } from "../../shared/helpers/Grid";
 import { Col } from "../../shared/helpers/Grid/Col";
 
-import CookBookService from "../../services/cookbook.service";
-import RecipeService from "../../services/recipe.service";
+import { useUrl } from "../../hooks/useUrl";
+import { SearchCookBookCard } from "../../components/SearchCookBookCard";
+import { SearchRecipeCard } from "../../components/SearchRecipeCard";
 
 const tabs = [
   {
@@ -27,23 +25,25 @@ const tabs = [
 
 const options = [
   {
-    value: "Views",
+    value: "views",
     label: "Views",
   },
   {
-    value: "Likes",
+    value: "likes",
     label: "Likes",
   },
   {
-    value: "Comments",
+    value: "comments",
     label: "Comments",
   },
 ];
 
 export const Search = () => {
-  const [timeRange, setTimeRange] = useState([0, 240]);
-  const [sort, setSort] = useState(options[0]);
-  const [searchData, setSearchData] = useState([]);
+  const { query } = useUrl();
+  const [timeRange, setTimeRange] = useState(query.cookingRange ? query.cookingRange : [0, 240]);
+  const startValue = options.filter((option) => option.value === query.sort[0]);
+  const [sort, setSort] = useState(startValue);
+
   const handleSort = (e) => {
     setSort({ value: e.value, label: e.label });
   };
@@ -53,48 +53,12 @@ export const Search = () => {
   const currentTab = tabs.find((t) => location.search.search(t.path) >= 0) || tabs[0];
 
   const onTabChange = (tab) => {
-    navigation(`?${tab.path}`);
-    console.log(location);
-  };
-
-  const { query, updateQuery } = useUrl();
-
-  const tabo = () => {
-    updateQuery({
-      ...query,
-      tabo: "barr",
-    });
-  };
-  const too = () => {
-    updateQuery({
-      ...query,
-      too: "to",
-    });
-  };
-  const search = () => {
-    updateQuery({
-      ...query,
-      search: "boom",
-    });
-  };
-
-  const del = () => {
-    updateQuery("search");
-  };
-
-  const getStartData = async () => {
-    let data;
-    if (currentTab.path === tabs[0].path) {
-      data = await CookBookService.getUserCookBooks().then((res) => res.data);
+    if (!location.search.includes("tab")) {
+      navigation(`?${tab.path}&${location.search.slice(1)}`);
+    } else {
+      navigation(`?${tab.path}`);
     }
-    if (currentTab.path === tabs[1].path) {
-      data = await RecipeService.getUserRecipes().then((res) => res.data);
-    }
-    setSearchData(data);
   };
-  useEffect(() => {
-    getStartData();
-  }, [currentTab?.path]);
 
   return (
     <Container mt={13}>
@@ -114,24 +78,12 @@ export const Search = () => {
           <TabBar tabs={tabs} currentTab={currentTab} onChange={(tab) => onTabChange(tab)} />
           <Container>
             <Grid nested mt={11}>
-              {searchData &&
-                searchData.map((props, index) => {
-                  if (currentTab?.path === tabs[0].path) {
-                    return <CookBookCard key={index} spanList={[4, 9, 4]} {...props} />;
-                  }
-                  if (currentTab?.path === tabs[1].path) {
-                    return <RecipesCard key={index} {...props} />;
-                  }
-                })}
+              {currentTab?.path === tabs[0].path && <SearchCookBookCard />}
+              {currentTab?.path === tabs[1].path && <SearchRecipeCard timeRange={timeRange} />}
             </Grid>
           </Container>
         </Col>
       </Grid>
-
-      <button onClick={() => tabo()}>tabo</button>
-      <button onClick={() => too()}>too</button>
-      <button onClick={() => search()}>search</button>
-      <button onClick={() => del()}>delete</button>
     </Container>
   );
 };

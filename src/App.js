@@ -3,6 +3,8 @@ import { Router } from "./router/Router";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 import theme from "./theme";
 import { UserProvider } from "./shared/ui-kit/UserProvider";
+import { store } from "./store";
+import { Provider } from "react-redux";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -16,14 +18,16 @@ const GlobalStyle = createGlobalStyle`
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <div className="App">
-        <GlobalStyle />
-        <UserProvider>
-          <Router />
-        </UserProvider>
-      </div>
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <div className="App">
+          <GlobalStyle />
+          <UserProvider>
+            <Router />
+          </UserProvider>
+        </div>
+      </ThemeProvider>
+    </Provider>
   );
 }
 

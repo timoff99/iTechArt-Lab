@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 import { Box } from "../../../shared/helpers/Box";
+import { Paragraph } from "../../../shared/helpers/Text";
 import theme, { BORDER_RADIUS } from "../../../theme";
 
 export const Label = styled(Box)``;
@@ -20,4 +21,9 @@ export const Wrapper = styled(Box)`
 
 export const Checkbox = styled(Box)`
   margin-right: 8px;
+`;
+
+export const Clear = styled(Paragraph)`
+  cursor: pointer;
+  color: ${theme.colors.primary.main};
 `;

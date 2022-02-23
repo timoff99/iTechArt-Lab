@@ -1,30 +1,54 @@
 import React from "react";
 
-import { Heading, Paragraph } from "../../../shared/helpers/Text";
+import { Heading } from "../../../shared/helpers/Text";
 import { FlexBetween, FlexColumn } from "../../../shared/helpers/Flex";
-import { Slider } from "../Slider";
-import { Label, Title, Wrapper, Checkbox } from "./styles";
+import { Slider } from "../../../shared/ui-kit/Slider";
+import { Label, Title, Wrapper, Checkbox, Clear } from "./styles";
 import { Box } from "../../../shared/helpers/Box";
 import { CheckboxData } from "./mockData";
 import { Select } from "../../../shared/ui-kit/Select";
+import { useUrl } from "../../../hooks/useUrl";
 
 export const Filter = ({ label, options, value, onChange, timeRange, setTimeRange, route }) => {
+  const { query, updateQuery, clearAll } = useUrl();
+
   const handleTypeChange = (e) => {
-    if (e.target.checked) {
-      console.log(e.target.value);
+    if (!e.target.checked) {
+      return updateQuery(e.target.value);
     }
+    return updateQuery({
+      type: e.target.value,
+    });
   };
+
+  const handleSort = (e) => {
+    onChange(e);
+    updateQuery({
+      sort: e.value,
+    });
+  };
+  const handleCookingTime = (value) => {
+    updateQuery({
+      cookingRange: value,
+    });
+  };
+  const handleClearAll = (e) => {
+    clearAll();
+  };
+
   return (
     <Wrapper>
       <FlexBetween mb={9}>
         <Heading as={"h3"} semiBold>
           Filter
         </Heading>
-        <Paragraph color="primary.main">clear all</Paragraph>
+        <Clear color="primary.main" cursor="pointer" onClick={(e) => handleClearAll(e)}>
+          clear all
+        </Clear>
       </FlexBetween>
       <FlexColumn as="label" htmlFor="select" mb={8}>
         {label && <Title as="span">{label}</Title>}
-        <Select options={options} value={value} onChange={onChange} />
+        <Select options={options} value={value} onChange={handleSort} />
       </FlexColumn>
       {route === "tab=cookbooks" && (
         <Heading as={"h3"} semiBold mb={5}>
@@ -33,6 +57,10 @@ export const Filter = ({ label, options, value, onChange, timeRange, setTimeRang
       )}
       {route === "tab=cookbooks" &&
         CheckboxData.map(({ value, children, mb }, index) => {
+          const isChecked = (() => {
+            return query.type ? query.type.includes(value) : false;
+          })();
+
           return (
             <Box key={index}>
               <FlexColumn>
@@ -43,6 +71,7 @@ export const Filter = ({ label, options, value, onChange, timeRange, setTimeRang
                     type="checkbox"
                     name="fruit"
                     value={value}
+                    checked={isChecked}
                   />
                   {children}
                 </Label>
@@ -56,7 +85,7 @@ export const Filter = ({ label, options, value, onChange, timeRange, setTimeRang
             Cooking Time
           </Heading>
           <Box mb={9}>
-            <Slider timeRange={timeRange} setTimeRange={setTimeRange} />
+            <Slider timeRange={timeRange} setTimeRange={setTimeRange} onChange={handleCookingTime} />
           </Box>
         </>
       )}

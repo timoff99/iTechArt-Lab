@@ -15,4 +15,9 @@ export default () => ({
     border: "1px solid",
     borderColor: "primary.main",
   },
+
+  link: {
+    color: "primary.main",
+    bg: "background.main",
+  },
 });

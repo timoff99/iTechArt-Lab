@@ -2,7 +2,7 @@ import React, { useState, useRef, memo } from "react";
 import styled from "styled-components";
 import { Formik, Form } from "formik";
 
-import RecipeService from "../../../../services/recipe.service";
+import { useAddRecipeMutation } from "../../../../services/recipe.service";
 import ImageService from "../../../../services/image.service";
 
 import { Flex, FlexColumn } from "../../../helpers/Flex";
@@ -13,6 +13,7 @@ import { Input } from "../../Input";
 import { Textarea } from "../../Textarea";
 import { ReactComponent as SmallX } from "../../../../static/icons/smallX.svg";
 import { createRecipeData } from "./mockData";
+import { Slider } from "../../Slider";
 
 const X = styled(SmallX)`
   display: inline-block;
@@ -27,10 +28,10 @@ export const CreateRecipes = memo(({ setShowModal }) => {
   const [cookbookImage, setCookbookImage] = useState("");
   const [ingredients, setIngredients] = useState([]);
   const [steps, setSteps] = useState([]);
-
+  const [time, setTime] = useState(0);
+  const [addRecipe] = useAddRecipeMutation();
   const formData = new FormData();
   const refFileInput = useRef();
-
   const setImage = (e) => {
     setCookbookImage(e.target.files[0]);
   };
@@ -50,9 +51,8 @@ export const CreateRecipes = memo(({ setShowModal }) => {
     try {
       const image = await CreateImage();
       const { title, description } = values;
-      const recipesData = { title, description, image, steps, ingredients };
-      console.log(recipesData);
-      const recept = await RecipeService.addRecipe(recipesData);
+      const recipesData = { title, description, image, steps, ingredients, cooking_time: time };
+      addRecipe(recipesData);
       console.log("recept upl seccess");
     } catch (error) {
       console.log("error recept", error);
@@ -65,7 +65,6 @@ export const CreateRecipes = memo(({ setShowModal }) => {
   };
   const handleAdd = (e) => {
     if (e.key === "Enter") {
-      console.log(ingredients);
       e.preventDefault();
       if (e.target.name === "steps") {
         setSteps((prev) => [...prev, e.target.value]);
@@ -108,6 +107,9 @@ export const CreateRecipes = memo(({ setShowModal }) => {
             </Button>
 
             <Textarea labelBold {...createRecipeData[1]} />
+            <Box mb={11}>
+              <Slider timeRange={time} setTimeRange={setTime} type="create" />
+            </Box>
             <Input
               handleChange={handleChange}
               labelBold="labelBold"

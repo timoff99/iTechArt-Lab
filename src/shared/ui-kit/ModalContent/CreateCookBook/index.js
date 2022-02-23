@@ -2,8 +2,11 @@ import React, { useState, useEffect, useRef, memo } from "react";
 import styled from "styled-components";
 import { Formik, Form } from "formik";
 
-import RecipeService from "../../../../services/recipe.service";
-import CookBookService from "../../../../services/cookbook.service";
+import {
+  useGetRecipeWithoutCookBookQuery,
+  useUpdateRecipeCookBookIdMutation,
+} from "../../../../services/recipe.service";
+import { useAddCookBookMutation } from "../../../../services/cookbook.service";
 import ImageService from "../../../../services/image.service";
 
 import { Box } from "../../../helpers/Box";
@@ -15,7 +18,7 @@ import { HorizontalCard } from "../../HorizontalCard";
 import { Textarea } from "../../Textarea";
 import { MultiSelect } from "../../MultiSelect";
 
-import { createCookBookData } from "./mockData";
+import { createCookBookData, CheckboxData } from "./mockData";
 
 const FileUploader = styled(Box)`
   display: none;
@@ -24,21 +27,24 @@ const FileUploader = styled(Box)`
 export const CreateCookBook = memo(({ setShowModal }) => {
   const [allAvailableRecipes, setAllAvailableRecipes] = useState([]);
   const [selectedRecipes, SetSelectedRecipes] = useState([]);
+  const [checkbox, setCheckbox] = useState(CheckboxData);
   const [cookbookImage, setCookbookImage] = useState("");
+  const [addCookBook] = useAddCookBookMutation();
+  const { data: recipeWithCookbook } = useGetRecipeWithoutCookBookQuery();
+  const [updateRecipesCookBookId] = useUpdateRecipeCookBookIdMutation();
   const formData = new FormData();
   const refFileInput = useRef();
 
   const loadRecipes = async () => {
-    const userRecipe = await RecipeService.getRecipeWithoutCookBook();
-    const listOfRecipes = userRecipe.data.map((el) => {
+    const listOfRecipes = recipeWithCookbook?.map((el) => {
       return { ...el, label: el.title, value: el._id };
     });
-    setAllAvailableRecipes((prev) => [...prev, ...listOfRecipes]);
+    listOfRecipes && setAllAvailableRecipes((prev) => [...prev, ...listOfRecipes]);
   };
 
   useEffect(() => {
     loadRecipes();
-  }, []);
+  }, [recipeWithCookbook]);
 
   const setImage = (e) => {
     setCookbookImage(e.target.files[0]);
@@ -62,9 +68,21 @@ export const CreateCookBook = memo(({ setShowModal }) => {
     try {
       const image = await CreateImage();
       const { title, description } = values;
-      const cookbookData = { title, description, image, selectedRecipes };
-      const recept = await CookBookService.addCookBook(cookbookData);
+      const cookbookTypes = checkbox.reduce((result, curr) => {
+        if (curr.checked) {
+          return [...result, curr.value];
+        }
+        return result;
+      }, []);
+      const cookbookData = { title, description, selectedRecipes, image, cookbookTypes };
+      console.log(cookbookData);
+      const recept = await addCookBook(cookbookData);
+      console.log(recept);
+      const { _id } = recept.data;
+      console.log(_id, selectedRecipes);
       console.log("cookBook upl seccess");
+      updateRecipesCookBookId({ selectedRecipes, _id });
+      console.log("cookBook_id add seccess");
     } catch (error) {
       console.log("error cookBook", error);
     }
@@ -74,6 +92,15 @@ export const CreateCookBook = memo(({ setShowModal }) => {
     e.preventDefault();
     refFileInput.current.click();
   };
+
+  const handleTypeChange = (e) => {
+    setCheckbox((prev) =>
+      prev.map((el) => {
+        return el.value === e.target.value ? { ...el, checked: !el.checked } : el;
+      })
+    );
+  };
+
   return (
     <Formik
       initialValues={{
@@ -96,7 +123,32 @@ export const CreateCookBook = memo(({ setShowModal }) => {
               Upload CookBook Image
             </Button>
             <Textarea labelBold {...createCookBookData[1]} />
-
+            <Box>
+              <Heading as={"h3"} fontSize={16} semiBold mb={3} color="secondary.main">
+                CookBook Types
+              </Heading>
+              <Flex as="form">
+                {checkbox.map(({ value, children }, index) => {
+                  return (
+                    <Box as="label" mr={5} key={index}>
+                      <Box
+                        mr={1}
+                        key={index}
+                        as="input"
+                        onChange={handleTypeChange}
+                        type="checkbox"
+                        name="fruit"
+                        value={value}
+                      />
+                      {children}
+                    </Box>
+                  );
+                })}
+              </Flex>
+            </Box>
+            <Heading as={"h3"} fontSize={16} semiBold my={3} color="secondary.main">
+              Recipe
+            </Heading>
             <MultiSelect
               options={allAvailableRecipes}
               value={selectedRecipes}
