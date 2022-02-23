@@ -29,9 +29,4 @@ export const CheckboxData = [
     children: "Without Eggs",
     checked: false,
   },
-  {
-    value: "hide-my-cookbooks",
-    children: "Hide My CookBooks",
-    checked: false,
-  },
 ];

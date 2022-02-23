@@ -1,18 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 
-import { Heading, Paragraph } from "../../../shared/helpers/Text";
+import { Heading } from "../../../shared/helpers/Text";
 import { FlexBetween, FlexColumn } from "../../../shared/helpers/Flex";
-import { Slider } from "../Slider";
+import { Slider } from "../../../shared/ui-kit/Slider";
 import { Label, Title, Wrapper, Checkbox, Clear } from "./styles";
 import { Box } from "../../../shared/helpers/Box";
 import { CheckboxData } from "./mockData";
 import { Select } from "../../../shared/ui-kit/Select";
 import { useUrl } from "../../../hooks/useUrl";
-import { cookBookApi } from "../../../services/cookbook.service";
 
 export const Filter = ({ label, options, value, onChange, timeRange, setTimeRange, route }) => {
-  const { query, updateQuery, ClearAll } = useUrl();
-  const [filterType, setFilterType] = useState(CheckboxData);
+  const { query, updateQuery, clearAll } = useUrl();
 
   const handleTypeChange = (e) => {
     if (!e.target.checked) {
@@ -29,8 +27,13 @@ export const Filter = ({ label, options, value, onChange, timeRange, setTimeRang
       sort: e.value,
     });
   };
+  const handleCookingTime = (value) => {
+    updateQuery({
+      cookingRange: value,
+    });
+  };
   const handleClearAll = (e) => {
-    ClearAll();
+    clearAll();
   };
 
   return (
@@ -53,7 +56,11 @@ export const Filter = ({ label, options, value, onChange, timeRange, setTimeRang
         </Heading>
       )}
       {route === "tab=cookbooks" &&
-        filterType.map(({ value, children, mb, checked }, index) => {
+        CheckboxData.map(({ value, children, mb }, index) => {
+          const isChecked = (() => {
+            return query.type ? query.type.includes(value) : false;
+          })();
+
           return (
             <Box key={index}>
               <FlexColumn>
@@ -64,7 +71,7 @@ export const Filter = ({ label, options, value, onChange, timeRange, setTimeRang
                     type="checkbox"
                     name="fruit"
                     value={value}
-                    // checked={checked}
+                    checked={isChecked}
                   />
                   {children}
                 </Label>
@@ -78,7 +85,7 @@ export const Filter = ({ label, options, value, onChange, timeRange, setTimeRang
             Cooking Time
           </Heading>
           <Box mb={9}>
-            <Slider timeRange={timeRange} setTimeRange={setTimeRange} />
+            <Slider timeRange={timeRange} setTimeRange={setTimeRange} onChange={handleCookingTime} />
           </Box>
         </>
       )}

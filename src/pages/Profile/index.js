@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -11,32 +11,19 @@ import { Heading, Paragraph } from "../../shared/helpers/Text";
 import userImage from "../../static/images/userImage.jpeg";
 import { UserContext } from "../../shared/ui-kit/UserProvider";
 import { Grid } from "../../shared/helpers/Grid";
-import { cookBookApi } from "../../services/cookbook.service";
-import { recipeApi } from "../../services/recipe.service";
-import theme from "../../theme";
 import { Modal } from "../../shared/ui-kit/Modal";
 import { CreateCookBook } from "../../shared/ui-kit/ModalContent/CreateCookBook";
 import { CreateRecipes } from "../../shared/ui-kit/ModalContent/CreateRecipes";
-import { CookBookCard } from "../../shared/ui-kit/CookBookCard";
-import { RecipesCard } from "../../shared/ui-kit/RecipesCard";
-import { Input } from "../../shared/ui-kit/Input";
+
 import UserService from "../../services/user.service";
-import { ToastContainer, toast } from "react-toastify";
 import ImageService from "../../services/image.service";
+import { SettingsTab } from "../../components/Profile/SettingsTab";
+import { CookBookTab } from "../../components/Profile/CookBookTab";
+import { RecipeTab } from "../../components/Profile/RecipeTab";
 
 const UserImage = styled(Box)`
   border-radius: 50%;
   max-width: 160px;
-`;
-
-const InfoBlock = styled(Box)`
-  box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.08);
-  border-radius: 10px;
-  width: 100%;
-`;
-
-const ProfileInfo = styled(Paragraph)`
-  font-size: ${theme.fontSizes[2]};
 `;
 
 const FileUploader = styled(Box)`
@@ -60,20 +47,8 @@ const tabs = [
 
 export const Profile = () => {
   const [showModal, setShowModal] = useState(false);
-  // const [searchData, setSearchData] = useState([]);
-  const [personName, setPersonName] = useState("none");
-  const [personEmail, setPersonEmail] = useState("none");
-  const [personPassword, setPersonPassword] = useState("none");
   const { user, setUser } = useContext(UserContext);
-  const [skipCook, setSkipCook] = useState(true);
-  const [skipRecipe, setSkipRecipe] = useState(true);
-  const _ = [];
-  const { data: userCookBooks } = cookBookApi.useGetUserCookBooksQuery(_, {
-    skip: skipCook,
-  });
-  const { data: userRecipes } = recipeApi.useGetUserRecipesQuery(_, {
-    skip: skipRecipe,
-  });
+
   const navigation = useNavigate();
   const location = useLocation();
   const refFileInput = useRef();
@@ -85,75 +60,8 @@ export const Profile = () => {
     console.log(location);
   };
 
-  const errorNotify = (errors) => {
-    if (errors?.message) {
-      console.log(errors);
-      return toast.error(errors.message);
-    }
-  };
-
-  const successNotify = (msg) => {
-    return toast.success(msg);
-  };
-
-  const getStartData = async () => {
-    if (currentTab.path === tabs[0].path) {
-      setSkipCook((prev) => !prev);
-    }
-    if (currentTab.path === tabs[1].path) {
-      setSkipRecipe((prev) => !prev);
-    }
-  };
-  useEffect(() => {
-    getStartData();
-  }, [currentTab?.path]);
-
   const toggleModal = () => {
     setShowModal((prev) => !prev);
-  };
-
-  const handleOpenNameInput = () => {
-    setPersonName((prev) => (prev === "none" ? "block" : "none"));
-  };
-  const handleOpenEmailInput = () => {
-    setPersonEmail((prev) => (prev === "none" ? "block" : "none"));
-  };
-  const handleOpenPasswordInput = () => {
-    setPersonPassword((prev) => (prev === "none" ? "block" : "none"));
-  };
-
-  const saveNewUserInfo = async (e) => {
-    try {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        console.log(e.target);
-        const updatedValue = e.target.value;
-        const inputName = e.target.name;
-        const updatedFiled = { [inputName]: updatedValue };
-        const { data } = await UserService.updateUser(updatedFiled);
-        setUser(data.updateUser);
-        e.target.value = "";
-        setPersonName("none");
-        setPersonEmail("none");
-        successNotify(`user ${inputName} updated`);
-      }
-    } catch (e) {
-      return errorNotify(e?.response?.data);
-    }
-  };
-  const saveNewUserPassword = async (e) => {
-    try {
-      e.preventDefault();
-      const updatedFiled = { oldPassword: e.target[0].value, newPassword: e.target[1].value };
-      const { data } = await UserService.updateUser(updatedFiled);
-      setUser(data.updateUser);
-      e.target[0].value = "";
-      e.target[1].value = "";
-      setPersonPassword("none");
-      successNotify("user password updated");
-    } catch (e) {
-      return errorNotify(e?.response?.data);
-    }
   };
 
   const setImage = async (e) => {
@@ -182,8 +90,8 @@ export const Profile = () => {
             {user.username}
           </Heading>
           <Paragraph maxWidth={504}>
-            {user.description
-              ? user.description
+            {user.status
+              ? user.status
               : "I don’t know about you but I love pizza. Especially when that pizza comes with Papa John’s very own garlic pizza sticks."}
           </Paragraph>
         </Box>
@@ -203,79 +111,9 @@ export const Profile = () => {
       </FlexBetween>
       <Box>
         <Grid nested mb={11}>
-          {userCookBooks &&
-            userCookBooks.map((props, index) => {
-              if (currentTab?.path === tabs[0].path) {
-                return <CookBookCard key={index} spanList={[4, 6, 3]} {...props} />;
-              }
-            })}
-          {userRecipes &&
-            userRecipes.map((props, index) => {
-              if (currentTab?.path === tabs[1].path) {
-                return <RecipesCard key={index} {...props} />;
-              }
-            })}
-          {currentTab?.path === tabs[2].path && (
-            <InfoBlock pl={11} py={12}>
-              <Heading as={"h2"} bold mb={10}>
-                Personal information
-              </Heading>
-              <Flex>
-                <Box>
-                  <Flex alignItems="center" mb={8}>
-                    <ProfileInfo fontSize={2}>Name</ProfileInfo>
-                    <ProfileInfo ml={5} fontSize={2}>
-                      {user.username ? user.username : "John Doe"}
-                    </ProfileInfo>
-                    <Button variant="link" size="link" ml={5} alignItems="center" onClick={handleOpenNameInput}>
-                      Edit
-                    </Button>
-                    <Input ml={5} labelSize="sm" name="username" display={personName} onKeyPress={saveNewUserInfo} />
-                  </Flex>
-
-                  <Flex alignItems="center" mb={8}>
-                    <ProfileInfo fontSize={2}>Email</ProfileInfo>
-                    <ProfileInfo ml={5} fontSize={2}>
-                      {user.email ? user.email : "testmail@test.com"}
-                    </ProfileInfo>
-                    <Button variant="link" size="link" ml={5} alignItems="center" onClick={handleOpenEmailInput}>
-                      Edit
-                    </Button>
-                    <Input ml={5} labelSize="sm" name="email" display={personEmail} onKeyPress={saveNewUserInfo} />
-                  </Flex>
-
-                  <Flex alignItems="center">
-                    <ProfileInfo fontSize={2}>Password</ProfileInfo>
-                    <ProfileInfo ml={5} fontSize={2}>
-                      *********
-                    </ProfileInfo>
-                    <Button variant="link" size="link" ml={5} alignItems="center" onClick={handleOpenPasswordInput}>
-                      Change My Password
-                    </Button>
-                    <Flex as="form" onSubmit={saveNewUserPassword}>
-                      <Input
-                        ml={5}
-                        labelSize="sm"
-                        name="password"
-                        display={personPassword}
-                        noForm
-                        placeholder="Old Password"
-                      />
-                      <Input
-                        ml={5}
-                        labelSize="sm"
-                        name="password"
-                        display={personPassword}
-                        noForm
-                        placeholder="New Password"
-                      />
-                      <Input type="submit" display="none" />
-                    </Flex>
-                  </Flex>
-                </Box>
-              </Flex>
-            </InfoBlock>
-          )}
+          {currentTab?.path === tabs[0].path && <CookBookTab />}
+          {currentTab?.path === tabs[1].path && <RecipeTab />}
+          {currentTab?.path === tabs[2].path && <SettingsTab />}
         </Grid>
       </Box>
       {showModal && (
@@ -284,7 +122,6 @@ export const Profile = () => {
           {currentTab?.path === tabs[1].path && <CreateRecipes setShowModal={toggleModal} />}
         </Modal>
       )}
-      <ToastContainer theme="colored" />
     </Container>
   );
 };

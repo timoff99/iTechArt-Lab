@@ -3,7 +3,23 @@ import { useLocation, useSearchParams } from "react-router-dom";
 export function useUrl() {
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
-  const query = new URLSearchParams(location.search);
+  const URLSPquery = new URLSearchParams(location.search);
+  const query = {};
+  const initQuery = (() => {
+    if (!URLSPquery.has("sort")) {
+      URLSPquery.set("sort", ["views"]);
+    }
+    if (URLSPquery.has("type")) {
+      query.type = URLSPquery.get("type").split(",");
+    }
+    if (URLSPquery.has("sort")) {
+      query.sort = URLSPquery.get("sort").split(",");
+    }
+    if (URLSPquery.has("cookingRange")) {
+      query.cookingRange = URLSPquery.get("cookingRange").split(",");
+    }
+    return query;
+  })();
 
   const updateQuery = (updateData) => {
     if (typeof updateData === "string") {
@@ -11,38 +27,14 @@ export function useUrl() {
         if (pair[0] !== "tab" && pair[0] !== "sort") {
           const data = pair[1].split(",");
           if (data.length === 1) {
-            query.delete(pair[0]);
-            return setSearchParams(query);
+            URLSPquery.delete(pair[0]);
+            return setSearchParams(URLSPquery);
           }
           pair[1] = data.filter((value) => value !== updateData).join(",");
-          query.set(pair[0], pair[1]);
+          URLSPquery.set(pair[0], pair[1]);
         }
       }
-      return setSearchParams(query);
-    }
-    if (Object.keys(updateData)[0] === "sort") {
-      let key = "";
-      let value = "";
-
-      for (const data of Object.entries(updateData)) {
-        key = data[0];
-        value = data[1];
-      }
-
-      const index = location.search.indexOf(key) + key.length + 1;
-      let prev = [];
-      if (query.has("sort")) {
-        prev = query.get("sort");
-      } else if (location.search.includes("sort")) {
-        prev = location.search.slice(index).split(",");
-      }
-      if (prev.includes("cookbooks") || prev.includes("recipes") || prev.includes("")) {
-        query.set(key, [value]);
-        return setSearchParams(query);
-      } else {
-        query.set(key, [value]);
-        return setSearchParams(query);
-      }
+      return setSearchParams(URLSPquery);
     }
 
     if (typeof updateData === "object") {
@@ -53,28 +45,40 @@ export function useUrl() {
         key = data[0];
         value = data[1];
       }
-
-      const index = location.search.indexOf(key) + key.length + 1;
       let prev = [];
-      if (query.has("type")) {
-        prev = query.get("type");
-      } else if (location.search.includes("type")) {
-        prev = location.search.slice(index).split(",");
-      }
-      if (prev.includes("cookbooks") || prev.includes("recipes") || prev.includes("")) {
-        query.set(key, [prev, value]);
+
+      if (Object.keys(updateData)[0] === "sort") {
+        if (URLSPquery.has("sort")) {
+          prev = URLSPquery.get("sort");
+        } else if (query.sort) {
+          prev = query.sort;
+        }
       } else {
-        query.set(key, [value]);
+        if (URLSPquery.has("type")) {
+          prev = URLSPquery.get("type");
+        } else if (query.type) {
+          prev = query.type;
+        }
       }
-      setSearchParams(query);
+
+      if (updateData.sort) {
+        URLSPquery.set(key, [value]);
+        return setSearchParams(URLSPquery);
+      }
+      if (prev.includes("")) {
+        URLSPquery.set(key, [prev, value]);
+      } else {
+        URLSPquery.set(key, [value]);
+      }
+      setSearchParams(URLSPquery);
     } // %2C === ,
   };
-  const ClearAll = () => {
-    if (query.has("tab")) {
-      return setSearchParams(`tab=${query.get("tab")}`);
+  const clearAll = () => {
+    if (URLSPquery.has("tab")) {
+      return setSearchParams(`tab=${URLSPquery.get("tab")}`);
     } else {
       return setSearchParams(`tab=cookbooks`);
     }
   };
-  return { query: location.search, updateQuery, ClearAll };
+  return { query, updateQuery, clearAll };
 }

@@ -1,5 +1,4 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import ImageService from "./image.service";
 import api from "./api.service.js";
 
 const axiosBaseQuery =
@@ -39,21 +38,13 @@ export const cookBookApi = createApi({
         query: (_id) => ({ url: `get`, method: "get", params: _id }),
         providesTags: [{ type: "CookBook", id: "COOKBOOK" }],
       }),
-      getSortedCookBook: builder.query({
-        query: (sortedCookBook, query) => ({
-          url: `get-sorted-cookbooks`,
-          method: "get",
-          data: sortedCookBook,
-          params: query,
-        }),
-        providesTags: [{ type: "CookBook", id: "COOKBOOK" }],
-      }),
-      getCookBooksSortBy: builder.query({
+      getFilteredCookBook: builder.query({
         query: (query) => ({
-          url: `get-cookbooks-sort-by`,
+          url: `get-filtered-cookbooks`,
           method: "get",
           params: query,
         }),
+
         providesTags: [{ type: "CookBook", id: "COOKBOOK" }],
       }),
       updateCookBook: builder.mutation({
@@ -72,4 +63,14 @@ export const cookBookApi = createApi({
   },
 });
 
-export const { useAddCookBookMutation, useGetAllCookBooksQuery } = cookBookApi; //  и без экспорта работает или писать?
+export const {
+  useAddCookBookMutation,
+  useGetAllCookBooksQuery,
+  useGetUserCookBooksQuery,
+  useGetCookBookQuery,
+  useLazyGetCookBookQuery,
+  useGetFilteredCookBookQuery,
+  useUpdateCookBookQuery,
+  useUpdateCookBookLikesQuery,
+  useDeleteCookBookMutation,
+} = cookBookApi;

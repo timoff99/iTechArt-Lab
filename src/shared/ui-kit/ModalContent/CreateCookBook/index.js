@@ -2,8 +2,11 @@ import React, { useState, useEffect, useRef, memo } from "react";
 import styled from "styled-components";
 import { Formik, Form } from "formik";
 
-import { recipeApi } from "../../../../services/recipe.service";
-import { cookBookApi } from "../../../../services/cookbook.service";
+import {
+  useGetRecipeWithoutCookBookQuery,
+  useUpdateRecipeCookBookIdMutation,
+} from "../../../../services/recipe.service";
+import { useAddCookBookMutation } from "../../../../services/cookbook.service";
 import ImageService from "../../../../services/image.service";
 
 import { Box } from "../../../helpers/Box";
@@ -26,9 +29,9 @@ export const CreateCookBook = memo(({ setShowModal }) => {
   const [selectedRecipes, SetSelectedRecipes] = useState([]);
   const [checkbox, setCheckbox] = useState(CheckboxData);
   const [cookbookImage, setCookbookImage] = useState("");
-  const [addCookBook] = cookBookApi.useAddCookBookMutation();
-  const { data: recipeWithCookbook } = recipeApi.useGetRecipeWithoutCookBookQuery();
-  const [updateRecipesCookBookId] = recipeApi.useUpdateRecipeCookBookIdMutation();
+  const [addCookBook] = useAddCookBookMutation();
+  const { data: recipeWithCookbook } = useGetRecipeWithoutCookBookQuery();
+  const [updateRecipesCookBookId] = useUpdateRecipeCookBookIdMutation();
   const formData = new FormData();
   const refFileInput = useRef();
 

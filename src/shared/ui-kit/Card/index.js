@@ -1,20 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import { Box } from "../../helpers/Box";
-import { Flex, FlexBetween, FlexCenter, FlexAlignCenter } from "../../helpers/Flex";
+import { FlexBetween, FlexCenter, FlexAlignCenter } from "../../helpers/Flex";
 import { ReactComponent as Eye } from "../../../static/icons/small-eye.svg";
 import { ReactComponent as Options } from "../../../static/icons/options.svg";
 import { ReactComponent as Heart } from "../../../static/icons/heart.svg";
 import { ReactComponent as Comment } from "../../../static/icons/comment.svg";
 import { Paragraph } from "../../helpers/Text";
 import { StyledHeading, StyledCard, StyledImg } from "./styles";
-import { CookBook } from "../../ui-kit/ModalContent/CookBook";
-import { Modal } from "../../ui-kit/Modal";
-import { cookBookApi } from "../../../services/cookbook.service";
 
 export const Card = ({
   title,
   description,
+  openCookBook,
   author,
   views,
   likes,
@@ -26,27 +24,13 @@ export const Card = ({
   _id,
   ...props
 }) => {
-  const [showModal, setShowModal] = useState(false);
-  // const [currentCookBook, setCurrentCookBook] = useState([]);
-  const [skip, setSkip] = useState(true);
-  const { data: cookBook } = cookBookApi.useGetCookBookQuery(_id, { skip });
-  // console.log(cookBook);
   const handleOption = (event) => {
     event.preventDefault();
     console.log(2);
   };
 
-  const toggleModal = () => {
-    setShowModal((prev) => !prev);
-  };
-
-  const openCookBook = () => {
-    setSkip((prev) => !prev);
-    toggleModal();
-  };
-
   return (
-    <StyledCard place={place} mb={3} {...props} onClick={openCookBook}>
+    <StyledCard place={place} mb={3} {...props} onClick={() => openCookBook(_id)}>
       <Box p={8}>
         <FlexAlignCenter pb={5} justifyContent="space-between">
           <FlexAlignCenter>
@@ -86,11 +70,6 @@ export const Card = ({
           </FlexAlignCenter>
         )}
       </Box>
-      {showModal && (
-        <Modal showModal={showModal} setShowModal={toggleModal}>
-          <CookBook {...cookBook} />
-        </Modal>
-      )}
     </StyledCard>
   );
 };

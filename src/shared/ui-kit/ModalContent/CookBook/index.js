@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import { ReactComponent as Heart } from "../../../../static/icons/heart.svg";
@@ -9,6 +9,9 @@ import { Paragraph, Heading } from "../../../helpers/Text";
 import { Button } from "../../Button";
 import { HorizontalCard } from "../../HorizontalCard";
 import { Comments } from "../../Comments";
+import { Recipes } from "../Recipes";
+import { Modal } from "../../Modal";
+import { useLazyGetRecipeQuery } from "../../../../services/recipe.service";
 
 const BoxImage = styled(Box)`
   width: 100%;
@@ -23,7 +26,18 @@ const Image = styled(Box)`
 `;
 
 export const CookBook = ({ recipes, title, description, author, likes, comments, image }) => {
-  console.log("kek", title);
+  const [showModal, setShowModal] = useState(false);
+  const [action, { data: recipe }] = useLazyGetRecipeQuery();
+
+  const toggleModal = () => {
+    setShowModal((prev) => !prev);
+  };
+
+  const openRecipe = (_id) => {
+    action(_id, true);
+    toggleModal();
+  };
+
   return (
     <Box px={56} py={72}>
       <FlexBetween mb={10}>
@@ -68,12 +82,17 @@ export const CookBook = ({ recipes, title, description, author, likes, comments,
         </Heading>
         {recipes &&
           recipes.map((props, index) => {
-            return <HorizontalCard key={index} modalCookBook place={"no-rates"} {...props} />;
+            return <HorizontalCard openRecipe={openRecipe} key={index} modalCookBook place={"no-rates"} {...props} />;
           })}
       </FlexColumn>
       <FlexColumn mb={10}>
         <Comments />
       </FlexColumn>
+      {showModal && (
+        <Modal showModal={showModal} setShowModal={toggleModal}>
+          <Recipes {...recipe} />
+        </Modal>
+      )}
     </Box>
   );
 };

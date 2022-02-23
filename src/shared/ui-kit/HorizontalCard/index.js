@@ -6,16 +6,14 @@ import { ReactComponent as Eye } from "../../../static/icons/small-eye.svg";
 import { ReactComponent as Options } from "../../../static/icons/options.svg";
 import { ReactComponent as Heart } from "../../../static/icons/heart.svg";
 import { ReactComponent as Comment } from "../../../static/icons/comment.svg";
-import { LinkRenderer, Paragraph, Heading } from "../../helpers/Text";
+import { Paragraph, Heading } from "../../helpers/Text";
 import { StyledCard, Img } from "./styles";
 import { Button } from "../Button";
-import { Modal } from "../../ui-kit/Modal";
-import { Recipes } from "../../ui-kit/ModalContent/Recipes";
-import { recipeApi } from "../../../services/recipe.service";
 
 export const HorizontalCard = ({
   title,
   description,
+  openRecipe,
   author,
   views,
   likes,
@@ -28,9 +26,6 @@ export const HorizontalCard = ({
   _id,
   ...props
 }) => {
-  const [showModal, setShowModal] = useState(false);
-  const [skip, setSkip] = useState(true);
-  const { data: recipe } = recipeApi.useGetRecipeQuery(_id, { skip });
   const handleOption = (event) => {
     event.preventDefault();
     console.log(2);
@@ -46,17 +41,8 @@ export const HorizontalCard = ({
     console.log("bober");
   };
 
-  const toggleModal = () => {
-    setShowModal((prev) => !prev);
-  };
-
-  const openRecipe = () => {
-    setSkip((prev) => !prev);
-    toggleModal();
-  };
-
   return (
-    <StyledCard place={place} mb={3} {...props} onClick={openRecipe} width={"100%"}>
+    <StyledCard place={place} mb={3} {...props} onClick={() => openRecipe(_id)} width={"100%"}>
       <FlexBetween width={"100%"}>
         <Flex>
           <Img as="img" src={image} alt="cardImage" />
@@ -102,11 +88,6 @@ export const HorizontalCard = ({
           )}
         </FlexBetween>
       </FlexBetween>
-      {showModal && (
-        <Modal showModal={showModal} setShowModal={toggleModal}>
-          <Recipes {...recipe} />
-        </Modal>
-      )}
     </StyledCard>
   );
 };

@@ -41,7 +41,7 @@ export const Paragraph = ({ children, as = "p", ...props }) => {
   );
 };
 
-export const LinkRenderer = ({ children, href, as = "a", ...props }) => {
+export const LinkRenderer = ({ children, href, as = "span", ...props }) => {
   const { link } = FontConfigurations;
 
   return (
