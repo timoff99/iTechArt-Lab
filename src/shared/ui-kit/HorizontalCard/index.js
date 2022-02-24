@@ -65,11 +65,11 @@ export const HorizontalCard = ({
                 </FlexAlignCenter>
                 <FlexAlignCenter pr={8}>
                   <Heart />
-                  <Paragraph ml={2}>{likes?.length} likes</Paragraph>
+                  <Paragraph ml={2}>{likes?.length || 0} likes</Paragraph>
                 </FlexAlignCenter>
                 <FlexAlignCenter>
                   <Comment />
-                  <Paragraph ml={2}>{comments?.count} comments</Paragraph>
+                  <Paragraph ml={2}>{comments?.length || 0} comments</Paragraph>
                 </FlexAlignCenter>
               </Flex>
             </FlexBetween>
