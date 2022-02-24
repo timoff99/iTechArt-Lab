@@ -6,22 +6,22 @@ import { Flex, FlexBetween } from "../../../helpers/Flex";
 import { Paragraph } from "../../../helpers/Text";
 
 const Image = styled(Box)`
-  object-fit: contain;
-  min-width: auto;
+  border-radius: 50%;
+  max-width: 68px;
 `;
 
-export const CommentsCard = ({ name, comment, time, image }) => {
+export const CommentsCard = ({ message, time, user_id }) => {
   return (
     <Flex mt={10}>
-      <Image as="img" src={image} alt="person Image" />
-      <Box ml={5}>
+      <Image as="img" src={user_id.image} alt="person Image" />
+      <Box ml={5} width={"100%"}>
         <FlexBetween>
           <Paragraph fontSize={2} semiBold>
-            {name}
+            {user_id.username}
           </Paragraph>
-          <Paragraph>{time}</Paragraph>
+          <Paragraph>{((Date.now() - time) / 60000).toFixed()} minutes ago</Paragraph>
         </FlexBetween>
-        <Paragraph>{comment}</Paragraph>
+        <Paragraph>{message}</Paragraph>
       </Box>
     </Flex>
   );

@@ -57,18 +57,17 @@ export const Card = ({
             {description}
           </Paragraph>
         )}
-        {likes?.length && comments.count && (
-          <FlexAlignCenter pt={9} justifyContent="space-between">
-            <FlexAlignCenter>
-              <Heart />
-              <Paragraph ml={2}>{likes?.length} likes</Paragraph>
-            </FlexAlignCenter>
-            <FlexAlignCenter>
-              <Comment />
-              <Paragraph ml={2}>{comments.count} comments</Paragraph>
-            </FlexAlignCenter>
+
+        <FlexAlignCenter pt={9} justifyContent="space-between">
+          <FlexAlignCenter>
+            <Heart />
+            <Paragraph ml={2}>{likes?.length ? likes.length : 0} likes</Paragraph>
           </FlexAlignCenter>
-        )}
+          <FlexAlignCenter>
+            <Comment />
+            <Paragraph ml={2}>{comments?.length ? comments.length : 0} comments</Paragraph>
+          </FlexAlignCenter>
+        </FlexAlignCenter>
       </Box>
     </StyledCard>
   );

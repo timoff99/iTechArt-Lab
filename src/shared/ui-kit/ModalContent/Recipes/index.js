@@ -10,7 +10,8 @@ import { Paragraph, Heading } from "../../../helpers/Text";
 import { Button } from "../../Button";
 import { Comments } from "../../Comments";
 import theme from "../../../../theme";
-
+import { useCreateRecipeCommentsMutation } from "../../../../services/comments.service";
+import { useUpdateRecipeCommentsMutation } from "../../../../services/recipe.service";
 const Image = styled(Box)`
   width: 100%;
   max-height: 660px;
@@ -27,8 +28,9 @@ const Circle = styled(Box)`
   display: inline-block;
 `;
 
-export const Recipes = ({ title, description, author, views, likes, comments, image, steps, ingredients }) => {
-  console.log("lol", title);
+export const Recipes = ({ _id, title, description, author, views, likes, comments, image, steps, ingredients }) => {
+  const [createRecipeComments] = useCreateRecipeCommentsMutation();
+  const [updateRecipeComments] = useUpdateRecipeCommentsMutation();
   return (
     <Box>
       <FlexBetween>
@@ -91,18 +93,23 @@ export const Recipes = ({ title, description, author, views, likes, comments, im
             </FlexAlignCenter>
             <FlexAlignCenter mr={8}>
               <Heart />
-              <Paragraph ml={2}>{likes?.length} likes</Paragraph>
+              <Paragraph ml={2}>{likes?.length ? likes?.length : 0} likes</Paragraph>
             </FlexAlignCenter>
             <FlexAlignCenter>
               <Comment />
-              <Paragraph ml={2}>{comments?.count} comments</Paragraph>
+              <Paragraph ml={2}>{comments?.length ? comments?.length : 0} comments</Paragraph>
             </FlexAlignCenter>
           </FlexAlignCenter>
         </FlexColumn>
       </FlexBetween>
       <Box px={56} py={72}>
         <FlexColumn mb={10}>
-          <Comments />
+          <Comments
+            id={_id}
+            createComments={createRecipeComments}
+            comments={comments}
+            updateComments={updateRecipeComments}
+          />
         </FlexColumn>
       </Box>
     </Box>

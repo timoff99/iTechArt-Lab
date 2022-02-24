@@ -7,7 +7,6 @@ import { Button } from "../Button";
 import { Input } from "../Input";
 import { ReactComponent as Send } from "../../../static/icons/send.svg";
 import { Box } from "../../helpers/Box";
-import { userComments } from "./mockData";
 import { CommentsCard } from "./CommentsCard";
 
 const StyledSend = styled(Send)`
@@ -16,16 +15,20 @@ const StyledSend = styled(Send)`
   justify-content: center;
 `;
 
-export const Comments = () => {
-  const handleSubmit = (e) => {
+export const Comments = ({ id, createComments, comments, updateComments }) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(e.target[0].value);
-    e.target[0].value = "";
+    if (e.target[0].value.trim()) {
+      const comment = await createComments({ message: e.target[0].value, id });
+      updateComments({ card_id: id, comment_id: comment.data._id }); // mising focus from input and go to the top
+      e.target[0].value = "";
+    }
   };
+  const reverseComments = comments?.slice()?.reverse();
   return (
     <>
       <Heading as={"h3"} semiBold mb={8}>
-        Comments (count)
+        Comments ({comments?.length})
       </Heading>
       <form onSubmit={(e) => handleSubmit(e)}>
         <Flex>
@@ -44,9 +47,13 @@ export const Comments = () => {
         </Flex>
       </form>
       <Box>
-        {userComments.map((props, index) => {
-          return <CommentsCard key={index} {...props} />;
-        })}
+        {comments?.length ? (
+          reverseComments.map((props, index) => {
+            return <CommentsCard key={index} {...props} />;
+          })
+        ) : (
+          <h3>No comments, be the first</h3>
+        )}
       </Box>
     </>
   );

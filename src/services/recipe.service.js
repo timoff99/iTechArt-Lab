@@ -47,6 +47,11 @@ export const recipeApi = createApi({
         query: (timeRange) => ({ url: `get-filtered-recipes`, method: "get", params: timeRange }),
         providesTags: [{ type: "Recipe", id: "RECIPE" }],
       }),
+      updateRecipeComments: builder.mutation({
+        query: (card_id, comment_id) => ({ url: `update-recipe-comments`, method: "put", data: card_id, comment_id }),
+        invalidatesTags: [{ type: "Recipe", id: "RECIPE" }],
+      }),
+
       updateRecipeCookBookId: builder.mutation({
         query: (selectedRecipes, _id) => ({
           url: `update-recipe-cookbookid`,
@@ -76,6 +81,7 @@ export const {
   useGetRecipeQuery,
   useGetRecipeWithoutCookBookQuery,
   useGetFilteredRecipesQuery,
+  useUpdateRecipeCommentsMutation,
   useUpdateRecipeCookBookIdMutation,
   useUpdateRecipeMutation,
   useDeleteRecipeMutation,

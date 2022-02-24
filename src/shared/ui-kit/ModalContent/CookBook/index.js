@@ -12,6 +12,8 @@ import { Comments } from "../../Comments";
 import { Recipes } from "../Recipes";
 import { Modal } from "../../Modal";
 import { useLazyGetRecipeQuery } from "../../../../services/recipe.service";
+import { useCreateCookBookCommentsMutation } from "../../../../services/comments.service";
+import { useUpdateCookBookCommentsMutation } from "../../../../services/cookbook.service";
 
 const BoxImage = styled(Box)`
   width: 100%;
@@ -25,8 +27,10 @@ const Image = styled(Box)`
   object-fit: cover;
 `;
 
-export const CookBook = ({ recipes, title, description, author, likes, comments, image }) => {
+export const CookBook = ({ _id, recipes, title, description, author, likes, comments, image }) => {
   const [showModal, setShowModal] = useState(false);
+  const [createCookBookComments] = useCreateCookBookCommentsMutation();
+  const [updateCookBookComments] = useUpdateCookBookCommentsMutation();
   const [action, { data: recipe }] = useLazyGetRecipeQuery();
 
   const toggleModal = () => {
@@ -61,11 +65,11 @@ export const CookBook = ({ recipes, title, description, author, likes, comments,
           <FlexAlignCenter pt={9}>
             <FlexAlignCenter mr={8}>
               <Heart />
-              <Paragraph ml={2}>{likes?.length} likes</Paragraph>
+              <Paragraph ml={2}>{likes?.length ? likes?.length : 0} likes</Paragraph>
             </FlexAlignCenter>
             <FlexAlignCenter>
               <Comment />
-              <Paragraph ml={2}>{comments?.count} comments</Paragraph>
+              <Paragraph ml={2}>{comments?.length ? comments?.length : 0} comments</Paragraph>
             </FlexAlignCenter>
           </FlexAlignCenter>
         </BoxImage>
@@ -86,7 +90,12 @@ export const CookBook = ({ recipes, title, description, author, likes, comments,
           })}
       </FlexColumn>
       <FlexColumn mb={10}>
-        <Comments />
+        <Comments
+          id={_id}
+          createComments={createCookBookComments}
+          comments={comments}
+          updateComments={updateCookBookComments}
+        />
       </FlexColumn>
       {showModal && (
         <Modal showModal={showModal} setShowModal={toggleModal}>
