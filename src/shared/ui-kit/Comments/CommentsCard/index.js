@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import moment from "moment";
 
 import { Box } from "../../../helpers/Box";
 import { Flex, FlexBetween } from "../../../helpers/Flex";
@@ -19,7 +20,7 @@ export const CommentsCard = ({ message, time, user_id }) => {
           <Paragraph fontSize={2} semiBold>
             {user_id.username}
           </Paragraph>
-          <Paragraph>{((Date.now() - time) / 60000).toFixed()} minutes ago</Paragraph>
+          <Paragraph>{moment(time, "YYYYMMDD").fromNow()}</Paragraph>
         </FlexBetween>
         <Paragraph>{message}</Paragraph>
       </Box>

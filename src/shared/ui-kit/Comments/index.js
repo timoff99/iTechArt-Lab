@@ -20,7 +20,7 @@ export const Comments = ({ id, createComments, comments, updateComments }) => {
     e.preventDefault();
     if (e.target[0].value.trim()) {
       const comment = await createComments({ message: e.target[0].value, id });
-      updateComments({ card_id: id, comment_id: comment.data._id }); // mising focus from input and go to the top
+      updateComments({ card_id: id, comment_id: comment.data._id }); // missing focus from input and go to the top
       e.target[0].value = "";
     }
   };

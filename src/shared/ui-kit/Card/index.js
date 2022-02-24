@@ -61,11 +61,11 @@ export const Card = ({
         <FlexAlignCenter pt={9} justifyContent="space-between">
           <FlexAlignCenter>
             <Heart />
-            <Paragraph ml={2}>{likes?.length ? likes.length : 0} likes</Paragraph>
+            <Paragraph ml={2}>{likes?.length || 0} likes</Paragraph>
           </FlexAlignCenter>
           <FlexAlignCenter>
             <Comment />
-            <Paragraph ml={2}>{comments?.length ? comments.length : 0} comments</Paragraph>
+            <Paragraph ml={2}>{comments?.length || 0} comments</Paragraph>
           </FlexAlignCenter>
         </FlexAlignCenter>
       </Box>
