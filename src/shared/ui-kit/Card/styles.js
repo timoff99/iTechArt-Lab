@@ -61,3 +61,14 @@ export const StyledImg = styled("img")({
   maxHeight: "240px",
   width: "240px",
 });
+
+export const OptionMenu = styled(Box)`
+  padding: 8px;
+  position: absolute;
+  top: 20px;
+  right: -50px;
+
+  transition: all 0.2s;
+  background: ${theme.colors.background.main};
+  border-radius: 10px;
+`;

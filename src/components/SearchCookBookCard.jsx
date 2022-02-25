@@ -27,7 +27,9 @@ export const SearchCookBookCard = () => {
     <>
       {data &&
         data.map((props, index) => {
-          return <CookBookCard openCookBook={openCookBook} key={index} spanList={[4, 9, 4]} {...props} />;
+          return (
+            <CookBookCard openCookBook={openCookBook} key={index} spanList={[4, 9, 4]} {...props} search={"search"} />
+          );
         })}
       {showModal && (
         <Modal showModal={showModal} setShowModal={toggleModal}>

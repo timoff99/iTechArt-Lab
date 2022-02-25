@@ -9,6 +9,10 @@ export default () => ({
     bg: "background.main",
   },
 
+  secondaryMenu: {
+    bg: "background.dark",
+  },
+
   outlined: {
     color: "primary.main",
     bg: "background.main",

@@ -67,3 +67,14 @@ export const StyledCard = styled(Box)`
     }
   }}
 `;
+
+export const OptionMenu = styled(Box)`
+  padding: 8px;
+  position: absolute;
+  top: 20px;
+  right: -50px;
+
+  transition: all 0.2s;
+  background: ${theme.colors.background.main};
+  border-radius: 10px;
+`;

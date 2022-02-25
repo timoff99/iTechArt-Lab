@@ -37,7 +37,16 @@ const StyledButton = styled(Box)`
       variants: variants(disabled),
     });
   }}
-  
+
+  :hover {
+    ${() => {
+      return variant({
+        prop: "variantMenu",
+        variants: variants(),
+      });
+    }}
+  }
+
   ${(props) => {
     switch (props.size) {
       case "box":

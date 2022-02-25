@@ -52,15 +52,15 @@ export const cookBookApi = createApi({
         invalidatesTags: [{ type: "CookBook", id: "COOKBOOK" }],
       }),
       updateCookBook: builder.mutation({
-        query: (_id) => ({ url: `update`, method: "put", data: _id }),
+        query: (cookbookData) => ({ url: `update`, method: "put", data: cookbookData }),
         invalidatesTags: [{ type: "CookBook", id: "COOKBOOK" }],
       }),
       updateCookBookLikes: builder.mutation({
-        query: (_id) => ({ url: `update-likes`, method: "put", data: _id }),
+        query: (_id) => ({ url: `update-likes`, method: "put", params: _id }),
         invalidatesTags: [{ type: "CookBook", id: "COOKBOOK" }],
       }),
       deleteCookBook: builder.mutation({
-        query: (_id) => ({ url: `delete`, method: "delete", data: _id }),
+        query: (_id) => ({ url: `delete`, method: "delete", params: _id }),
         invalidatesTags: [{ type: "CookBook", id: "COOKBOOK" }],
       }),
     };
@@ -75,7 +75,7 @@ export const {
   useLazyGetCookBookQuery,
   useGetFilteredCookBookQuery,
   useUpdateCookBookCommentsMutation,
-  useUpdateCookBookQuery,
-  useUpdateCookBookLikesQuery,
+  useUpdateCookBookMutation,
+  useUpdateCookBookLikesMutation,
   useDeleteCookBookMutation,
 } = cookBookApi;

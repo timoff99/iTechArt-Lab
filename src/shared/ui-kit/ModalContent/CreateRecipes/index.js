@@ -2,7 +2,7 @@ import React, { useState, useRef, memo } from "react";
 import styled from "styled-components";
 import { Formik, Form } from "formik";
 
-import { useAddRecipeMutation } from "../../../../services/recipe.service";
+import { useAddRecipeMutation, useUpdateRecipeMutation } from "../../../../services/recipe.service";
 import ImageService from "../../../../services/image.service";
 
 import { Flex, FlexColumn } from "../../../helpers/Flex";
@@ -24,133 +24,183 @@ const FileUploader = styled(Box)`
   display: none;
 `;
 
-export const CreateRecipes = memo(({ setShowModal }) => {
-  const [cookbookImage, setCookbookImage] = useState("");
-  const [ingredients, setIngredients] = useState([]);
-  const [steps, setSteps] = useState([]);
-  const [time, setTime] = useState(0);
-  const [addRecipe] = useAddRecipeMutation();
-  const formData = new FormData();
-  const refFileInput = useRef();
-  const setImage = (e) => {
-    setCookbookImage(e.target.files[0]);
-  };
+export const CreateRecipes = memo(
+  ({
+    setShowModal,
+    _id,
+    oldTitle,
+    oldDescription,
+    oldCooking_time,
+    oldSteps,
+    oldIngredients,
+    oldImage,
+    update,
+    setUpdate,
+    ...props
+  }) => {
+    const [recipeImage, setRecipeImage] = useState("");
+    const [ingredients, setIngredients] = useState(oldIngredients || []);
+    const [steps, setSteps] = useState(oldSteps || []);
+    const [time, setTime] = useState(oldCooking_time || 0);
 
-  const CreateImage = async () => {
-    try {
-      formData.append("image", cookbookImage);
-      const image = await ImageService.addImage(formData);
-      return image.data;
-    } catch (error) {
-      console.log("error occurred  while uploading image", error);
-    }
-    return true;
-  };
+    const [addRecipe] = useAddRecipeMutation();
+    const [updateRecipe] = useUpdateRecipeMutation();
+    const formData = new FormData();
+    const refFileInput = useRef();
+    const setImage = (e) => {
+      setRecipeImage(e.target.files[0]);
+    };
 
-  const createRecipe = async (values) => {
-    try {
-      const image = await CreateImage();
-      const { title, description } = values;
-      const recipesData = { title, description, image, steps, ingredients, cooking_time: time };
-      addRecipe(recipesData);
-      console.log("recept upl seccess");
-    } catch (error) {
-      console.log("error recept", error);
-    }
-    return true;
-  };
-  const handleClickFileUploader = (e) => {
-    e.preventDefault();
-    refFileInput.current.click();
-  };
-  const handleAdd = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      if (e.target.name === "steps") {
-        setSteps((prev) => [...prev, e.target.value]);
-      } else if (e.target.name === "ingredients") {
-        setIngredients((prev) => [...prev, e.target.value]);
+    const createImage = async () => {
+      try {
+        formData.append("image", recipeImage);
+        const image = await ImageService.addImage(formData);
+        return image.data;
+      } catch (error) {
+        console.log("error occurred  while uploading image", error);
       }
-      e.target.value = "";
-    }
-  };
+      return true;
+    };
 
-  const handleCloseSteps = (deleteItem) => {
-    const updatedSteps = steps.filter((item) => item !== deleteItem);
-    setSteps(updatedSteps);
-  };
-  const handleCloseIngredients = (deleteItem) => {
-    const updatedIngredients = ingredients.filter((item) => item !== deleteItem);
-    setIngredients(updatedIngredients);
-  };
-  return (
-    <Formik
-      initialValues={{
-        title: "",
-        description: "",
-      }}
-      onSubmit={async (values) => {
-        await createRecipe(values);
-      }}
-    >
-      {({ handleChange }) => (
-        <Form>
-          <Box px={56} py={72}>
-            <Heading as={"h2"} bold mb={10}>
-              Create New Recipe
-            </Heading>
-            <Input handleChange={handleChange} labelBold="labelBold" {...createRecipeData[0]} require />
+    const createRecipe = async (values) => {
+      try {
+        let newImage;
+        if (!oldImage?.includes("http")) {
+          newImage = await createImage();
+          console.log("create new Image");
+        } else if (recipeImage) {
+          newImage = await createImage();
+          console.log("create new Image");
+        }
+        const { title, description } = values;
+        const recipesData = {
+          _id,
+          title,
+          description,
+          image: newImage ? newImage : oldImage,
+          steps,
+          ingredients,
+          cooking_time: time,
+        };
+        if (update) {
+          updateRecipe(recipesData);
+          setShowModal();
+          return setUpdate(false);
+        }
+        addRecipe(recipesData);
+        setShowModal();
+        console.log("recept upl seccess");
+      } catch (error) {
+        console.log("error recept", error);
+      }
+      return true;
+    };
+    const handleClickFileUploader = (e) => {
+      e.preventDefault();
+      refFileInput.current.click();
+    };
+    const handleAdd = (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        if (e.target.name === "steps") {
+          setSteps((prev) => [...prev, e.target.value]);
+        } else if (e.target.name === "ingredients") {
+          setIngredients((prev) => [...prev, e.target.value]);
+        }
+        e.target.value = "";
+      }
+    };
 
-            <FileUploader as="input" ref={refFileInput} type="file" id="img" name="img" onChange={(e) => setImage(e)} />
-            <Button size="md" variant="primary" mb={10} onClick={handleClickFileUploader}>
-              Upload Recipe Image
-            </Button>
+    const handleCloseSteps = (deleteItem) => {
+      const updatedSteps = steps.filter((item) => item !== deleteItem);
+      setSteps(updatedSteps);
+    };
+    const handleCloseIngredients = (deleteItem) => {
+      const updatedIngredients = ingredients.filter((item) => item !== deleteItem);
+      setIngredients(updatedIngredients);
+    };
+    return (
+      <Formik
+        initialValues={{
+          title: "",
+          description: oldDescription || "",
+        }}
+        onSubmit={async (values) => {
+          await createRecipe(values);
+        }}
+      >
+        {({ handleChange }) => (
+          <Form>
+            <Box px={56} py={72}>
+              <Heading as={"h2"} bold mb={10}>
+                Create New Recipe
+              </Heading>
+              <Input
+                handleChange={handleChange}
+                defaultValue={oldTitle}
+                labelBold="labelBold"
+                {...createRecipeData[0]}
+                require
+              />
 
-            <Textarea labelBold {...createRecipeData[1]} />
-            <Box mb={11}>
-              <Slider timeRange={time} setTimeRange={setTime} type="create" />
+              <FileUploader
+                as="input"
+                ref={refFileInput}
+                type="file"
+                id="img"
+                name="img"
+                onChange={(e) => setImage(e)}
+              />
+              <Button size="md" variant="primary" mb={10} onClick={handleClickFileUploader}>
+                Upload Recipe Image
+              </Button>
+
+              <Textarea labelBold {...createRecipeData[1]} />
+              <Box mb={11}>
+                <Slider timeRange={time} setTimeRange={setTime} type="create" />
+              </Box>
+              <Input
+                handleChange={handleChange}
+                labelBold="labelBold"
+                {...createRecipeData[2]}
+                onKeyPress={(e) => handleAdd(e)}
+              />
+              <FlexColumn mb={10}>
+                {ingredients.map((ingredient, index) => (
+                  <Paragraph key={index}>
+                    {ingredient}
+                    <X onClick={() => handleCloseIngredients(ingredient)} />
+                  </Paragraph>
+                ))}
+              </FlexColumn>
+
+              <Input
+                handleChange={handleChange}
+                labelBold="labelBold"
+                {...createRecipeData[3]}
+                onKeyPress={(e) => handleAdd(e)}
+              />
+              <FlexColumn mb={10}>
+                {steps.map((step, index) => (
+                  <Paragraph key={index}>
+                    {step}
+                    <X onClick={() => handleCloseSteps(step)} />
+                  </Paragraph>
+                ))}
+              </FlexColumn>
+
+              <Flex justifyContent="flex-end">
+                <Button size="md" variant="outlined" mr={10} onClick={setShowModal}>
+                  Cancel
+                </Button>
+                <Button size="md" variant="primary" type="submit">
+                  Confirm
+                </Button>
+              </Flex>
             </Box>
-            <Input
-              handleChange={handleChange}
-              labelBold="labelBold"
-              {...createRecipeData[2]}
-              onKeyPress={(e) => handleAdd(e)}
-            />
-            <FlexColumn mb={10}>
-              {ingredients.map((ingredient, index) => (
-                <Paragraph key={index}>
-                  {ingredient}
-                  <X onClick={() => handleCloseIngredients(ingredient)} />
-                </Paragraph>
-              ))}
-            </FlexColumn>
-
-            <Input
-              handleChange={handleChange}
-              labelBold="labelBold"
-              {...createRecipeData[3]}
-              onKeyPress={(e) => handleAdd(e)}
-            />
-            <FlexColumn mb={10}>
-              {steps.map((step, index) => (
-                <Paragraph key={index}>
-                  {step}
-                  <X onClick={() => handleCloseSteps(step)} />
-                </Paragraph>
-              ))}
-            </FlexColumn>
-
-            <Flex justifyContent="flex-end">
-              <Button size="md" variant="outlined" mr={10} onClick={setShowModal}>
-                Cancel
-              </Button>
-              <Button size="md" variant="primary" type="submit">
-                Confirm
-              </Button>
-            </Flex>
-          </Box>
-        </Form>
-      )}
-    </Formik>
-  );
-});
+          </Form>
+        )}
+      </Formik>
+    );
+  }
+);
