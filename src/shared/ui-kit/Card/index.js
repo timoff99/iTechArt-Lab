@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Box } from "../../helpers/Box";
 import { FlexBetween, FlexCenter, FlexAlignCenter } from "../../helpers/Flex";
@@ -7,26 +7,66 @@ import { ReactComponent as Options } from "../../../static/icons/options.svg";
 import { ReactComponent as Heart } from "../../../static/icons/heart.svg";
 import { ReactComponent as Comment } from "../../../static/icons/comment.svg";
 import { Paragraph } from "../../helpers/Text";
-import { StyledHeading, StyledCard, StyledImg } from "./styles";
+import { StyledHeading, StyledCard, StyledImg, OptionMenu } from "./styles";
+import { Button } from "../Button";
+import { useDeleteCookBookMutation, useUpdateCookBookLikesMutation } from "../../../services/cookbook.service";
+import { Modal } from "../Modal";
+import { CreateCookBook } from "../ModalContent/CreateCookBook";
 
 export const Card = ({
+  _id,
   title,
   description,
-  openCookBook,
   author,
   views,
   likes,
   comments,
-  image,
-  place,
-  cloudinary_id,
   recipes,
-  _id,
+  image,
+  types,
+  place,
+  openRecipe,
+  openCookBook,
   ...props
 }) => {
+  const [showModal, setShowModal] = useState(false);
+  const [update, setUpdate] = useState(false);
+  const [optionMenu, setOptionMenu] = useState(false);
+  const [deleteCookBook] = useDeleteCookBookMutation();
+  const [updateCookBookLikes] = useUpdateCookBookLikesMutation();
+
   const handleOption = (event) => {
-    event.preventDefault();
-    console.log(2);
+    event.stopPropagation();
+    setOptionMenu((prev) => !prev);
+  };
+
+  const onEdit = (event) => {
+    event.stopPropagation();
+    setUpdate(true);
+    toggleModal();
+    setOptionMenu(false);
+  };
+
+  const onDelete = (event) => {
+    event.stopPropagation();
+    deleteCookBook(_id);
+    setOptionMenu(false);
+  };
+
+  const onClone = (event) => {
+    event.stopPropagation();
+    console.log("onClone");
+    setOptionMenu(false);
+  };
+
+  const handleLikes = (event) => {
+    event.stopPropagation();
+    console.log("handleLikes");
+    updateCookBookLikes(_id);
+  };
+
+  const toggleModal = () => {
+    setShowModal((prev) => !prev);
   };
 
   return (
@@ -37,8 +77,31 @@ export const Card = ({
             <Eye />
             <Paragraph ml={2}>{views} views</Paragraph>
           </FlexAlignCenter>
-          <FlexAlignCenter onClick={(e) => handleOption(e)} height={20}>
+          <FlexAlignCenter onClick={(e) => handleOption(e)} height={20} position="relative">
             <Options />
+            {optionMenu && props.profile && (
+              <OptionMenu>
+                <Button variant="secondary" variantMenu="secondaryMenu" size="box" onClick={onEdit}>
+                  <Paragraph as={"pre"} fontWeight={"normal"}>
+                    Edit CookBook
+                  </Paragraph>
+                </Button>
+                <Button variant="secondary" variantMenu="secondaryMenu" size="box" onClick={onDelete}>
+                  <Paragraph as={"pre"} fontWeight={"normal"}>
+                    Delete CookBook
+                  </Paragraph>
+                </Button>
+              </OptionMenu>
+            )}
+            {optionMenu && props.search && (
+              <OptionMenu>
+                <Button variant="secondary" variantMenu="secondaryMenu" size="box" onClick={onClone}>
+                  <Paragraph as={"pre"} fontWeight={"normal"}>
+                    Clone to My CookBooks
+                  </Paragraph>
+                </Button>
+              </OptionMenu>
+            )}
           </FlexAlignCenter>
         </FlexAlignCenter>
         <FlexCenter>
@@ -54,12 +117,12 @@ export const Card = ({
 
         {description && (
           <Paragraph pt={5} textAlign="left">
-            {description}
+            {description.slice(0, 100)}
           </Paragraph>
         )}
 
         <FlexAlignCenter pt={9} justifyContent="space-between">
-          <FlexAlignCenter>
+          <FlexAlignCenter onClick={handleLikes}>
             <Heart />
             <Paragraph ml={2}>{likes?.length || 0} likes</Paragraph>
           </FlexAlignCenter>
@@ -69,6 +132,25 @@ export const Card = ({
           </FlexAlignCenter>
         </FlexAlignCenter>
       </Box>
+      {showModal && (
+        <Modal showModal={showModal} setShowModal={toggleModal}>
+          {
+            <CreateCookBook
+              setShowModal={toggleModal}
+              _id={_id}
+              title={title}
+              description={description}
+              types={types}
+              recipes={recipes}
+              image={image}
+              openRecipe={openRecipe}
+              update={update}
+              setUpdate={setUpdate}
+              {...props}
+            />
+          }
+        </Modal>
+      )}
     </StyledCard>
   );
 };

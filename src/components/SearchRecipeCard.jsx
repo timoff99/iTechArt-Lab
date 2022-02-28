@@ -23,7 +23,7 @@ export const SearchRecipeCard = ({ timeRange }) => {
     <>
       {data &&
         data.map((props, index) => {
-          return <RecipesCard openRecipe={openRecipe} key={index} {...props} />;
+          return <RecipesCard openRecipe={openRecipe} key={index} {...props} search={"search"} />;
         })}
       {showModal && (
         <Modal showModal={showModal} setShowModal={toggleModal}>

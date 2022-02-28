@@ -23,7 +23,9 @@ export const RecipeTab = () => {
     <>
       {data &&
         data.map((props, index) => {
-          return <RecipesCard openRecipe={openRecipe} key={index} spanList={[4, 6, 3]} {...props} />;
+          return (
+            <RecipesCard openRecipe={openRecipe} key={index} spanList={[4, 6, 3]} {...props} profile={"profile"} />
+          );
         })}
       {showModal && (
         <Modal showModal={showModal} setShowModal={toggleModal}>

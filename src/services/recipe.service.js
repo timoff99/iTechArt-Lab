@@ -62,11 +62,24 @@ export const recipeApi = createApi({
         invalidatesTags: [{ type: "Recipe", id: "RECIPE" }],
       }),
       updateRecipe: builder.mutation({
-        query: (_id) => ({ url: `update`, method: "put", data: _id }),
+        query: (recipesData) => ({ url: `update`, method: "put", data: recipesData }),
+        invalidatesTags: [{ type: "Recipe", id: "RECIPE" }],
+      }),
+      updateRecipeLikes: builder.mutation({
+        query: (_id) => ({ url: `update-likes`, method: "put", params: _id }),
+        invalidatesTags: [{ type: "Recipe", id: "RECIPE" }],
+      }),
+      deleteRecipesCookBookId: builder.mutation({
+        query: (selectedRecipes, _id) => ({
+          url: `delete-recipe-cookbookid`,
+          method: "delete",
+          data: selectedRecipes,
+          _id,
+        }),
         invalidatesTags: [{ type: "Recipe", id: "RECIPE" }],
       }),
       deleteRecipe: builder.mutation({
-        query: (_id) => ({ url: `delete`, method: "delete", data: _id }),
+        query: (_id) => ({ url: `delete`, method: "delete", params: _id }),
         invalidatesTags: [{ type: "Recipe", id: "RECIPE" }],
       }),
     };
@@ -84,5 +97,7 @@ export const {
   useUpdateRecipeCommentsMutation,
   useUpdateRecipeCookBookIdMutation,
   useUpdateRecipeMutation,
+  useUpdateRecipeLikesMutation,
+  useDeleteRecipesCookBookIdMutation,
   useDeleteRecipeMutation,
 } = recipeApi;

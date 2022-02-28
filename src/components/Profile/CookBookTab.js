@@ -24,7 +24,9 @@ export const CookBookTab = () => {
     <>
       {data &&
         data.map((props, index) => {
-          return <CookBookCard openCookBook={openCookBook} key={index} spanList={[4, 6, 3]} {...props} />;
+          return (
+            <CookBookCard openCookBook={openCookBook} key={index} spanList={[4, 6, 3]} {...props} profile={"profile"} />
+          );
         })}
       {showModal && (
         <Modal showModal={showModal} setShowModal={toggleModal}>
