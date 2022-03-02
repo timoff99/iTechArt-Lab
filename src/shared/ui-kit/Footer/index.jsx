@@ -27,12 +27,12 @@ export const Footer = () => {
         <Logo2 />
         <Ul>
           <Li>
-            <LinkRenderer href="/" color="background.main" inline>
+            <LinkRenderer href="/search?tab=cookbooks" color="background.main" inline>
               Cookbooks
             </LinkRenderer>
           </Li>
           <Li>
-            <LinkRenderer href="/" color="background.main" inline>
+            <LinkRenderer href="/search?tab=recipes" color="background.main" inline>
               Recipes
             </LinkRenderer>
           </Li>

@@ -12,6 +12,8 @@ import { Comments } from "../../Comments";
 import theme from "../../../../theme";
 import { useCreateRecipeCommentsMutation } from "../../../../services/comments.service";
 import { useUpdateRecipeCommentsMutation } from "../../../../services/recipe.service";
+import { useAddRecipeCloneMutation } from "../../../../services/recipe.service";
+
 const Image = styled(Box)`
   width: 100%;
   max-height: 660px;
@@ -31,6 +33,8 @@ const Circle = styled(Box)`
 export const Recipes = ({ _id, title, description, author, views, likes, comments, image, steps, ingredients }) => {
   const [createRecipeComments] = useCreateRecipeCommentsMutation();
   const [updateRecipeComments] = useUpdateRecipeCommentsMutation();
+  const [addRecipeClone] = useAddRecipeCloneMutation();
+
   return (
     <Box>
       <FlexBetween>
@@ -41,7 +45,7 @@ export const Recipes = ({ _id, title, description, author, views, likes, comment
               {title}
             </Heading>
             <Box>
-              <Button size="box" variant="outlined">
+              <Button size="box" variant="outlined" onClick={() => addRecipeClone(_id)}>
                 +
               </Button>
             </Box>

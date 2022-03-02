@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import debounce from "lodash/debounce";
 
 import { ReactComponent as Logo } from "../../../static/icons/logo.svg";
 import person from "../../../static/icons/person.svg";
@@ -12,11 +14,12 @@ import { Modal } from "../Modal";
 import { CreateCookBook } from "../ModalContent/CreateCookBook";
 import { UserContext } from "../UserProvider";
 import UserService from "../../../services/user.service";
-import { useNavigate } from "react-router-dom";
+import { useUrl } from "../../../hooks/useUrl";
 
-export const Header = () => {
+export const Header = ({ mainPage }) => {
   const [showModal, setShowModal] = useState(false);
   const { user, setUser } = useContext(UserContext);
+  const { query, updateQuery, clearAll } = useUrl();
   const navigation = useNavigate();
   const TryGetUser = async () => {
     if (!user.username) {
@@ -34,6 +37,19 @@ export const Header = () => {
   const openModal = () => {
     setShowModal((prev) => !prev);
   };
+  const debouncedChange = debounce((value) => {
+    if (value === "") {
+      return updateQuery(value);
+    }
+    updateQuery({ search: value });
+  }, 500);
+
+  const handleChange = useCallback(
+    (e) => {
+      debouncedChange(e.target.value);
+    },
+    [debouncedChange]
+  );
   return (
     <Box boxShadow="0px 0px 16px rgba(0, 0, 0, 0.08)">
       <StyledContainer>
@@ -58,14 +74,19 @@ export const Header = () => {
             </LinkRenderer>
           </Li>
         </Ul>
-        <Input
-          type="text"
-          name="smallSearch"
-          variantLabel="smallLabel"
-          variantInput="smallInput"
-          inputSize="sm"
-          labelSize="sm"
-        />
+        {!mainPage && (
+          <Input
+            type="text"
+            name="smallSearch"
+            variantLabel="smallLabel"
+            variantInput="smallInput"
+            inputSize="sm"
+            labelSize="sm"
+            defaultValue={query.search}
+            handleChange={handleChange}
+          />
+        )}
+
         <Button size="sm" variant="outlined" onClick={openModal}>
           Create cookBook
         </Button>

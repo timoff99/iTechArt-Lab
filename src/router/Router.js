@@ -12,12 +12,13 @@ import { Search } from "../pages/Search";
 import { Profile } from "../pages/Profile";
 
 export const Router = () => {
+  const mainPage = "mainPage";
   return (
     <Routes>
       <Route
         path={ROUTE_NAMES.HOME}
         element={
-          <Layout>
+          <Layout mainPage={mainPage}>
             <Home />
           </Layout>
         }

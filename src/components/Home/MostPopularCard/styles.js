@@ -18,6 +18,9 @@ export const RelativeCard = styled(Box)`
   ${({ bg }) => {
     return `background: url(${bg}) no-repeat center center / cover;`;
   }}
+  ${({ pt }) => {
+    return `padding-top: ${pt};`;
+  }}
   margin-bottom: 24px;
   > ${Box} {
     position: absolute;
@@ -26,10 +29,6 @@ export const RelativeCard = styled(Box)`
     width: 100%;
     height: 100%;
   }
-`;
-
-export const RelativeCard2 = styled(RelativeCard)`
-  padding-top: ${(258 / 600) * 100}%;
 `;
 
 export const BoxGradient = styled(Flex)`
@@ -42,4 +41,14 @@ export const StyledOptions = styled(Box)`
   margin-right: ${theme.space[8]};
   align-self: flex-start;
   margin-left: auto;
+`;
+
+export const OptionMenu = styled(Box)`
+  padding: 8px;
+  position: absolute;
+  right: 10px;
+
+  transition: all 0.2s;
+  background: ${theme.colors.background.main};
+  border-radius: 10px;
 `;

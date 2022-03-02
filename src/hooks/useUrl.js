@@ -18,6 +18,9 @@ export function useUrl() {
     if (URLSPquery.has("cookingRange")) {
       query.cookingRange = URLSPquery.get("cookingRange").split(",");
     }
+    if (URLSPquery.has("search")) {
+      query.search = URLSPquery.get("search").split(",");
+    }
     return query;
   })();
 

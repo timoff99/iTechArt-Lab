@@ -6,56 +6,35 @@ import { ReactComponent as Eye } from "../../../static/icons/small-eye.svg";
 import { ReactComponent as Options } from "../../../static/icons/options.svg";
 import { ReactComponent as Heart } from "../../../static/icons/heart.svg";
 import { ReactComponent as Comment } from "../../../static/icons/comment.svg";
-import { Paragraph } from "../../helpers/Text";
-import { StyledHeading, StyledCard, StyledImg, OptionMenu } from "./styles";
+import { Paragraph, Heading } from "../../helpers/Text";
+import { StyledCard, OptionMenu, StyledImg } from "./styles";
 import { Button } from "../Button";
-import {
-  useAddCookBookCloneMutation,
-  useDeleteCookBookMutation,
-  useUpdateCookBookLikesMutation,
-} from "../../../services/cookbook.service";
-import { Modal } from "../Modal";
-import { CreateCookBook } from "../ModalContent/CreateCookBook";
+import { useAddRecipeCloneMutation, useUpdateRecipeLikesMutation } from "../../../services/recipe.service";
 
-export const Card = ({
-  _id,
+export const VerticalRecipesCard = ({
   title,
   description,
+  openRecipe,
   author,
   views,
   likes,
   comments,
-  recipes,
   image,
-  types,
+  cooking_time,
   place,
-  openRecipe,
-  openCookBook,
+  steps,
+  ingredients,
+  modalCookBook,
+  _id,
   ...props
 }) => {
-  const [showModal, setShowModal] = useState(false);
-  const [update, setUpdate] = useState(false);
   const [optionMenu, setOptionMenu] = useState(false);
-  const [deleteCookBook] = useDeleteCookBookMutation();
-  const [updateCookBookLikes] = useUpdateCookBookLikesMutation();
-  const [addCookBookClone] = useAddCookBookCloneMutation();
+  const [updateRecipeLikes] = useUpdateRecipeLikesMutation();
+  const [addCookBookClone] = useAddRecipeCloneMutation();
 
   const handleOption = (event) => {
     event.stopPropagation();
     setOptionMenu((prev) => !prev);
-  };
-
-  const onEdit = (event) => {
-    event.stopPropagation();
-    setUpdate(true);
-    toggleModal();
-    setOptionMenu(false);
-  };
-
-  const onDelete = (event) => {
-    event.stopPropagation();
-    deleteCookBook(_id);
-    setOptionMenu(false);
   };
 
   const onClone = (event) => {
@@ -66,15 +45,11 @@ export const Card = ({
 
   const handleLikes = (event) => {
     event.stopPropagation();
-    updateCookBookLikes(_id);
-  };
-
-  const toggleModal = () => {
-    setShowModal((prev) => !prev);
+    updateRecipeLikes(_id);
   };
 
   return (
-    <StyledCard place={place} mb={3} {...props} onClick={() => openCookBook(_id)}>
+    <StyledCard place={place} mb={3} {...props} onClick={() => openRecipe(_id)}>
       <Box p={8}>
         <FlexAlignCenter pb={5} justifyContent="space-between">
           <FlexAlignCenter>
@@ -83,21 +58,7 @@ export const Card = ({
           </FlexAlignCenter>
           <FlexAlignCenter onClick={(e) => handleOption(e)} height={20} position="relative">
             <Options />
-            {optionMenu && props.profile && (
-              <OptionMenu>
-                <Button variant="secondary" variantMenu="secondaryMenu" size="box" onClick={onEdit}>
-                  <Paragraph as={"pre"} fontWeight={"normal"}>
-                    Edit CookBook
-                  </Paragraph>
-                </Button>
-                <Button variant="secondary" variantMenu="secondaryMenu" size="box" onClick={onDelete}>
-                  <Paragraph as={"pre"} fontWeight={"normal"}>
-                    Delete CookBook
-                  </Paragraph>
-                </Button>
-              </OptionMenu>
-            )}
-            {optionMenu && props.search && (
+            {optionMenu && (
               <OptionMenu>
                 <Button variant="secondary" variantMenu="secondaryMenu" size="box" onClick={onClone}>
                   <Paragraph as={"pre"} fontWeight={"normal"}>
@@ -113,9 +74,9 @@ export const Card = ({
         </FlexCenter>
 
         <FlexBetween pt={5} alignItems="center">
-          <StyledHeading as={"h3"} semiBold>
+          <Heading as={"h3"} semiBold>
             {title}
-          </StyledHeading>
+          </Heading>
           <Paragraph>{author}</Paragraph>
         </FlexBetween>
 
@@ -136,25 +97,6 @@ export const Card = ({
           </FlexAlignCenter>
         </FlexAlignCenter>
       </Box>
-      {showModal && (
-        <Modal showModal={showModal} setShowModal={toggleModal}>
-          {
-            <CreateCookBook
-              setShowModal={toggleModal}
-              _id={_id}
-              title={title}
-              description={description}
-              types={types}
-              recipes={recipes}
-              image={image}
-              openRecipe={openRecipe}
-              update={update}
-              setUpdate={setUpdate}
-              {...props}
-            />
-          }
-        </Modal>
-      )}
     </StyledCard>
   );
 };

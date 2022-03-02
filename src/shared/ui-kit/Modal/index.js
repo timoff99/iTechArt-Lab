@@ -38,7 +38,7 @@ export const Modal = ({ showModal, setShowModal, children }) => {
   });
   return createPortal(
     <Overlay ref={modalRef} onClick={closeModal}>
-      <StyledX onClick={setShowModal} />
+      <StyledX onClick={() => setShowModal(false)} />
       <Content>{children}</Content>
     </Overlay>,
     element
