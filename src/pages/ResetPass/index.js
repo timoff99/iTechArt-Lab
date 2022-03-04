@@ -13,6 +13,7 @@ import { Container } from "../../shared/helpers/Container";
 import { Col } from "../../shared/helpers/Grid/Col";
 import { mediaQueries } from "../../theme";
 import UserService from "../../services/user.service";
+import { ROUTE_NAMES } from "../../router/routeNames";
 
 const StyledLogin = styled(Box)`
   display: flex;
@@ -56,7 +57,7 @@ export const ResetPass = () => {
       const confirmPassword = values.confirmPassword;
       await UserService.resetPass({ newPassword: password, token });
       setTimeout(() => {
-        navigation("/login", { replace: true });
+        navigation(`${ROUTE_NAMES.LOGIN}`, { replace: true });
       }, 1000);
 
       successNotify("new password created");

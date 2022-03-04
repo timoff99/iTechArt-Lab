@@ -25,6 +25,7 @@ import homeBg from "../../static/images/homeBg.png";
 
 import { useGetRecipesForMainQuery, useLazyGetRecipeQuery } from "../../services/recipe.service";
 import { useGetCookBooksForMainQuery, useLazyGetCookBookQuery } from "../../services/cookbook.service";
+import { ROUTE_NAMES } from "../../router/routeNames";
 
 const StyledLinkRenderer = styled(LinkRenderer)`
   color: ${theme.colors.background.main};
@@ -66,7 +67,7 @@ export const Home = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const searchValue = e.target[0].value;
-    navigation(`/search?tab=cookbooks&search=${searchValue}`);
+    navigation(`${ROUTE_NAMES.SEARCHTABCOOKBOOKS}&search=${searchValue}`);
   };
 
   const toggleRecipeModal = () => {

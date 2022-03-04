@@ -15,6 +15,7 @@ import { CreateCookBook } from "../ModalContent/CreateCookBook";
 import { UserContext } from "../UserProvider";
 import UserService from "../../../services/user.service";
 import { useUrl } from "../../../hooks/useUrl";
+import { ROUTE_NAMES } from "../../../router/routeNames";
 
 export const Header = ({ mainPage }) => {
   const [showModal, setShowModal] = useState(false);
@@ -27,7 +28,7 @@ export const Header = ({ mainPage }) => {
         const getUser = await UserService.getUser();
         setUser(getUser.data.user);
       } catch (error) {
-        navigation("/", { replace: true });
+        navigation(ROUTE_NAMES.HOME, { replace: true });
       }
     }
   };

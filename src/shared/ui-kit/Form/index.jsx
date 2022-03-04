@@ -17,6 +17,7 @@ import { Heading, Paragraph, LinkRenderer } from "../../helpers/Text";
 import AuthService from "../../../services/auth.service";
 import UserService from "../../../services/user.service";
 import { UserContext } from "../UserProvider";
+import { ROUTE_NAMES } from "../../../router/routeNames";
 
 const StyledForm = styled(Box)`
   background: ${theme.colors.background.main};
@@ -65,7 +66,7 @@ export const Form = ({
         setUser(user.data.user);
         successNotify("user signup");
         setTimeout(() => {
-          navigation("/profile?tab=cookbooks", { replace: true });
+          navigation(ROUTE_NAMES.PROFILETABCOOKBOOKS, { replace: true });
         }, 1000);
         return true;
       } catch (e) {
@@ -79,7 +80,7 @@ export const Form = ({
       setUser(user.data.user);
       successNotify("user login");
       setTimeout(() => {
-        navigation("/profile?tab=cookbooks", { replace: true });
+        navigation(ROUTE_NAMES.PROFILETABCOOKBOOKS, { replace: true });
       }, 1000);
       return true;
     } catch (e) {
