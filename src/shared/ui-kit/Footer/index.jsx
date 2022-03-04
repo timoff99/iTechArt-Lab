@@ -8,6 +8,7 @@ import { ReactComponent as ITechArtLogo } from "../../../static/icons/iTechArt-l
 import theme from "../../../theme";
 import { Li, Ul } from "../../helpers/List";
 import { LinkRenderer, Paragraph } from "../../helpers/Text";
+import { ROUTE_NAMES } from "../../../router/routeNames";
 
 const StyledContainer = styled(Container)`
   display: flex;
@@ -23,30 +24,32 @@ const StyledContainer = styled(Container)`
 export const Footer = () => {
   return (
     <Box background={theme.colors.secondary.main}>
-      <StyledContainer>
+      <StyledContainer flexDirection={["column", "column", "row"]}>
         <Logo2 />
-        <Ul>
-          <Li>
-            <LinkRenderer href="/search?tab=cookbooks" color="background.main" inline>
+        <Ul display={["flex", null, null]} flexDirection={["column", "row", "row"]} p={0}>
+          <Li m={5}>
+            <LinkRenderer href={ROUTE_NAMES.SEARCHTABCOOKBOOKS} color="background.main" inline>
               Cookbooks
             </LinkRenderer>
           </Li>
-          <Li>
-            <LinkRenderer href="/search?tab=recipes" color="background.main" inline>
+          <Li m={5}>
+            <LinkRenderer href={ROUTE_NAMES.SEARCHTABRECIPES} color="background.main" inline>
               Recipes
             </LinkRenderer>
           </Li>
-          <Li>
-            <LinkRenderer href="/" color="background.main" inline>
+          <Li m={5}>
+            <LinkRenderer href={ROUTE_NAMES.HOME} color="background.main" inline>
               About Us
             </LinkRenderer>
           </Li>
         </Ul>
-        <Paragraph color="primary.main" fontSize={1} mx={80} my={0}>
+        <Paragraph color="primary.main" fontSize={1} mx={80} my={0} m={5}>
           plzfeedme@itechart.com
         </Paragraph>
-        <Paragraph fontSize={1}>Study Project, 2020</Paragraph>
-        <Box>
+        <Paragraph fontSize={1} m={5}>
+          Study Project, 2020
+        </Paragraph>
+        <Box m={5}>
           <ITechArtLogo />
         </Box>
       </StyledContainer>

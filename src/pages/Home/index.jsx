@@ -46,9 +46,6 @@ const StyledLogin = styled(Box)`
 
 const SwiperBox = styled(Box)`
   background: url(${pear}) ${theme.colors.primary.main} right no-repeat;
-
-  padding-right: 196px;
-  padding-left: 196px;
   border-radius: 40px 10px;
   text-align: center;
 `;
@@ -105,11 +102,11 @@ export const Home = () => {
                 as={"form"}
               />
             </Col>
-            <Ul>
+            <Ul display={["none", "flex", null]}>
               {listMenu.map(({ children, value }, index) => {
                 return (
-                  <Li key={index}>
-                    <StyledLinkRenderer href={`/search?tab=cookbooks&type=${value}`} inline fontSize={2}>
+                  <Li key={index} mr={10}>
+                    <StyledLinkRenderer href={`${ROUTE_NAMES.SEARCHTABCOOKBOOKS}&type=${value}`} inline fontSize={2}>
                       {children}
                     </StyledLinkRenderer>
                   </Li>
@@ -136,7 +133,7 @@ export const Home = () => {
               );
             })}
         </Grid>
-        <LinkRenderer href="/search?tab=recipes" inline mt={10} mb={13}>
+        <LinkRenderer href={ROUTE_NAMES.SEARCHTABRECIPES} inline mt={10} mb={13}>
           <Button size="lg" variant="outlined">
             Show More
           </Button>
@@ -150,13 +147,13 @@ export const Home = () => {
           Most Popular CookBooks
         </Heading>
         <PopularCard items={viewsCookBooks?.cookbooks} variant={"secondary"} openCookBook={openCookBook} mb={100} />
-        <LinkRenderer href="/search?tab=cookbooks" inline mt={10} mb={13}>
+        <LinkRenderer href={ROUTE_NAMES.SEARCHTABCOOKBOOKS} inline mt={10} mb={13}>
           <Button size="lg" variant="outlined">
             Show More
           </Button>
         </LinkRenderer>
       </Container>
-      <SwiperBox mb={8} mx={9}>
+      <SwiperBox mb={8} mx={[5, 9, 9]} px={[1, "196px", "196px"]}>
         <Paragraph uppercase fontSize={1} pt={13} color="background.main">
           top 10
         </Paragraph>
@@ -181,7 +178,7 @@ export const Home = () => {
               })}
           </Swiper>
         </Container>
-        <LinkRenderer href="/search?tab=recipes" inline mb={13}>
+        <LinkRenderer href={ROUTE_NAMES.SEARCHTABRECIPES} inline mb={13}>
           <Button size="lg" variant="outlined">
             Show More
           </Button>

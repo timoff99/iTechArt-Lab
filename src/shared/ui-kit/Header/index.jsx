@@ -59,24 +59,25 @@ export const Header = ({ mainPage }) => {
             <CreateCookBook />
           </Modal>
         )}
-        <LinkRenderer href="/" inline>
+        <LinkRenderer href={ROUTE_NAMES.HOME} inline>
           <Logo />
         </LinkRenderer>
 
-        <Ul>
-          <Li>
-            <LinkRenderer href="/search?tab=recipes" color="secondary.main" inline>
+        <Ul display={["none", "flex", null]}>
+          <Li mr="72px">
+            <LinkRenderer href={ROUTE_NAMES.SEARCHTABRECIPES} color="secondary.main" inline>
               Recipes
             </LinkRenderer>
           </Li>
-          <Li>
-            <LinkRenderer href="/search?tab=cookbooks" color="secondary.main" inline>
+          <Li mr={0}>
+            <LinkRenderer href={ROUTE_NAMES.SEARCHTABCOOKBOOKS} color="secondary.main" inline>
               Cookbooks
             </LinkRenderer>
           </Li>
         </Ul>
         {!mainPage && (
           <Input
+            display={["none", "block", null]}
             type="text"
             name="smallSearch"
             variantLabel="smallLabel"
@@ -88,11 +89,11 @@ export const Header = ({ mainPage }) => {
           />
         )}
 
-        <Button size="sm" variant="outlined" onClick={openModal}>
+        <Button display={["none", null, "block"]} size="sm" variant="outlined" onClick={openModal}>
           Create cookBook
         </Button>
         {user.username ? (
-          <LinkRenderer href="/profile?tab=cookbooks" color="secondary.main" inline>
+          <LinkRenderer href={ROUTE_NAMES.PROFILETABCOOKBOOKS} color="secondary.main" inline>
             <User>
               <img src={person} alt="person" />
               <Paragraph fontSize={1} color="secondary.main">
@@ -101,7 +102,7 @@ export const Header = ({ mainPage }) => {
             </User>
           </LinkRenderer>
         ) : (
-          <LinkRenderer href="/login" color="secondary.main" inline>
+          <LinkRenderer href={ROUTE_NAMES.LOGIN} color="secondary.main" inline>
             <Paragraph fontSize={1} color="secondary.main">
               Sign In
             </Paragraph>

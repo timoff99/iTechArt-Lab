@@ -12,6 +12,7 @@ import bigSearch from "../../../static/icons/bigSearch.svg";
 import { Box } from "../../helpers/Box";
 import { LinkRenderer } from "../../helpers/Text";
 import { ErrorMessage } from "formik";
+import { ROUTE_NAMES } from "../../../router/routeNames";
 
 const LabelStyle = styled(Box)`
   display: flex;
@@ -148,11 +149,11 @@ export const Input = memo(
           {type === "password" && icon}
         </Box>
         {name === "password" && !noForm && (
-          <LinkRenderer href="/forgot-password" semiBold position="absolute" top="0" right="0">
+          <LinkRenderer href={ROUTE_NAMES.FORGOTPASSWORD} semiBold position="absolute" top="0" right="0">
             Forgot password?
           </LinkRenderer>
         )}
-        {name === "bigSearch" && <StyledButton size="md">SEARCH</StyledButton>}
+        {name === "bigSearch" && <StyledButton p={["10px", "sm", "30px"]}>SEARCH</StyledButton>}
         <Box color="red">{form && <ErrorMessage name={name} />}</Box>
       </LabelStyle>
     );
