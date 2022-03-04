@@ -7,4 +7,7 @@ export default class UserService {
   static async updateUser(updatedFiled) {
     return api.put("user/update-user", { updatedFiled });
   }
+  static async resetPass(newPassword, token) {
+    return api.put("user/reset-password", newPassword, token);
+  }
 }

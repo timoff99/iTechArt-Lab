@@ -17,6 +17,7 @@ import { Heading, Paragraph, LinkRenderer } from "../../helpers/Text";
 import AuthService from "../../../services/auth.service";
 import UserService from "../../../services/user.service";
 import { UserContext } from "../UserProvider";
+import { ROUTE_NAMES } from "../../../router/routeNames";
 
 const StyledForm = styled(Box)`
   background: ${theme.colors.background.main};
@@ -27,18 +28,27 @@ const StyledForm = styled(Box)`
   z-index: 2;
 `;
 
-const schema = yup.object().shape({
+const defaultSchema = yup.object().shape({
   email: yup.string().email().required(),
   password: yup.string().trim().required(),
   confirmPassword: yup.string().oneOf([yup.ref("password"), null], "Passwords must match"),
 });
-
-export const Form = ({ title, description, link, inputData, href, buttonText, auth, ...props }) => {
+export const Form = ({
+  title,
+  description,
+  link,
+  inputData,
+  href,
+  buttonText,
+  auth,
+  oSubmit,
+  schema = defaultSchema,
+  ...props
+}) => {
   const { setUser } = useContext(UserContext);
   const navigation = useNavigate();
   const errorNotify = (errors) => {
     if (errors?.message) {
-      console.log(errors);
       return toast.error(errors.message);
     }
   };
@@ -56,7 +66,7 @@ export const Form = ({ title, description, link, inputData, href, buttonText, au
         setUser(user.data.user);
         successNotify("user signup");
         setTimeout(() => {
-          navigation("/profile?tab=cookbooks", { replace: true });
+          navigation(ROUTE_NAMES.PROFILETABCOOKBOOKS, { replace: true });
         }, 1000);
         return true;
       } catch (e) {
@@ -70,14 +80,13 @@ export const Form = ({ title, description, link, inputData, href, buttonText, au
       setUser(user.data.user);
       successNotify("user login");
       setTimeout(() => {
-        navigation("/profile?tab=cookbooks", { replace: true });
+        navigation(ROUTE_NAMES.PROFILETABCOOKBOOKS, { replace: true });
       }, 1000);
       return true;
     } catch (e) {
       return errorNotify(e?.response?.data);
     }
   };
-
   return (
     <Formik
       initialValues={{
@@ -86,7 +95,11 @@ export const Form = ({ title, description, link, inputData, href, buttonText, au
       }}
       validationSchema={schema}
       onSubmit={(values) => {
-        asyncHandleSubmit(values);
+        if (oSubmit) {
+          oSubmit(values);
+        } else {
+          asyncHandleSubmit(values);
+        }
       }}
     >
       {({ handleChange, handleSubmit }) => (
@@ -97,12 +110,23 @@ export const Form = ({ title, description, link, inputData, href, buttonText, au
           </Heading>
           <Paragraph semiBold mb={9} fontSize={1}>
             {description}{" "}
-            <LinkRenderer href={href} inline>
-              {link}
-            </LinkRenderer>
+            {href && (
+              <LinkRenderer href={href} inline>
+                {link}
+              </LinkRenderer>
+            )}
           </Paragraph>
           {inputData.map((data, index) => {
-            return <Input handleChange={handleChange} key={index} {...data} variantInput="loginInput" form />;
+            return (
+              <Input
+                handleChange={handleChange}
+                key={index}
+                {...data}
+                noForm={props.noForm}
+                variantInput="loginInput"
+                form
+              />
+            );
           })}
 
           <Button size="fit" mt="14px" type="submit">

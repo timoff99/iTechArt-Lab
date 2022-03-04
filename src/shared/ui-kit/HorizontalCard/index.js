@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-
 import { Box } from "../../helpers/Box";
 import { Flex, FlexBetween, FlexCenter, FlexAlignCenter } from "../../helpers/Flex";
 import { ReactComponent as Eye } from "../../../static/icons/small-eye.svg";
@@ -11,7 +10,11 @@ import { StyledCard, Img, OptionMenu } from "./styles";
 import { Button } from "../Button";
 import { CreateRecipes } from "../ModalContent/CreateRecipes";
 import { Modal } from "../Modal";
-import { useDeleteRecipeMutation, useUpdateRecipeLikesMutation } from "../../../services/recipe.service";
+import {
+  useAddRecipeCloneMutation,
+  useDeleteRecipeMutation,
+  useUpdateRecipeLikesMutation,
+} from "../../../services/recipe.service";
 
 export const HorizontalCard = ({
   title,
@@ -35,7 +38,7 @@ export const HorizontalCard = ({
   const [optionMenu, setOptionMenu] = useState(false);
   const [deleteRecipe] = useDeleteRecipeMutation();
   const [updateRecipeLikes] = useUpdateRecipeLikesMutation();
-
+  const [addRecipeClone] = useAddRecipeCloneMutation();
   const handleOption = (event) => {
     event.stopPropagation();
     setOptionMenu((prev) => !prev);
@@ -54,15 +57,14 @@ export const HorizontalCard = ({
     setOptionMenu(false);
   };
 
-  const onClone = (event) => {
+  const onClone = async (event) => {
     event.stopPropagation();
-    console.log("onClone");
+    addRecipeClone(_id);
     setOptionMenu(false);
   };
 
   const handleLikes = (event) => {
     event.stopPropagation();
-    console.log("handleLikes");
     updateRecipeLikes(_id);
   };
 
@@ -70,16 +72,9 @@ export const HorizontalCard = ({
     setShowModal((prev) => !prev);
   };
 
-  const foo = (e) => {
-    e.stopPropagation();
-    console.log("vover");
+  const save = async () => {
+    addRecipeClone(_id);
   };
-
-  const boo = (e) => {
-    e.stopPropagation();
-    console.log("bober");
-  };
-
   return (
     <StyledCard place={place} mb={3} {...props} onClick={() => openRecipe(_id)} width={"100%"}>
       <FlexBetween width={"100%"}>
@@ -117,7 +112,7 @@ export const HorizontalCard = ({
         <FlexBetween flexDirection="column" p={8} alignItems="end">
           <Paragraph>{author}</Paragraph>
           {modalCookBook ? (
-            <Button variant="outlined" ml={5} onClick={(e) => foo(e)}>
+            <Button variant="outlined" ml={5} onClick={save}>
               Save
             </Button>
           ) : (

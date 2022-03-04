@@ -42,7 +42,6 @@ export const SettingsTab = () => {
 
   const errorNotify = (errors) => {
     if (errors?.message) {
-      console.log(errors);
       return toast.error(errors.message);
     }
   };
@@ -55,7 +54,6 @@ export const SettingsTab = () => {
     try {
       if (e.key === "Enter") {
         e.preventDefault();
-        console.log(e.target);
         const updatedValue = e.target.value;
         const inputName = e.target.name;
         const updatedFiled = { [inputName]: updatedValue };

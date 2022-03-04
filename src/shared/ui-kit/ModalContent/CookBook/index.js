@@ -13,7 +13,7 @@ import { Recipes } from "../Recipes";
 import { Modal } from "../../Modal";
 import { useLazyGetRecipeQuery } from "../../../../services/recipe.service";
 import { useCreateCookBookCommentsMutation } from "../../../../services/comments.service";
-import { useUpdateCookBookCommentsMutation } from "../../../../services/cookbook.service";
+import { useAddCookBookCloneMutation, useUpdateCookBookCommentsMutation } from "../../../../services/cookbook.service";
 
 const BoxImage = styled(Box)`
   width: 100%;
@@ -32,6 +32,7 @@ export const CookBook = ({ _id, recipes, title, description, author, likes, comm
   const [createCookBookComments] = useCreateCookBookCommentsMutation();
   const [updateCookBookComments] = useUpdateCookBookCommentsMutation();
   const [action, { data: recipe }] = useLazyGetRecipeQuery();
+  const [addCookBookClone] = useAddCookBookCloneMutation();
 
   const toggleModal = () => {
     setShowModal((prev) => !prev);
@@ -40,6 +41,9 @@ export const CookBook = ({ _id, recipes, title, description, author, likes, comm
   const openRecipe = (_id) => {
     action(_id, true);
     toggleModal();
+  };
+  const onClone = async (_id) => {
+    addCookBookClone(_id);
   };
 
   return (
@@ -54,7 +58,7 @@ export const CookBook = ({ _id, recipes, title, description, author, likes, comm
           </Paragraph>
         </FlexColumn>
         <Box>
-          <Button size="md" variant="primary">
+          <Button size="md" variant="primary" onClick={() => onClone(_id)}>
             Clone to My CookBook
           </Button>
         </Box>

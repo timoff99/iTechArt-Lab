@@ -1,22 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 import theme from "../../theme";
 import { Box } from "../../shared/helpers/Box";
 import { Grid } from "../../shared/helpers/Grid";
 import { Col } from "../../shared/helpers/Grid/Col";
-import { Input } from "../../shared/ui-kit/Input";
-
-import { listMenu, cardListHighRate, cardListTrending, cardListPopular } from "./mockData";
-import homeBg from "../../static/images/homeBg.png";
 import { Ul, Li } from "../../shared/helpers/List";
-import { LinkRenderer, Heading, Paragraph } from "../../shared/helpers/Text";
 import { Container } from "../../shared/helpers/Container";
-import { Card } from "../../shared/ui-kit/Card";
-import { Button } from "../../shared/ui-kit/Button";
-import pear from "../../static/icons/pear.svg";
+import { LinkRenderer, Heading, Paragraph } from "../../shared/helpers/Text";
+
+import { Input } from "../../shared/ui-kit/Input";
 import { Swiper } from "../../shared/ui-kit/Swiper";
+import { Button } from "../../shared/ui-kit/Button";
+import { Modal } from "../../shared/ui-kit/Modal";
+import { CookBook } from "../../shared/ui-kit/ModalContent/CookBook";
+import { Recipes } from "../../shared/ui-kit/ModalContent/Recipes";
+import { VerticalRecipesCard } from "../../shared/ui-kit/VerticalRecipesCard";
 import { PopularCard } from "../../components/Home/PopularCard";
+
+import { listMenu } from "./mockData";
+import pear from "../../static/icons/pear.svg";
+import homeBg from "../../static/images/homeBg.png";
+
+import { useGetRecipesForMainQuery, useLazyGetRecipeQuery } from "../../services/recipe.service";
+import { useGetCookBooksForMainQuery, useLazyGetCookBookQuery } from "../../services/cookbook.service";
+import { ROUTE_NAMES } from "../../router/routeNames";
 
 const StyledLinkRenderer = styled(LinkRenderer)`
   color: ${theme.colors.background.main};
@@ -45,6 +54,37 @@ const SwiperBox = styled(Box)`
 `;
 
 export const Home = () => {
+  const [showRecipeModal, setShowRecipeModal] = useState(false);
+  const [showCookBookModal, setShowCookBookModal] = useState(false);
+
+  const { data: likesRecipes } = useGetRecipesForMainQuery({ limit: 4, type: "likes" });
+  const { data: viewsRecipes } = useGetRecipesForMainQuery({ limit: 9, type: "views" });
+  const { data: viewsCookBooks } = useGetCookBooksForMainQuery({ limit: 4, type: "views" });
+  const [action, { data: recipe }] = useLazyGetRecipeQuery();
+  const [cookBookAction, { data: cookBook }] = useLazyGetCookBookQuery();
+  const navigation = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const searchValue = e.target[0].value;
+    navigation(`${ROUTE_NAMES.SEARCHTABCOOKBOOKS}&search=${searchValue}`);
+  };
+
+  const toggleRecipeModal = () => {
+    setShowRecipeModal((prev) => !prev);
+  };
+  const toggleCookBookModal = () => {
+    setShowCookBookModal((prev) => !prev);
+  };
+
+  const openRecipe = (_id) => {
+    action(_id, true);
+    toggleRecipeModal();
+  };
+  const openCookBook = (_id) => {
+    cookBookAction(_id, true);
+    toggleCookBookModal();
+  };
   return (
     <>
       <StyledLogin mx={9}>
@@ -61,14 +101,16 @@ export const Home = () => {
                 inputSize="lg"
                 labelSize="lg"
                 placeholder="Find Best Recipes..."
+                handleSubmit={handleSubmit}
+                as={"form"}
               />
             </Col>
             <Ul>
-              {listMenu.map(({ menu }, index) => {
+              {listMenu.map(({ children, value }, index) => {
                 return (
                   <Li key={index}>
-                    <StyledLinkRenderer href="/" inline fontSize={2}>
-                      {menu}
+                    <StyledLinkRenderer href={`/search?tab=cookbooks&type=${value}`} inline fontSize={2}>
+                      {children}
                     </StyledLinkRenderer>
                   </Li>
                 );
@@ -85,17 +127,20 @@ export const Home = () => {
           20 Highest-Rated Recipes
         </Heading>
         <Grid nested mt={10}>
-          {cardListHighRate.map((props, index) => {
-            return (
-              <Col key={index} span={[4, 6, 3]}>
-                <Card {...props} sizes="sm" place="no-rates" />
-              </Col>
-            );
-          })}
+          {likesRecipes?.recipes &&
+            likesRecipes?.recipes.map((props, index) => {
+              return (
+                <Col key={index} span={[4, 6, 3]}>
+                  <VerticalRecipesCard {...props} sizes="sm" openRecipe={openRecipe} place="no-rates" />
+                </Col>
+              );
+            })}
         </Grid>
-        <Button size="lg" variant="outlined" mb={13}>
-          Show More
-        </Button>
+        <LinkRenderer href="/search?tab=recipes" inline mt={10} mb={13}>
+          <Button size="lg" variant="outlined">
+            Show More
+          </Button>
+        </LinkRenderer>
       </Container>
       <Container mt={5} textAlign="center">
         <Paragraph uppercase fontSize={1} mb={8} color="primary.main">
@@ -104,10 +149,12 @@ export const Home = () => {
         <Heading as={"h2"} bold mb={8} color="secondary.main">
           Most Popular CookBooks
         </Heading>
-        <PopularCard items={cardListPopular} variant={"secondary"} mb={100} />
-        <Button size="lg" variant="outlined" mt={10} mb={13}>
-          Show More
-        </Button>
+        <PopularCard items={viewsCookBooks?.cookbooks} variant={"secondary"} openCookBook={openCookBook} mb={100} />
+        <LinkRenderer href="/search?tab=cookbooks" inline mt={10} mb={13}>
+          <Button size="lg" variant="outlined">
+            Show More
+          </Button>
+        </LinkRenderer>
       </Container>
       <SwiperBox mb={8} mx={9}>
         <Paragraph uppercase fontSize={1} pt={13} color="background.main">
@@ -118,19 +165,38 @@ export const Home = () => {
         </Heading>
         <Container mt="48px" mb="112px">
           <Swiper>
-            {cardListTrending.map((props, index) => {
-              return (
-                <Box key={index} px={"12px"}>
-                  <Card {...props} width={310} />
-                </Box>
-              );
-            })}
+            {viewsRecipes?.recipes &&
+              viewsRecipes?.recipes.map((props, index) => {
+                return (
+                  <Box key={index}>
+                    <VerticalRecipesCard
+                      maxWidth={"288px"}
+                      {...props}
+                      sizes="sm"
+                      openRecipe={openRecipe}
+                      place="no-rates"
+                    />
+                  </Box>
+                );
+              })}
           </Swiper>
         </Container>
-        <Button size="lg" variant="outlined" mb={13}>
-          Show More
-        </Button>
+        <LinkRenderer href="/search?tab=recipes" inline mb={13}>
+          <Button size="lg" variant="outlined">
+            Show More
+          </Button>
+        </LinkRenderer>
       </SwiperBox>
+      {showRecipeModal && (
+        <Modal showModal={showRecipeModal} setShowModal={setShowRecipeModal}>
+          <Recipes {...recipe} />
+        </Modal>
+      )}
+      {showCookBookModal && (
+        <Modal showModal={showCookBookModal} setShowModal={setShowCookBookModal}>
+          <CookBook {...cookBook} />
+        </Modal>
+      )}
     </>
   );
 };

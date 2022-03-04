@@ -27,12 +27,12 @@ export const recipeApi = createApi({
         query: (recipesData) => ({ url: `create`, method: "post", data: recipesData }),
         invalidatesTags: [{ type: "Recipe", id: "RECIPE" }],
       }),
-      getAllRecipes: builder.query({
-        query: () => ({ url: `get-all-recipes`, method: "get" }),
-        providesTags: [{ type: "Recipe", id: "RECIPE" }],
+      addRecipeClone: builder.mutation({
+        query: (_id) => ({ url: `create-clone`, method: "post", data: { _id } }),
+        invalidatesTags: [{ type: "Recipe", id: "RECIPE" }],
       }),
       getUserRecipes: builder.query({
-        query: () => ({ url: `get-user-recipes`, method: "get" }),
+        query: (page) => ({ url: `get-user-recipes`, method: "get", params: { page } }),
         providesTags: [{ type: "Recipe", id: "RECIPE" }],
       }),
       getRecipe: builder.query({
@@ -44,7 +44,23 @@ export const recipeApi = createApi({
         providesTags: [{ type: "Recipe", id: "RECIPE" }],
       }),
       getFilteredRecipes: builder.query({
-        query: (timeRange) => ({ url: `get-filtered-recipes`, method: "get", params: timeRange }),
+        query: (timeRange, page, sort, search) => ({
+          url: `get-filtered-recipes`,
+          method: "get",
+          params: timeRange,
+          page,
+          sort,
+          search,
+        }),
+        providesTags: [{ type: "Recipe", id: "RECIPE" }],
+      }),
+      getRecipesForMain: builder.query({
+        query: (limit, type) => ({
+          url: `get-recipes-for-main`,
+          method: "get",
+          params: limit,
+          type,
+        }),
         providesTags: [{ type: "Recipe", id: "RECIPE" }],
       }),
       updateRecipeComments: builder.mutation({
@@ -88,12 +104,15 @@ export const recipeApi = createApi({
 
 export const {
   useAddRecipeMutation,
-  useGetAllRecipesQuery,
+  useAddRecipeCloneMutation,
   useGetUserRecipesQuery,
+  useLazyGetUserRecipesQuery,
   useLazyGetRecipeQuery,
   useGetRecipeQuery,
   useGetRecipeWithoutCookBookQuery,
   useGetFilteredRecipesQuery,
+  useLazyGetFilteredRecipesQuery,
+  useGetRecipesForMainQuery,
   useUpdateRecipeCommentsMutation,
   useUpdateRecipeCookBookIdMutation,
   useUpdateRecipeMutation,

@@ -10,7 +10,6 @@ import { Container } from "../../shared/helpers/Container";
 import { Heading, Paragraph } from "../../shared/helpers/Text";
 import userImage from "../../static/images/userImage.jpeg";
 import { UserContext } from "../../shared/ui-kit/UserProvider";
-import { Grid } from "../../shared/helpers/Grid";
 import { Modal } from "../../shared/ui-kit/Modal";
 import { CreateCookBook } from "../../shared/ui-kit/ModalContent/CreateCookBook";
 import { CreateRecipes } from "../../shared/ui-kit/ModalContent/CreateRecipes";
@@ -57,7 +56,6 @@ export const Profile = () => {
 
   const onTabChange = (tab) => {
     navigation(`?${tab.path}`);
-    console.log(location);
   };
 
   const toggleModal = () => {
@@ -110,11 +108,11 @@ export const Profile = () => {
         )}
       </FlexBetween>
       <Box>
-        <Grid nested mb={11}>
-          {currentTab?.path === tabs[0].path && <CookBookTab />}
-          {currentTab?.path === tabs[1].path && <RecipeTab />}
-          {currentTab?.path === tabs[2].path && <SettingsTab />}
-        </Grid>
+        {currentTab?.path === tabs[0].path && <CookBookTab />}
+
+        {currentTab?.path === tabs[1].path && <RecipeTab />}
+
+        {currentTab?.path === tabs[2].path && <SettingsTab />}
       </Box>
       {showModal && (
         <Modal showModal={showModal} setShowModal={toggleModal}>

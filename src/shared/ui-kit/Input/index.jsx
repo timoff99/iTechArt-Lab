@@ -108,6 +108,7 @@ export const Input = memo(
     label,
     placeholder,
     handleChange,
+    handleSubmit,
     name,
     errors,
     labelBold,
@@ -116,6 +117,7 @@ export const Input = memo(
     require,
     form,
     noForm,
+    as,
     ...props
   }) => {
     const [currentType, setCurrentType] = useState(type);
@@ -128,7 +130,7 @@ export const Input = memo(
       currentType === "password" ? <EyeCloseStyle onClick={onEyeClick} /> : <EyeStyle onClick={onEyeClick} />;
 
     return (
-      <LabelStyle labelSize={labelSize} variantLabel={variantLabel}>
+      <LabelStyle as={as} labelSize={labelSize} variantLabel={variantLabel} onSubmit={handleSubmit}>
         <Label as="label" label={label} labelBold={labelBold} htmlFor={id}>
           {label}
           {require && <StyledSpan>*</StyledSpan>}
@@ -146,7 +148,7 @@ export const Input = memo(
           {type === "password" && icon}
         </Box>
         {name === "password" && !noForm && (
-          <LinkRenderer href="/" semiBold position="absolute" top="0" right="0">
+          <LinkRenderer href="/forgot-password" semiBold position="absolute" top="0" right="0">
             Forgot password?
           </LinkRenderer>
         )}

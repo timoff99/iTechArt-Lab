@@ -26,12 +26,12 @@ export const cookBookApi = createApi({
         query: (cookbookData) => ({ url: `create`, method: "post", data: cookbookData }),
         invalidatesTags: [{ type: "CookBook", id: "COOKBOOK" }],
       }),
-      getAllCookBooks: builder.query({
-        query: () => ({ url: `get-all-cookbooks`, method: "get" }),
-        providesTags: [{ type: "CookBook", id: "COOKBOOK" }],
+      addCookBookClone: builder.mutation({
+        query: (_id) => ({ url: `create-clone`, method: "post", data: { _id } }),
+        invalidatesTags: [{ type: "CookBook", id: "COOKBOOK" }],
       }),
       getUserCookBooks: builder.query({
-        query: () => ({ url: `get-user-cookbooks`, method: "get" }),
+        query: (page) => ({ url: `get-user-cookbooks`, method: "get", params: { page } }),
         providesTags: [{ type: "CookBook", id: "COOKBOOK" }],
       }),
       getCookBook: builder.query({
@@ -43,6 +43,16 @@ export const cookBookApi = createApi({
           url: `get-filtered-cookbooks`,
           method: "get",
           params: query,
+        }),
+
+        providesTags: [{ type: "CookBook", id: "COOKBOOK" }],
+      }),
+      getCookBooksForMain: builder.query({
+        query: (limit, type) => ({
+          url: `get-cookbooks-for-main`,
+          method: "get",
+          params: limit,
+          type,
         }),
 
         providesTags: [{ type: "CookBook", id: "COOKBOOK" }],
@@ -69,11 +79,14 @@ export const cookBookApi = createApi({
 
 export const {
   useAddCookBookMutation,
-  useGetAllCookBooksQuery,
+  useAddCookBookCloneMutation,
   useGetUserCookBooksQuery,
+  useLazyGetUserCookBooksQuery,
   useGetCookBookQuery,
   useLazyGetCookBookQuery,
   useGetFilteredCookBookQuery,
+  useLazyGetFilteredCookBookQuery,
+  useGetCookBooksForMainQuery,
   useUpdateCookBookCommentsMutation,
   useUpdateCookBookMutation,
   useUpdateCookBookLikesMutation,

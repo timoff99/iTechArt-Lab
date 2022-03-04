@@ -13,4 +13,16 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+api.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error.response.data.message === "User not authorized") {
+      return (window.location = "/login");
+    }
+    return error;
+  }
+);
+
 export default api;

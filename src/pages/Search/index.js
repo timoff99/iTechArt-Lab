@@ -59,7 +59,6 @@ export const Search = () => {
       navigation(`?${tab.path}`);
     }
   };
-
   return (
     <Container mt={13}>
       <Grid>
@@ -77,10 +76,8 @@ export const Search = () => {
         <Col span={[4, 7, 9]}>
           <TabBar tabs={tabs} currentTab={currentTab} onChange={(tab) => onTabChange(tab)} />
           <Container>
-            <Grid nested mt={11}>
-              {currentTab?.path === tabs[0].path && <SearchCookBookCard />}
-              {currentTab?.path === tabs[1].path && <SearchRecipeCard timeRange={timeRange} />}
-            </Grid>
+            {currentTab?.path === tabs[0].path && <SearchCookBookCard query={query} />}
+            {currentTab?.path === tabs[1].path && <SearchRecipeCard query={query} timeRange={timeRange} />}
           </Container>
         </Col>
       </Grid>
