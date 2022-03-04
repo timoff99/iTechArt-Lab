@@ -10,6 +10,8 @@ import { LogIn } from "../pages/LogIn";
 import { SignUp } from "../pages/SignUp";
 import { Search } from "../pages/Search";
 import { Profile } from "../pages/Profile";
+import { ForgotPass } from "../pages/ForgotPass";
+import { ResetPass } from "../pages/ResetPass";
 
 export const Router = () => {
   const mainPage = "mainPage";
@@ -26,6 +28,8 @@ export const Router = () => {
 
       <Route path={ROUTE_NAMES.LOGIN} element={<LogIn />} />
       <Route path={ROUTE_NAMES.SIGNUP} element={<SignUp />} />
+      <Route path={ROUTE_NAMES.FORGOTPASSWORD} element={<ForgotPass />} />
+      <Route path={ROUTE_NAMES.RESETPASSWORD} element={<ResetPass />} />
 
       <Route
         path={ROUTE_NAMES.SEARCH}

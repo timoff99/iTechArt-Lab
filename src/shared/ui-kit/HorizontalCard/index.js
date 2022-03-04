@@ -65,7 +65,6 @@ export const HorizontalCard = ({
 
   const handleLikes = (event) => {
     event.stopPropagation();
-    console.log("handleLikes");
     updateRecipeLikes(_id);
   };
 

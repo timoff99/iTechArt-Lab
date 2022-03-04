@@ -4,4 +4,6 @@ export const ROUTE_NAMES = {
   SIGNUP: "/signup",
   SEARCH: "/search",
   PROFILE: "/profile",
+  FORGOTPASSWORD: "/forgot-password",
+  RESETPASSWORD: "/reset-password/:token",
 };

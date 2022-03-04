@@ -31,7 +31,6 @@ export const RecipeTab = () => {
   const handlePageClick = (data) => {
     setCurrentPage(data.selected);
   };
-  console.log(data);
 
   return (
     <Box display="flex" flexDirection="column">

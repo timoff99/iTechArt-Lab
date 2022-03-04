@@ -67,10 +67,8 @@ export const CreateRecipes = memo(
         let newImage;
         if (!oldImage?.includes("http")) {
           newImage = await createImage();
-          console.log("create new Image");
         } else if (recipeImage) {
           newImage = await createImage();
-          console.log("create new Image");
         }
         const { title, description } = values;
         const recipesData = {
@@ -89,7 +87,6 @@ export const CreateRecipes = memo(
         }
         addRecipe(recipesData);
         setShowModal();
-        console.log("recept upl seccess");
       } catch (error) {
         console.log("error recept", error);
       }

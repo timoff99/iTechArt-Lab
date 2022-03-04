@@ -148,7 +148,7 @@ export const Input = memo(
           {type === "password" && icon}
         </Box>
         {name === "password" && !noForm && (
-          <LinkRenderer href="/" semiBold position="absolute" top="0" right="0">
+          <LinkRenderer href="/forgot-password" semiBold position="absolute" top="0" right="0">
             Forgot password?
           </LinkRenderer>
         )}

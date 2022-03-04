@@ -110,10 +110,8 @@ export const CreateCookBook = memo(
         let newImage;
         if (!oldImage?.includes("http")) {
           newImage = await createImage();
-          console.log("create new Image");
         } else if (cookbookImage) {
           newImage = await createImage();
-          console.log("create new Image");
         }
         const { title, description } = values;
         const cookbookTypes = checkbox.reduce((result, curr) => {
@@ -134,15 +132,12 @@ export const CreateCookBook = memo(
           await deleteRecipesCookBookId({ selectedRecipes: oldCookbookRecipes, _id });
           await updateCookBook(cookbookData);
           updateRecipesCookBookId({ selectedRecipes, _id });
-          console.log("cookBook_id add seccess");
           setShowModal();
           return setUpdate(false);
         } else {
           const recept = await addCookBook(cookbookData);
           const { _id } = recept.data;
-          console.log("cookBook upl seccess");
           updateRecipesCookBookId({ selectedRecipes, _id });
-          console.log("cookBook_id add seccess");
           setShowModal();
         }
       } catch (error) {
