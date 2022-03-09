@@ -94,7 +94,7 @@ export const Home = () => {
               <Input
                 type="text"
                 name="bigSearch"
-                variantInput="bigInput"
+                variantInput={["middleInput", "bigInput", "bigInput"]}
                 inputSize="lg"
                 labelSize="lg"
                 placeholder="Find Best Recipes..."

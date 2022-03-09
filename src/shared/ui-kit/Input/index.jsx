@@ -4,13 +4,13 @@ import styled from "styled-components";
 import { variant } from "styled-system";
 
 import variants from "./inputVariants";
-import theme from "../../../theme";
+import theme, { mediaQueries } from "../../../theme";
 import { Button } from "../Button";
 import { ReactComponent as EyeClose } from "../../../static/icons/eye-close.svg";
 import smallSearch from "../../../static/icons/smallSearch.svg";
 import bigSearch from "../../../static/icons/bigSearch.svg";
 import { Box } from "../../helpers/Box";
-import { LinkRenderer } from "../../helpers/Text";
+import { LinkRenderer, Paragraph } from "../../helpers/Text";
 import { ErrorMessage } from "formik";
 import { ROUTE_NAMES } from "../../../router/routeNames";
 
@@ -95,6 +95,10 @@ const StyledButton = styled(Button)`
   right: 16px;
   top: 50%;
   transform: translate(0, -50%);
+
+  ${mediaQueries.small} {
+    padding: ${theme.space[2]} ${theme.space[5]};
+  }
 `;
 
 const StyledSpan = styled(Box)`
@@ -153,7 +157,11 @@ export const Input = memo(
             Forgot password?
           </LinkRenderer>
         )}
-        {name === "bigSearch" && <StyledButton>SEARCH</StyledButton>}
+        {name === "bigSearch" && (
+          <StyledButton>
+            <Paragraph fontSize={[0, 2, 3]}>SEARCH</Paragraph>
+          </StyledButton>
+        )}
         <Box color="red">{form && <ErrorMessage name={name} />}</Box>
       </LabelStyle>
     );
