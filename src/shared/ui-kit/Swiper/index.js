@@ -6,7 +6,13 @@ import { ReactComponent as Arrow } from "../../../static/icons/rightArrow.svg";
 
 function SampleNextArrow(props) {
   const { className, onClick } = props;
-  return <Arrow className={className} style={{ width: "48px", height: "48px" }} onClick={onClick} />;
+  return (
+    <Arrow
+      className={className}
+      style={{ width: "48px", height: "48px", transform: "translate(0, 0)" }}
+      onClick={onClick}
+    />
+  );
 }
 
 function SamplePrevArrow(props) {

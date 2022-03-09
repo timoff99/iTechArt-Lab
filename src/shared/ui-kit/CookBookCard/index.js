@@ -5,7 +5,7 @@ import { Card } from "../Card";
 
 export const CookBookCard = ({ spanList, openCookBook, ...props }) => {
   return (
-    <Col span={spanList}>
+    <Col span={spanList} display="flex" justifyContent="center">
       <Card {...props} sizes="sm" maxWidth={288} openCookBook={openCookBook} place="no-rates" />
     </Col>
   );

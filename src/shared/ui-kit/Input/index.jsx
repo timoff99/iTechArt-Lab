@@ -153,7 +153,7 @@ export const Input = memo(
             Forgot password?
           </LinkRenderer>
         )}
-        {name === "bigSearch" && <StyledButton p={["10px", "sm", "30px"]}>SEARCH</StyledButton>}
+        {name === "bigSearch" && <StyledButton>SEARCH</StyledButton>}
         <Box color="red">{form && <ErrorMessage name={name} />}</Box>
       </LabelStyle>
     );

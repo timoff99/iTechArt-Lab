@@ -23,6 +23,7 @@ import { RecipeTab } from "../../components/Profile/RecipeTab";
 const UserImage = styled(Box)`
   border-radius: 50%;
   max-width: 160px;
+  cursor: pointer;
 `;
 
 const FileUploader = styled(Box)`
@@ -73,8 +74,9 @@ export const Profile = () => {
     e.preventDefault();
     refFileInput.current.click();
   };
+
   return (
-    <Container my={104}>
+    <Container my={[6, 50, 104]}>
       <Flex mb={11} alignItems="center">
         <FileUploader as="input" ref={refFileInput} type="file" id="img" name="img" onChange={(e) => setImage(e)} />
         <UserImage
@@ -94,7 +96,7 @@ export const Profile = () => {
           </Paragraph>
         </Box>
       </Flex>
-      <FlexBetween mb={5}>
+      <FlexBetween mb={5} flexWrap={["wrap", "nowrap", "nowrap"]}>
         <TabBar tabs={tabs} currentTab={currentTab} onChange={(tab) => onTabChange(tab)} />
         {currentTab?.path === tabs[0].path && (
           <Button size="md" variant="primary" onClick={toggleModal}>

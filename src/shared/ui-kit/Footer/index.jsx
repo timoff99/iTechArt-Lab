@@ -47,7 +47,7 @@ export const Footer = () => {
           plzfeedme@itechart.com
         </Paragraph>
         <Paragraph fontSize={1} m={5}>
-          Study Project, 2020
+          Study Project, 2022
         </Paragraph>
         <Box m={5}>
           <ITechArtLogo />

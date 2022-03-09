@@ -47,9 +47,9 @@ export const CookBook = ({ _id, recipes, title, description, author, likes, comm
   };
 
   return (
-    <Box px={56} py={72}>
-      <FlexBetween mb={10}>
-        <FlexColumn>
+    <Box px={[5, 11, 11]} py={[5, 12, 12]}>
+      <FlexBetween mb={10} flexWrap={"wrap"}>
+        <FlexColumn mb={[5, 0, 0]}>
           <Heading as={"h2"} bold mb={5} maxWidth={600}>
             {title}
           </Heading>
@@ -63,7 +63,7 @@ export const CookBook = ({ _id, recipes, title, description, author, likes, comm
           </Button>
         </Box>
       </FlexBetween>
-      <FlexBetween mb={12}>
+      <FlexBetween mb={12} flexWrap={["wrap", "nowrap", "nowrap"]}>
         <BoxImage mr={5}>
           <Image as="img" src={image} alt="image" />
           <FlexAlignCenter pt={9}>
@@ -77,7 +77,7 @@ export const CookBook = ({ _id, recipes, title, description, author, likes, comm
             </FlexAlignCenter>
           </FlexAlignCenter>
         </BoxImage>
-        <FlexColumn maxWidth={424}>
+        <FlexColumn maxWidth={424} mt={[5, 0, 0]}>
           <Heading as={"h3"} semiBold mb={5}>
             Description
           </Heading>

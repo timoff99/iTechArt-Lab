@@ -84,7 +84,7 @@ export const Home = () => {
   };
   return (
     <>
-      <StyledLogin mx={9}>
+      <StyledLogin mx={[2, 2, 9]}>
         <Container py={[50, 110, 243]}>
           <Heading as={"h1"} semiBold mb={11} color="background.main" maxWidth={808}>
             Find Recipes and Сreate Your Favourite Сookbooks

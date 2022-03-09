@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useCallback } from "react";
+import React, { useState, useEffect, useContext, useCallback, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import debounce from "lodash/debounce";
 
@@ -16,11 +16,14 @@ import { UserContext } from "../UserProvider";
 import UserService from "../../../services/user.service";
 import { useUrl } from "../../../hooks/useUrl";
 import { ROUTE_NAMES } from "../../../router/routeNames";
+import { Burger } from "./Burger";
+import { Menu } from "./Menu";
 
-export const Header = ({ mainPage }) => {
+export const Header = memo(({ mainPage }) => {
   const [showModal, setShowModal] = useState(false);
+  const [open, setOpen] = useState(false);
   const { user, setUser } = useContext(UserContext);
-  const { query, updateQuery, clearAll } = useUrl();
+  const { query, updateQuery } = useUrl();
   const navigation = useNavigate();
   const TryGetUser = async () => {
     if (!user.username) {
@@ -32,9 +35,11 @@ export const Header = ({ mainPage }) => {
       }
     }
   };
+
   useEffect(() => {
     TryGetUser();
   }, []);
+
   const openModal = () => {
     setShowModal((prev) => !prev);
   };
@@ -51,14 +56,13 @@ export const Header = ({ mainPage }) => {
     },
     [debouncedChange]
   );
+
   return (
     <Box boxShadow="0px 0px 16px rgba(0, 0, 0, 0.08)">
       <StyledContainer>
-        {showModal && (
-          <Modal showModal={showModal} setShowModal={openModal}>
-            <CreateCookBook />
-          </Modal>
-        )}
+        <Burger display={["flex", "none", "none"]} open={open} setOpen={setOpen}>
+          <Menu open={open} />
+        </Burger>
         <LinkRenderer href={ROUTE_NAMES.HOME} inline>
           <Logo />
         </LinkRenderer>
@@ -75,6 +79,7 @@ export const Header = ({ mainPage }) => {
             </LinkRenderer>
           </Li>
         </Ul>
+
         {!mainPage && (
           <Input
             display={["none", "block", null]}
@@ -109,6 +114,11 @@ export const Header = ({ mainPage }) => {
           </LinkRenderer>
         )}
       </StyledContainer>
+      {showModal && (
+        <Modal showModal={showModal} setShowModal={openModal}>
+          <CreateCookBook setShowModal={openModal} />
+        </Modal>
+      )}
     </Box>
   );
-};
+});

@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import moment from "moment";
-
+import moment from "moment-timezone";
 import { Box } from "../../../helpers/Box";
 import { Flex, FlexBetween } from "../../../helpers/Flex";
 import { Paragraph } from "../../../helpers/Text";
@@ -20,7 +19,7 @@ export const CommentsCard = ({ message, time, user_id }) => {
           <Paragraph fontSize={2} semiBold>
             {user_id.username}
           </Paragraph>
-          <Paragraph>{moment(time, "YYYYMMDD").fromNow()}</Paragraph>
+          <Paragraph>{moment.tz(time, "YYYYMMDD", "America/Inuvik").fromNow()}</Paragraph>
         </FlexBetween>
         <Paragraph>{message}</Paragraph>
       </Box>

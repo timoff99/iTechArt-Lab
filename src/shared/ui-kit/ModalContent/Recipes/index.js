@@ -37,9 +37,9 @@ export const Recipes = ({ _id, title, description, author, views, likes, comment
 
   return (
     <Box>
-      <FlexBetween>
-        <Image as="img" src={image} alt="image" />
-        <FlexColumn pl={40} pr={56} pt={72}>
+      <FlexBetween flexDirection={["column", "row", "row"]}>
+        <Image as="img" src={image} alt="image" alignSelf={["center", "normal", "normal"]} />
+        <FlexColumn pl={[5, 40, 40]} pr={[5, 40, 11]} pt={72}>
           <FlexBetween>
             <Heading as={"h2"} bold mb={5} maxWidth={427}>
               {title}
@@ -106,7 +106,7 @@ export const Recipes = ({ _id, title, description, author, views, likes, comment
           </FlexAlignCenter>
         </FlexColumn>
       </FlexBetween>
-      <Box px={56} py={72}>
+      <Box px={[3, 11, 11]} py={72}>
         <FlexColumn mb={10}>
           <Comments
             id={_id}

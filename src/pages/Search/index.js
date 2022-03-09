@@ -60,7 +60,7 @@ export const Search = () => {
     }
   };
   return (
-    <Container mt={13}>
+    <Container my={[6, 50, 104]}>
       <Grid>
         <Col span={[4, 5, 3]}>
           <Filter

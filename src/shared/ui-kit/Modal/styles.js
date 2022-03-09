@@ -25,13 +25,10 @@ export const StyledX = styled(X)`
 export const Content = styled(Box)`
   position: absolute;
   top: 100px;
-  left: 190px;
-  right: 190px;
   bottom: 0px;
-  border: 1px solid #ccc;
   background: ${theme.colors.background.main};
   overflow: auto;
-  border-radius: 4px;
+  border-radius: 50px 10px 10px 10px;
   box-shadow: 0px 18px 60px rgba(24, 24, 24, 0.7);
   outline: none;
 `;
