@@ -37,9 +37,7 @@ export const RecipeTab = () => {
       <Grid nested mb={11}>
         {data?.recipes &&
           data?.recipes.map((props, index) => {
-            return (
-              <RecipesCard openRecipe={openRecipe} key={index} spanList={[4, 6, 3]} {...props} profile={"profile"} />
-            );
+            return <RecipesCard openRecipe={openRecipe} key={index} {...props} profile={"profile"} />;
           })}
         {showModal && (
           <Modal showModal={showModal} setShowModal={toggleModal}>

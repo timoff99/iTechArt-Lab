@@ -1,13 +1,19 @@
 import styled from "styled-components";
 
 import { Box } from "../../../shared/helpers/Box";
-import theme from "../../../theme";
+import theme, { mediaQueries } from "../../../theme";
 import { Button } from "../../../shared/ui-kit/Button";
 import { Flex } from "../../../shared/helpers/Flex";
 
 export const StyledButton = styled(Button)`
   &:hover {
     background: ${theme.colors.primary.main};
+  }
+  ${mediaQueries.medium} {
+    padding: ${theme.space[2]} ${theme.space[3]};
+  }
+  ${mediaQueries.large} {
+    padding: ${theme.space[3]} ${theme.space[9]};
   }
 `;
 

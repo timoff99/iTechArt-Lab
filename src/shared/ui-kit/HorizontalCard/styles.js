@@ -5,17 +5,22 @@ import { Heading } from "../../helpers/Text";
 import { BORDER_RADIUS } from "../../../theme";
 import theme from "../../../theme";
 
-export const Img = styled(Box)`
+export const ImgBox = styled(Box)`
+  ${({ image }) => `background: url(${image})`};
+  background-size: cover;
+  width: 288px;
+  height: 212px;
   max-width: 288px;
   max-height: 212px;
   border-radius: 50px 10px;
+  flex: 1 0 auto;
 `;
 
 export const StyledCard = styled(Box)`
   display: inline-block;
   background: ${theme.colors.background.main};
   box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.08);
-  border-radius: ${BORDER_RADIUS}px;
+  border-radius: 50px ${BORDER_RADIUS}px ${BORDER_RADIUS}px ${BORDER_RADIUS}px;
   transition: all 0.4s;
 
   &:hover {

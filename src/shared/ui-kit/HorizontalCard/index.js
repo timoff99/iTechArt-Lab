@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Box } from "../../helpers/Box";
-import { Flex, FlexBetween, FlexCenter, FlexAlignCenter } from "../../helpers/Flex";
+import { Flex, FlexBetween, FlexAlignCenter } from "../../helpers/Flex";
 import { ReactComponent as Eye } from "../../../static/icons/small-eye.svg";
 import { ReactComponent as Options } from "../../../static/icons/options.svg";
 import { ReactComponent as Heart } from "../../../static/icons/heart.svg";
 import { ReactComponent as Comment } from "../../../static/icons/comment.svg";
 import { Paragraph, Heading } from "../../helpers/Text";
-import { StyledCard, Img, OptionMenu } from "./styles";
+import { StyledCard, ImgBox, OptionMenu } from "./styles";
 import { Button } from "../Button";
 import { CreateRecipes } from "../ModalContent/CreateRecipes";
 import { Modal } from "../Modal";
@@ -78,8 +78,8 @@ export const HorizontalCard = ({
   return (
     <StyledCard place={place} mb={3} {...props} onClick={() => openRecipe(_id)} width={"100%"}>
       <FlexBetween width={"100%"}>
-        <Flex>
-          <Img as="img" src={image} alt="cardImage" />
+        <Flex flexWrap={"wrap"}>
+          <ImgBox image={image} />
           <Box p={8}>
             <FlexBetween pb={5}>
               <Heading as={"h3"} semiBold>

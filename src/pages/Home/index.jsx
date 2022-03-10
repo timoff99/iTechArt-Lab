@@ -127,8 +127,14 @@ export const Home = () => {
           {likesRecipes?.recipes &&
             likesRecipes?.recipes.map((props, index) => {
               return (
-                <Col key={index} span={[4, 6, 3]}>
-                  <VerticalRecipesCard {...props} sizes="sm" openRecipe={openRecipe} place="no-rates" />
+                <Col key={index} span={[4, 6, 3]} display="flex" justifyContent="center">
+                  <VerticalRecipesCard
+                    {...props}
+                    sizes="sm"
+                    openRecipe={openRecipe}
+                    place="no-rates"
+                    maxWidth={"288px"}
+                  />
                 </Col>
               );
             })}

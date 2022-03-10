@@ -61,7 +61,7 @@ export const Search = () => {
   };
   return (
     <Container my={[6, 50, 104]}>
-      <Grid>
+      <Grid nested>
         <Col span={[4, 5, 3]}>
           <Filter
             label="Sort by"

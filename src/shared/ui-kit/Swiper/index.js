@@ -1,6 +1,7 @@
 import React from "react";
 import Slider from "react-slick";
 
+import styles from "./styles.scss";
 import { breakpointsAsInts } from "../../../theme";
 import { ReactComponent as Arrow } from "../../../static/icons/rightArrow.svg";
 
@@ -54,7 +55,7 @@ const settings = {
 
 export const Swiper = ({ children }) => {
   return (
-    <Slider {...settings} style={{ textAlign: "center" }}>
+    <Slider {...settings} className={styles}>
       {children}
     </Slider>
   );

@@ -31,7 +31,9 @@ export const MostPopularCard = ({ items, variant, openCookBook, pt }) => {
     <RelativeCard bg={items?.image} pt={pt}>
       <BoxGradient>
         <StyledButton ml={8} mb={8} alignSelf="flex-end" variant={variant} onClick={(e) => handleClick(e, items)}>
-          {items?.title}
+          <Paragraph fontWeight={"normal"} fontSize={[2, 0, 2]} overflow="hidden" height="20px">
+            {items?.title}
+          </Paragraph>
         </StyledButton>
         <StyledOptions onClick={(e) => handleOption(e)}>
           <Options />
