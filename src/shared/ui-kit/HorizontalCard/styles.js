@@ -8,12 +8,10 @@ import theme from "../../../theme";
 export const ImgBox = styled(Box)`
   ${({ image }) => `background: url(${image})`};
   background-size: cover;
-  width: 288px;
+  background-position: center center;
   height: 212px;
-  max-width: 288px;
-  max-height: 212px;
   border-radius: 50px 10px;
-  flex: 1 0 auto;
+  flex: 0 0 288px;
 `;
 
 export const StyledCard = styled(Box)`
@@ -78,7 +76,7 @@ export const OptionMenu = styled(Box)`
   position: absolute;
   top: 20px;
   right: -50px;
-
+  box-shadow: 0px 0px 8px 4px ${theme.colors.background.dark};
   transition: all 0.2s;
   background: ${theme.colors.background.main};
   border-radius: 10px;

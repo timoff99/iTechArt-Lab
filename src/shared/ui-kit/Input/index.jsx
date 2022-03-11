@@ -15,7 +15,6 @@ import { ErrorMessage } from "formik";
 import { ROUTE_NAMES } from "../../../router/routeNames";
 
 const LabelStyle = styled(Box)`
-  display: flex;
   flex-direction: column;
   position: relative;
 
@@ -92,7 +91,7 @@ const EyeStyle = styled(EyeCloseStyle)`
 
 const StyledButton = styled(Button)`
   position: absolute;
-  right: 16px;
+  right: 6px;
   top: 50%;
   transform: translate(0, -50%);
 
@@ -123,6 +122,7 @@ export const Input = memo(
     form,
     noForm,
     as,
+    display,
     ...props
   }) => {
     const [currentType, setCurrentType] = useState(type);
@@ -135,7 +135,7 @@ export const Input = memo(
       currentType === "password" ? <EyeCloseStyle onClick={onEyeClick} /> : <EyeStyle onClick={onEyeClick} />;
 
     return (
-      <LabelStyle as={as} labelSize={labelSize} variantLabel={variantLabel} onSubmit={handleSubmit}>
+      <LabelStyle as={as} display={display} labelSize={labelSize} variantLabel={variantLabel} onSubmit={handleSubmit}>
         <Label as="label" label={label} labelBold={labelBold} htmlFor={id}>
           {label}
           {require && <StyledSpan>*</StyledSpan>}

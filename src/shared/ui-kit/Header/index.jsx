@@ -60,9 +60,10 @@ export const Header = memo(({ mainPage }) => {
   return (
     <Box boxShadow="0px 0px 16px rgba(0, 0, 0, 0.08)">
       <StyledContainer>
-        <Burger display={["flex", "none", "none"]} open={open} setOpen={setOpen}>
-          <Menu open={open} />
-        </Burger>
+        <Box display={["flex", "none", "none"]}>
+          <Burger display={["flex", "none", "none"]} open={open} setOpen={setOpen} />
+          <Menu open={open} setOpen={setOpen} />
+        </Box>
         <LinkRenderer href={ROUTE_NAMES.HOME} inline>
           <Logo />
         </LinkRenderer>

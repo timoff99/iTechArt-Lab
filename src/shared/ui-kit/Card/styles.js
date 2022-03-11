@@ -66,7 +66,7 @@ export const OptionMenu = styled(Box)`
   position: absolute;
   top: 20px;
   right: -50px;
-
+  box-shadow: 0px 0px 8px 4px ${theme.colors.background.dark};
   transition: all 0.2s;
   background: ${theme.colors.background.main};
   border-radius: 10px;

@@ -106,7 +106,7 @@ export const Recipes = ({ _id, title, description, author, views, likes, comment
           </FlexAlignCenter>
         </FlexColumn>
       </FlexBetween>
-      <Box px={[3, 11, 11]} py={72}>
+      <Box px={[3, 11, 11]} pt={72}>
         <FlexColumn mb={10}>
           <Comments
             id={_id}

@@ -141,11 +141,11 @@ export const Card = ({
             <CreateCookBook
               setShowModal={toggleModal}
               _id={_id}
-              title={title}
-              description={description}
+              oldTitle={title}
+              oldDescription={description}
               types={types}
-              recipes={recipes}
-              image={image}
+              oldRecipes={recipes}
+              oldImage={image}
               openRecipe={openRecipe}
               update={update}
               setUpdate={setUpdate}

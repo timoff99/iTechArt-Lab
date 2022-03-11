@@ -62,7 +62,7 @@ export const Search = () => {
   return (
     <Container my={[6, 50, 104]}>
       <Grid nested>
-        <Col span={[4, 5, 3]}>
+        <Col span={[4, 12, 3]}>
           <Filter
             label="Sort by"
             options={options}
@@ -73,7 +73,7 @@ export const Search = () => {
             route={currentTab?.path}
           />
         </Col>
-        <Col span={[4, 7, 9]}>
+        <Col span={[4, 12, 9]}>
           <TabBar tabs={tabs} currentTab={currentTab} onChange={(tab) => onTabChange(tab)} />
           <Container>
             {currentTab?.path === tabs[0].path && <SearchCookBookCard query={query} />}

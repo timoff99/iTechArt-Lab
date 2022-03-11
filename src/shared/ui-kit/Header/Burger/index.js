@@ -44,13 +44,12 @@ const StyledBurger = styled(Box)`
   }
 `;
 
-export const Burger = ({ open, setOpen, children, ...props }) => {
+export const Burger = ({ open, setOpen, ...props }) => {
   return (
     <StyledBurger open={open} onClick={() => setOpen(!open)} {...props}>
       <div />
       <div />
       <div />
-      {children}
     </StyledBurger>
   );
 };

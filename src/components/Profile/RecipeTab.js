@@ -7,6 +7,7 @@ import { Modal } from "../../shared/ui-kit/Modal";
 import { Recipes } from "../../shared/ui-kit/ModalContent/Recipes";
 import { Grid } from "../../shared/helpers/Grid";
 import { Box } from "../../shared/helpers/Box";
+import { Col } from "../../shared/helpers/Grid/Col";
 
 export const RecipeTab = () => {
   const [showModal, setShowModal] = useState(false);
@@ -35,10 +36,12 @@ export const RecipeTab = () => {
   return (
     <Box display="flex" flexDirection="column">
       <Grid nested mb={11}>
-        {data?.recipes &&
-          data?.recipes.map((props, index) => {
-            return <RecipesCard openRecipe={openRecipe} key={index} {...props} profile={"profile"} />;
-          })}
+        <Col>
+          {data?.recipes &&
+            data?.recipes.map((props, index) => {
+              return <RecipesCard openRecipe={openRecipe} key={index} {...props} profile={"profile"} />;
+            })}
+        </Col>
         {showModal && (
           <Modal showModal={showModal} setShowModal={toggleModal}>
             <Recipes {...recipe} />
