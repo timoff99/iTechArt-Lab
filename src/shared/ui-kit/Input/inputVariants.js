@@ -5,6 +5,15 @@ export default () => ({
     maxHeight: "40px",
     maxWidth: "284px",
   },
+  middleInput: {
+    height: "50px",
+    maxHeight: "50px",
+
+    fontSize: "14px",
+    lineHeight: "10px",
+    width: "100%",
+  },
+
   bigInput: {
     border: "0",
     borderRadius: "10px",

@@ -1,12 +1,11 @@
-import React, { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React from "react";
 
 import { Heading } from "../../helpers/Text";
 import { Wrapper, Tab, ActiveTab } from "./styles";
 
 export const TabBar = ({ tabs, currentTab, onChange }) => {
   return (
-    <Wrapper>
+    <Wrapper mb={6}>
       {tabs.map((tab) =>
         currentTab?.path === tab.path ? (
           <ActiveTab key={tab.path} type="button" onClick={() => onChange(tab)}>

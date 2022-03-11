@@ -1,12 +1,19 @@
 import React from "react";
 import Slider from "react-slick";
 
+import styles from "./styles.scss";
 import { breakpointsAsInts } from "../../../theme";
 import { ReactComponent as Arrow } from "../../../static/icons/rightArrow.svg";
 
 function SampleNextArrow(props) {
   const { className, onClick } = props;
-  return <Arrow className={className} style={{ width: "48px", height: "48px" }} onClick={onClick} />;
+  return (
+    <Arrow
+      className={className}
+      style={{ width: "48px", height: "48px", transform: "translate(0, 0)" }}
+      onClick={onClick}
+    />
+  );
 }
 
 function SamplePrevArrow(props) {
@@ -48,7 +55,7 @@ const settings = {
 
 export const Swiper = ({ children }) => {
   return (
-    <Slider {...settings} style={{ textAlign: "center" }}>
+    <Slider {...settings} className={styles}>
       {children}
     </Slider>
   );

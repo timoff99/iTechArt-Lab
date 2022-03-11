@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useCallback } from "react";
+import React, { useState, useEffect, useContext, useCallback, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import debounce from "lodash/debounce";
 
@@ -16,11 +16,14 @@ import { UserContext } from "../UserProvider";
 import UserService from "../../../services/user.service";
 import { useUrl } from "../../../hooks/useUrl";
 import { ROUTE_NAMES } from "../../../router/routeNames";
+import { Burger } from "./Burger";
+import { Menu } from "./Menu";
 
-export const Header = ({ mainPage }) => {
+export const Header = memo(({ mainPage }) => {
   const [showModal, setShowModal] = useState(false);
+  const [open, setOpen] = useState(false);
   const { user, setUser } = useContext(UserContext);
-  const { query, updateQuery, clearAll } = useUrl();
+  const { query, updateQuery } = useUrl();
   const navigation = useNavigate();
   const TryGetUser = async () => {
     if (!user.username) {
@@ -32,9 +35,11 @@ export const Header = ({ mainPage }) => {
       }
     }
   };
+
   useEffect(() => {
     TryGetUser();
   }, []);
+
   const openModal = () => {
     setShowModal((prev) => !prev);
   };
@@ -51,32 +56,34 @@ export const Header = ({ mainPage }) => {
     },
     [debouncedChange]
   );
+
   return (
     <Box boxShadow="0px 0px 16px rgba(0, 0, 0, 0.08)">
       <StyledContainer>
-        {showModal && (
-          <Modal showModal={showModal} setShowModal={openModal}>
-            <CreateCookBook />
-          </Modal>
-        )}
-        <LinkRenderer href="/" inline>
+        <Box display={["flex", "none", "none"]}>
+          <Burger display={["flex", "none", "none"]} open={open} setOpen={setOpen} />
+          <Menu open={open} setOpen={setOpen} />
+        </Box>
+        <LinkRenderer href={ROUTE_NAMES.HOME} inline>
           <Logo />
         </LinkRenderer>
 
-        <Ul>
-          <Li>
-            <LinkRenderer href="/search?tab=recipes" color="secondary.main" inline>
+        <Ul display={["none", "flex", null]}>
+          <Li mr="72px">
+            <LinkRenderer href={ROUTE_NAMES.SEARCHTABRECIPES} color="secondary.main" inline>
               Recipes
             </LinkRenderer>
           </Li>
-          <Li>
-            <LinkRenderer href="/search?tab=cookbooks" color="secondary.main" inline>
+          <Li mr={0}>
+            <LinkRenderer href={ROUTE_NAMES.SEARCHTABCOOKBOOKS} color="secondary.main" inline>
               Cookbooks
             </LinkRenderer>
           </Li>
         </Ul>
+
         {!mainPage && (
           <Input
+            display={["none", "block", null]}
             type="text"
             name="smallSearch"
             variantLabel="smallLabel"
@@ -88,11 +95,11 @@ export const Header = ({ mainPage }) => {
           />
         )}
 
-        <Button size="sm" variant="outlined" onClick={openModal}>
+        <Button display={["none", null, "block"]} size="sm" variant="outlined" onClick={openModal}>
           Create cookBook
         </Button>
         {user.username ? (
-          <LinkRenderer href="/profile?tab=cookbooks" color="secondary.main" inline>
+          <LinkRenderer href={ROUTE_NAMES.PROFILETABCOOKBOOKS} color="secondary.main" inline>
             <User>
               <img src={person} alt="person" />
               <Paragraph fontSize={1} color="secondary.main">
@@ -101,13 +108,18 @@ export const Header = ({ mainPage }) => {
             </User>
           </LinkRenderer>
         ) : (
-          <LinkRenderer href="/login" color="secondary.main" inline>
+          <LinkRenderer href={ROUTE_NAMES.LOGIN} color="secondary.main" inline>
             <Paragraph fontSize={1} color="secondary.main">
               Sign In
             </Paragraph>
           </LinkRenderer>
         )}
       </StyledContainer>
+      {showModal && (
+        <Modal showModal={showModal} setShowModal={openModal}>
+          <CreateCookBook setShowModal={openModal} />
+        </Modal>
+      )}
     </Box>
   );
-};
+});

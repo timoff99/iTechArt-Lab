@@ -37,7 +37,7 @@ export const Filter = ({ label, options, value, onChange, timeRange, setTimeRang
   };
 
   return (
-    <Wrapper>
+    <Wrapper mb={5}>
       <FlexBetween mb={9}>
         <Heading as={"h3"} semiBold>
           Filter

@@ -16,7 +16,6 @@ const StyledButton = styled(Box)`
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
-  display: inline-flex;
   align-items: center;
   text-align: center;
   justify-content: center;

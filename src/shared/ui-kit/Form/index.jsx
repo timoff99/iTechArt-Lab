@@ -61,6 +61,9 @@ export const Form = ({
     if (auth === "signup") {
       try {
         const signinData = await AuthService.signup(values.email, values.password);
+        if (!signinData.data) {
+          throw signinData;
+        }
         Cookies.set("token", signinData.data.token);
         const user = await UserService.getUser();
         setUser(user.data.user);
@@ -75,6 +78,9 @@ export const Form = ({
     }
     try {
       const loginData = await AuthService.login(values.email, values.password);
+      if (!loginData.data) {
+        throw loginData;
+      }
       Cookies.set("token", loginData.data.token);
       const user = await UserService.getUser();
       setUser(user.data.user);

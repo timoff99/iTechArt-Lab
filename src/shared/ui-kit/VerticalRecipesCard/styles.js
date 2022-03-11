@@ -5,14 +5,9 @@ import { Heading } from "../../helpers/Text";
 import { BORDER_RADIUS } from "../../../theme";
 import theme from "../../../theme";
 
-export const Img = styled(Box)`
-  max-width: 288px;
-  max-height: 212px;
-  border-radius: 50px 10px;
-`;
-
 export const StyledCard = styled(Box)`
-  display: inline-block;
+  display: flex;
+  height: 100%;
   background: ${theme.colors.background.main};
   box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.08);
   border-radius: ${BORDER_RADIUS}px;
@@ -73,16 +68,17 @@ export const OptionMenu = styled(Box)`
   position: absolute;
   top: 20px;
   right: -50px;
-
+  box-shadow: 0px 0px 8px 4px ${theme.colors.background.dark};
   transition: all 0.2s;
   background: ${theme.colors.background.main};
   border-radius: 10px;
 `;
 
-export const StyledImg = styled("img")({
-  minWidth: "0px",
-  borderRadius: "50px 10px",
-  objectFit: "cover",
-  maxHeight: "240px",
-  width: "240px",
-});
+export const ImgBox = styled(Box)`
+  ${({ image }) => `background: url(${image})`};
+  background-size: cover;
+  width: 240px;
+  height: 240px;
+  border-radius: 50px 10px;
+  flex: 1 0 auto;
+`;

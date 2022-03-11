@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 
 import { Box } from "../../helpers/Box";
-import { FlexBetween, FlexCenter, FlexAlignCenter } from "../../helpers/Flex";
+import { FlexBetween, FlexCenter, FlexAlignCenter, Flex, FlexColumn } from "../../helpers/Flex";
 import { ReactComponent as Eye } from "../../../static/icons/small-eye.svg";
 import { ReactComponent as Options } from "../../../static/icons/options.svg";
 import { ReactComponent as Heart } from "../../../static/icons/heart.svg";
 import { ReactComponent as Comment } from "../../../static/icons/comment.svg";
 import { Paragraph, Heading } from "../../helpers/Text";
-import { StyledCard, OptionMenu, StyledImg } from "./styles";
+import { StyledCard, OptionMenu, ImgBox } from "./styles";
 import { Button } from "../Button";
 import { useAddRecipeCloneMutation, useUpdateRecipeLikesMutation } from "../../../services/recipe.service";
 
@@ -50,7 +50,7 @@ export const VerticalRecipesCard = ({
 
   return (
     <StyledCard place={place} mb={3} {...props} onClick={() => openRecipe(_id)}>
-      <Box p={8}>
+      <FlexColumn p={8}>
         <FlexAlignCenter pb={5} justifyContent="space-between">
           <FlexAlignCenter>
             <Eye />
@@ -70,11 +70,11 @@ export const VerticalRecipesCard = ({
           </FlexAlignCenter>
         </FlexAlignCenter>
         <FlexCenter>
-          <StyledImg src={image} alt="cardImage" />
+          <ImgBox image={image} />
         </FlexCenter>
 
         <FlexBetween pt={5} alignItems="center">
-          <Heading as={"h3"} semiBold>
+          <Heading as={"h3"} semiBold overflow="hidden" height="20px">
             {title}
           </Heading>
           <Paragraph>{author}</Paragraph>
@@ -82,11 +82,11 @@ export const VerticalRecipesCard = ({
 
         {description && (
           <Paragraph pt={5} textAlign="left">
-            {description.slice(0, 100)}
+            {description}
           </Paragraph>
         )}
 
-        <FlexAlignCenter pt={9} justifyContent="space-between">
+        <FlexAlignCenter pt={9} justifyContent="space-between" mt="auto">
           <FlexAlignCenter onClick={handleLikes}>
             <Heart />
             <Paragraph ml={2}>{likes?.length || 0} likes</Paragraph>
@@ -96,7 +96,7 @@ export const VerticalRecipesCard = ({
             <Paragraph ml={2}>{comments?.length || 0} comments</Paragraph>
           </FlexAlignCenter>
         </FlexAlignCenter>
-      </Box>
+      </FlexColumn>
     </StyledCard>
   );
 };

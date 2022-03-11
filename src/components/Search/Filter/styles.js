@@ -15,7 +15,6 @@ export const Wrapper = styled(Box)`
 
   box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.08);
   border-radius: ${BORDER_RADIUS}px;
-  max-width: 272px;
   padding: 32px 24px;
 `;
 

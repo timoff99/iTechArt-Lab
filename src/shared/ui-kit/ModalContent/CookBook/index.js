@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { ReactComponent as Heart } from "../../../../static/icons/heart.svg";
 import { ReactComponent as Comment } from "../../../../static/icons/comment.svg";
 import { Box } from "../../../helpers/Box";
-import { FlexBetween, FlexColumn, FlexAlignCenter } from "../../../helpers/Flex";
+import { FlexBetween, FlexColumn, FlexAlignCenter, Flex } from "../../../helpers/Flex";
 import { Paragraph, Heading } from "../../../helpers/Text";
 import { Button } from "../../Button";
 import { HorizontalCard } from "../../HorizontalCard";
@@ -33,7 +33,6 @@ export const CookBook = ({ _id, recipes, title, description, author, likes, comm
   const [updateCookBookComments] = useUpdateCookBookCommentsMutation();
   const [action, { data: recipe }] = useLazyGetRecipeQuery();
   const [addCookBookClone] = useAddCookBookCloneMutation();
-
   const toggleModal = () => {
     setShowModal((prev) => !prev);
   };
@@ -47,9 +46,9 @@ export const CookBook = ({ _id, recipes, title, description, author, likes, comm
   };
 
   return (
-    <Box px={56} py={72}>
-      <FlexBetween mb={10}>
-        <FlexColumn>
+    <Box px={[5, 11, 11]} pt={[5, 12, 12]}>
+      <FlexBetween mb={10} flexWrap={"wrap"}>
+        <FlexColumn mb={[5, 0, 0]}>
           <Heading as={"h2"} bold mb={5} maxWidth={600}>
             {title}
           </Heading>
@@ -63,7 +62,7 @@ export const CookBook = ({ _id, recipes, title, description, author, likes, comm
           </Button>
         </Box>
       </FlexBetween>
-      <FlexBetween mb={12}>
+      <FlexBetween mb={12} flexWrap={["wrap", "nowrap", "nowrap"]}>
         <BoxImage mr={5}>
           <Image as="img" src={image} alt="image" />
           <FlexAlignCenter pt={9}>
@@ -77,22 +76,25 @@ export const CookBook = ({ _id, recipes, title, description, author, likes, comm
             </FlexAlignCenter>
           </FlexAlignCenter>
         </BoxImage>
-        <FlexColumn maxWidth={424}>
+        <FlexColumn maxWidth={424} mt={[5, 0, 0]}>
           <Heading as={"h3"} semiBold mb={5}>
             Description
           </Heading>
           <Paragraph>{description}</Paragraph>
         </FlexColumn>
       </FlexBetween>
-      <FlexColumn mb={10}>
-        <Heading as={"h3"} semiBold mb={10}>
-          Recipes
-        </Heading>
-        {recipes &&
-          recipes.map((props, index) => {
-            return <HorizontalCard openRecipe={openRecipe} key={index} modalCookBook place={"no-rates"} {...props} />;
-          })}
-      </FlexColumn>
+      {recipes?.length > 0 && (
+        <>
+          <FlexColumn mb={10}>
+            <Heading as={"h3"} semiBold mb={10}>
+              Recipes
+            </Heading>
+            {recipes.map((props, index) => {
+              return <HorizontalCard openRecipe={openRecipe} key={index} modalCookBook place={"no-rates"} {...props} />;
+            })}
+          </FlexColumn>
+        </>
+      )}
       <FlexColumn mb={10}>
         <Comments
           id={_id}

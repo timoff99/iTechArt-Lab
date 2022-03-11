@@ -4,17 +4,17 @@ import styled from "styled-components";
 import { variant } from "styled-system";
 
 import variants from "./inputVariants";
-import theme from "../../../theme";
+import theme, { mediaQueries } from "../../../theme";
 import { Button } from "../Button";
 import { ReactComponent as EyeClose } from "../../../static/icons/eye-close.svg";
 import smallSearch from "../../../static/icons/smallSearch.svg";
 import bigSearch from "../../../static/icons/bigSearch.svg";
 import { Box } from "../../helpers/Box";
-import { LinkRenderer } from "../../helpers/Text";
+import { LinkRenderer, Paragraph } from "../../helpers/Text";
 import { ErrorMessage } from "formik";
+import { ROUTE_NAMES } from "../../../router/routeNames";
 
 const LabelStyle = styled(Box)`
-  display: flex;
   flex-direction: column;
   position: relative;
 
@@ -91,9 +91,13 @@ const EyeStyle = styled(EyeCloseStyle)`
 
 const StyledButton = styled(Button)`
   position: absolute;
-  right: 16px;
+  right: 6px;
   top: 50%;
   transform: translate(0, -50%);
+
+  ${mediaQueries.small} {
+    padding: ${theme.space[2]} ${theme.space[5]};
+  }
 `;
 
 const StyledSpan = styled(Box)`
@@ -118,6 +122,7 @@ export const Input = memo(
     form,
     noForm,
     as,
+    display,
     ...props
   }) => {
     const [currentType, setCurrentType] = useState(type);
@@ -130,7 +135,7 @@ export const Input = memo(
       currentType === "password" ? <EyeCloseStyle onClick={onEyeClick} /> : <EyeStyle onClick={onEyeClick} />;
 
     return (
-      <LabelStyle as={as} labelSize={labelSize} variantLabel={variantLabel} onSubmit={handleSubmit}>
+      <LabelStyle as={as} display={display} labelSize={labelSize} variantLabel={variantLabel} onSubmit={handleSubmit}>
         <Label as="label" label={label} labelBold={labelBold} htmlFor={id}>
           {label}
           {require && <StyledSpan>*</StyledSpan>}
@@ -148,11 +153,15 @@ export const Input = memo(
           {type === "password" && icon}
         </Box>
         {name === "password" && !noForm && (
-          <LinkRenderer href="/forgot-password" semiBold position="absolute" top="0" right="0">
+          <LinkRenderer href={ROUTE_NAMES.FORGOTPASSWORD} semiBold position="absolute" top="0" right="0">
             Forgot password?
           </LinkRenderer>
         )}
-        {name === "bigSearch" && <StyledButton size="md">SEARCH</StyledButton>}
+        {name === "bigSearch" && (
+          <StyledButton>
+            <Paragraph fontSize={[0, 2, 3]}>SEARCH</Paragraph>
+          </StyledButton>
+        )}
         <Box color="red">{form && <ErrorMessage name={name} />}</Box>
       </LabelStyle>
     );

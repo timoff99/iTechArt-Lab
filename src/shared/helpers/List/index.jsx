@@ -4,16 +4,10 @@ import styled from "styled-components";
 import { Box } from "../Box";
 
 const StyledUl = styled(Box)`
-  display: flex;
   list-style-type: none;
 `;
 
-const StyledLi = styled(Box)`
-  margin-right: 72px;
-  &:last-child {
-    margin-right: 0px;
-  }
-`;
+const StyledLi = styled(Box)``;
 
 export const Ul = (props) => {
   return <StyledUl as="ul" {...props} />;

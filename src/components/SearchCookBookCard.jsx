@@ -40,7 +40,7 @@ export const SearchCookBookCard = ({ query }) => {
         {data?.sorted &&
           data?.sorted.map((props, index) => {
             return (
-              <CookBookCard openCookBook={openCookBook} key={index} spanList={[4, 9, 4]} {...props} search={"search"} />
+              <CookBookCard openCookBook={openCookBook} key={index} spanList={[4, 6, 4]} {...props} search={"search"} />
             );
           })}
       </Grid>

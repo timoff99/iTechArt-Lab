@@ -1,13 +1,19 @@
 import styled from "styled-components";
 
 import { Box } from "../../../shared/helpers/Box";
-import theme from "../../../theme";
+import theme, { mediaQueries } from "../../../theme";
 import { Button } from "../../../shared/ui-kit/Button";
 import { Flex } from "../../../shared/helpers/Flex";
 
 export const StyledButton = styled(Button)`
   &:hover {
     background: ${theme.colors.primary.main};
+  }
+  ${mediaQueries.medium} {
+    padding: ${theme.space[2]} ${theme.space[3]};
+  }
+  ${mediaQueries.large} {
+    padding: ${theme.space[3]} ${theme.space[9]};
   }
 `;
 
@@ -47,7 +53,7 @@ export const OptionMenu = styled(Box)`
   padding: 8px;
   position: absolute;
   right: 10px;
-
+  box-shadow: 0px 0px 8px 4px ${theme.colors.background.dark};
   transition: all 0.2s;
   background: ${theme.colors.background.main};
   border-radius: 10px;

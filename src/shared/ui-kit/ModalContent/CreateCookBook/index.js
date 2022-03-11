@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, memo } from "react";
 import styled from "styled-components";
-import { Formik, Form } from "formik";
+import { Formik, Form, ErrorMessage } from "formik";
+import * as yup from "yup";
 
 import {
   useUpdateRecipeCookBookIdMutation,
@@ -28,13 +29,17 @@ const FileUploader = styled(Box)`
   display: none;
 `;
 
+const cookbookSchema = yup.object().shape({
+  title: yup.string().trim().required(),
+  file: yup.mixed().required("File is required"),
+});
+
 export const CreateCookBook = memo(
   ({ setShowModal, _id, oldTitle, oldDescription, types, oldRecipes, oldImage, update, setUpdate, ...props }) => {
     const [recipeShowModal, setRecipeShowModal] = useState(false);
     const [allAvailableRecipes, setAllAvailableRecipes] = useState([]);
     const [selectedRecipes, SetSelectedRecipes] = useState([]);
     const [oldCookbookRecipes, SetOldCookbookRecipes] = useState("");
-    const [cookbookImage, setCookbookImage] = useState("");
     const [checkbox, setCheckbox] = useState(CheckboxData);
 
     const [addCookBook] = useAddCookBookMutation();
@@ -43,7 +48,6 @@ export const CreateCookBook = memo(
     const [deleteRecipesCookBookId] = useDeleteRecipesCookBookIdMutation();
     const { data: recipeWithCookbook } = useGetRecipeWithoutCookBookQuery();
     const [action, { data: recipe }] = useLazyGetRecipeQuery();
-
     const openRecipe = (_id) => {
       action(_id, true);
       recipeToggleModal();
@@ -86,17 +90,13 @@ export const CreateCookBook = memo(
       }
     }, []);
 
-    const setImage = (e) => {
-      setCookbookImage(e.target.files[0]);
-    };
-
     const handleSelectedRecipes = (recipes) => {
       SetSelectedRecipes(recipes);
     };
 
-    const createImage = async () => {
+    const createImage = async (fileImage) => {
       try {
-        formData.append("image", cookbookImage);
+        formData.append("image", fileImage);
         const image = await ImageService.addImage(formData);
         return image.data;
       } catch (error) {
@@ -109,9 +109,9 @@ export const CreateCookBook = memo(
       try {
         let newImage;
         if (!oldImage?.includes("http")) {
-          newImage = await createImage();
-        } else if (cookbookImage) {
-          newImage = await createImage();
+          newImage = await createImage(values.file);
+        } else if (values.file) {
+          newImage = await createImage(values.file);
         }
         const { title, description } = values;
         const cookbookTypes = checkbox.reduce((result, curr) => {
@@ -163,14 +163,16 @@ export const CreateCookBook = memo(
       <>
         <Formik
           initialValues={{
-            title: "",
+            title: oldTitle || "",
+            file: "",
             description: oldDescription || "",
           }}
+          validationSchema={cookbookSchema}
           onSubmit={async (values) => {
             await createCookBook(values);
           }}
         >
-          {({ handleChange }) => (
+          {({ handleChange, setFieldValue }) => (
             <Form>
               <Box px={56} py={72}>
                 <Heading as={"h2"} bold mb={10}>
@@ -181,19 +183,26 @@ export const CreateCookBook = memo(
                   defaultValue={oldTitle}
                   labelBold="labelBold"
                   {...createCookBookData[0]}
+                  labelSize={"sm"}
                   require
                 />
+                <Box color="red" mb={10}>
+                  {<ErrorMessage name={"title"} />}
+                </Box>
                 <FileUploader
                   as="input"
                   ref={refFileInput}
                   type="file"
                   id="img"
                   name="img"
-                  onChange={(e) => setImage(e)}
+                  onChange={(e) => setFieldValue("file", e.currentTarget.files[0])}
                 />
-                <Button size="md" variant="primary" mb={10} onClick={handleClickFileUploader}>
+                <Button size="md" variant="primary" onClick={handleClickFileUploader}>
                   Upload CookBook Image
                 </Button>
+                <Box color="red" mb={10}>
+                  {<ErrorMessage name={"file"} />}
+                </Box>
                 <Textarea labelBold {...createCookBookData[1]} />
                 <Box>
                   <Heading as={"h3"} fontSize={16} semiBold mb={3} color="secondary.main">

@@ -86,7 +86,7 @@ export const SettingsTab = () => {
   };
 
   return (
-    <InfoBlock pl={11} py={12}>
+    <InfoBlock pl={[5, 11, 11]} py={12}>
       <Heading as={"h2"} bold mb={10}>
         Personal information
       </Heading>

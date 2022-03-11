@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Box } from "../../helpers/Box";
-import { Flex, FlexBetween, FlexCenter, FlexAlignCenter } from "../../helpers/Flex";
+import { Flex, FlexBetween, FlexAlignCenter, FlexCenter } from "../../helpers/Flex";
 import { ReactComponent as Eye } from "../../../static/icons/small-eye.svg";
 import { ReactComponent as Options } from "../../../static/icons/options.svg";
 import { ReactComponent as Heart } from "../../../static/icons/heart.svg";
 import { ReactComponent as Comment } from "../../../static/icons/comment.svg";
 import { Paragraph, Heading } from "../../helpers/Text";
-import { StyledCard, Img, OptionMenu } from "./styles";
+import { StyledCard, ImgBox, OptionMenu } from "./styles";
 import { Button } from "../Button";
 import { CreateRecipes } from "../ModalContent/CreateRecipes";
 import { Modal } from "../Modal";
@@ -75,75 +75,90 @@ export const HorizontalCard = ({
   const save = async () => {
     addRecipeClone(_id);
   };
+
+  const OptionUI = () => {
+    return (
+      <>
+        <Paragraph alignSelf="center">{author}</Paragraph>
+        {modalCookBook ? (
+          <Button variant="outlined" ml={5} onClick={save}>
+            Save
+          </Button>
+        ) : (
+          <FlexAlignCenter onClick={(e) => handleOption(e)} height={20} position="relative">
+            <Options />
+            {optionMenu && props.profile && (
+              <OptionMenu>
+                <Button variant="secondary" variantMenu="secondaryMenu" size="box" onClick={onEdit}>
+                  <Paragraph as={"pre"} fontWeight={"normal"}>
+                    Edit CookBook
+                  </Paragraph>
+                </Button>
+                <Button variant="secondary" variantMenu="secondaryMenu" size="box" onClick={onDelete}>
+                  <Paragraph as={"pre"} fontWeight={"normal"}>
+                    Delete CookBook
+                  </Paragraph>
+                </Button>
+              </OptionMenu>
+            )}
+            {optionMenu && props.search && (
+              <OptionMenu>
+                <Button variant="secondary" variantMenu="secondaryMenu" size="box" onClick={onClone}>
+                  <Paragraph as={"pre"} fontWeight={"normal"}>
+                    Clone to My CookBooks
+                  </Paragraph>
+                </Button>
+              </OptionMenu>
+            )}
+          </FlexAlignCenter>
+        )}
+      </>
+    );
+  };
   return (
     <StyledCard place={place} mb={3} {...props} onClick={() => openRecipe(_id)} width={"100%"}>
-      <FlexBetween width={"100%"}>
-        <Flex>
-          <Img as="img" src={image} alt="cardImage" />
-          <Box p={8}>
-            <FlexBetween pb={5}>
-              <Heading as={"h3"} semiBold>
-                {title}
-              </Heading>
-            </FlexBetween>
-            {description && (
-              <Paragraph textAlign="left" pb={48}>
-                {description}
-              </Paragraph>
-            )}
-            <FlexBetween>
-              <Flex flexWrap="wrap">
-                <FlexAlignCenter pr={8}>
-                  <Eye />
-                  <Paragraph ml={2}>{views} views</Paragraph>
-                </FlexAlignCenter>
-                <FlexAlignCenter pr={8} onClick={handleLikes}>
-                  <Heart />
-                  <Paragraph ml={2}>{likes?.length || 0} likes</Paragraph>
-                </FlexAlignCenter>
-                <FlexAlignCenter>
-                  <Comment />
-                  <Paragraph ml={2}>{comments?.length || 0} comments</Paragraph>
-                </FlexAlignCenter>
-              </Flex>
-            </FlexBetween>
-          </Box>
-        </Flex>
-        <FlexBetween flexDirection="column" p={8} alignItems="end">
-          <Paragraph>{author}</Paragraph>
-          {modalCookBook ? (
-            <Button variant="outlined" ml={5} onClick={save}>
-              Save
-            </Button>
-          ) : (
-            <FlexAlignCenter onClick={(e) => handleOption(e)} height={20} mb={5} position="relative">
-              <Options />
-              {optionMenu && props.profile && (
-                <OptionMenu>
-                  <Button variant="secondary" variantMenu="secondaryMenu" size="box" onClick={onEdit}>
-                    <Paragraph as={"pre"} fontWeight={"normal"}>
-                      Edit CookBook
-                    </Paragraph>
-                  </Button>
-                  <Button variant="secondary" variantMenu="secondaryMenu" size="box" onClick={onDelete}>
-                    <Paragraph as={"pre"} fontWeight={"normal"}>
-                      Delete CookBook
-                    </Paragraph>
-                  </Button>
-                </OptionMenu>
-              )}
-              {optionMenu && props.search && (
-                <OptionMenu>
-                  <Button variant="secondary" variantMenu="secondaryMenu" size="box" onClick={onClone}>
-                    <Paragraph as={"pre"} fontWeight={"normal"}>
-                      Clone to My CookBooks
-                    </Paragraph>
-                  </Button>
-                </OptionMenu>
-              )}
-            </FlexAlignCenter>
+      <FlexBetween flexDirection={["column", "row"]} width={"100%"}>
+        <ImgBox image={image} />
+        <Flex justifyContent="space-between" flexDirection={"column"} flex={1} p={8}>
+          <FlexBetween pb={5}>
+            <Heading as={"h3"} semiBold>
+              {title}
+            </Heading>
+          </FlexBetween>
+          {description && (
+            <Paragraph textAlign="left" pb={[0, 0, 5]} flex={1}>
+              {description}
+            </Paragraph>
           )}
-        </FlexBetween>
+          <Box display={["flex", "flex", "none"]} justifyContent="space-between" p={8} alignItems="end">
+            {OptionUI()}
+          </Box>
+          <FlexCenter>
+            <Flex flexWrap="wrap" flexGrow="1">
+              <FlexAlignCenter pr={8}>
+                <Eye />
+                <Paragraph ml={2}>{views} views</Paragraph>
+              </FlexAlignCenter>
+              <FlexAlignCenter pr={8} onClick={handleLikes}>
+                <Heart />
+                <Paragraph ml={2}>{likes?.length || 0} likes</Paragraph>
+              </FlexAlignCenter>
+              <FlexAlignCenter>
+                <Comment />
+                <Paragraph ml={2}>{comments?.length || 0} comments</Paragraph>
+              </FlexAlignCenter>
+            </Flex>
+          </FlexCenter>
+        </Flex>
+        <Box
+          display={["none", "none", "flex"]}
+          justifyContent="space-between"
+          flexDirection="column"
+          p={8}
+          alignItems="end"
+        >
+          {OptionUI()}
+        </Box>
       </FlexBetween>
       {showModal && (
         <Modal showModal={showModal} setShowModal={toggleModal}>
