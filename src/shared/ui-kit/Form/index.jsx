@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Formik } from "formik";
@@ -45,6 +45,7 @@ export const Form = ({
   schema = defaultSchema,
   ...props
 }) => {
+  const [disable, setDisable] = useState(false);
   const { setUser } = useContext(UserContext);
   const navigation = useNavigate();
   const errorNotify = (errors) => {
@@ -103,6 +104,7 @@ export const Form = ({
       onSubmit={(values) => {
         if (oSubmit) {
           oSubmit(values);
+          setDisable(true);
         } else {
           asyncHandleSubmit(values);
         }
@@ -135,7 +137,7 @@ export const Form = ({
             );
           })}
 
-          <Button size="fit" mt="14px" type="submit">
+          <Button size="fit" mt="14px" type="submit" disabled={disable}>
             {buttonText}
           </Button>
           <ToastContainer theme="colored" />

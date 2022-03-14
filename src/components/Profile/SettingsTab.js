@@ -74,14 +74,15 @@ export const SettingsTab = () => {
     try {
       e.preventDefault();
       const updatedFiled = { oldPassword: e.target[0].value, newPassword: e.target[1].value };
-      const { data } = await UserService.updateUser(updatedFiled);
-      setUser(data.updateUser);
+      const data = await UserService.updateUser(updatedFiled);
+      if (data?.response?.data) throw data;
+      setUser(data.data.updateUser);
       e.target[0].value = "";
       e.target[1].value = "";
       setPersonPassword(false);
       successNotify("user password updated");
-    } catch (e) {
-      return errorNotify(e?.response?.data);
+    } catch (err) {
+      return errorNotify(err?.response?.data);
     }
   };
 
@@ -151,7 +152,7 @@ export const SettingsTab = () => {
               <Flex as="form" onSubmit={saveNewUserPassword}>
                 <Input ml={5} labelSize="sm" name="password" noForm placeholder="Old Password" />
                 <Input ml={5} labelSize="sm" name="password" noForm placeholder="New Password" />
-                <Input type="submit" display="none" />
+                <Input type="submit" labelSize="sm" />
               </Flex>
             )}
 
