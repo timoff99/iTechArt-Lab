@@ -75,11 +75,11 @@ export const Home = () => {
   };
 
   const openRecipe = (_id) => {
-    action(_id, true);
+    action({ _id }, true);
     toggleRecipeModal();
   };
   const openCookBook = (_id) => {
-    cookBookAction(_id, true);
+    cookBookAction({ _id }, true);
     toggleCookBookModal();
   };
   return (

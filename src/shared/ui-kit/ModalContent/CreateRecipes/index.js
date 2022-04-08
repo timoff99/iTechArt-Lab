@@ -5,6 +5,7 @@ import * as yup from "yup";
 
 import { useAddRecipeMutation, useUpdateRecipeMutation } from "../../../../services/recipe.service";
 import ImageService from "../../../../services/image.service";
+import UserService from "../../../../services/user.service";
 
 import { Flex, FlexBetween } from "../../../helpers/Flex";
 import { Box } from "../../../helpers/Box";
@@ -53,7 +54,6 @@ export const CreateRecipes = memo(
     const [updateRecipe] = useUpdateRecipeMutation();
     const formData = new FormData();
     const refFileInput = useRef();
-
     const createImage = async (fileImage) => {
       try {
         formData.append("image", fileImage);
@@ -87,10 +87,12 @@ export const CreateRecipes = memo(
         };
         if (update) {
           updateRecipe(recipesData);
+          await UserService.updateUserRecipes(_id); 
           setShowModal();
           return setUpdate(false);
         }
-        addRecipe(recipesData);
+        const newRecipe = await addRecipe(recipesData);
+        await UserService.updateUserRecipes(newRecipe.data._id);
         setShowModal();
       } catch (error) {
         console.log("error recept", error);

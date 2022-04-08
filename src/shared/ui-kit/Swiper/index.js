@@ -35,6 +35,7 @@ const settings = {
   slidesToScroll: 3,
   nextArrow: <SampleNextArrow />,
   prevArrow: <SamplePrevArrow />,
+  adaptiveHeight: true,
   responsive: [
     {
       breakpoint: 1440,

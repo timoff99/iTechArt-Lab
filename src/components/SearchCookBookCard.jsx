@@ -26,7 +26,7 @@ export const SearchCookBookCard = ({ query }) => {
   };
 
   const openCookBook = (_id) => {
-    action(_id, true);
+    action({ _id }, true);
     toggleModal();
   };
 

@@ -27,7 +27,7 @@ export const SearchRecipeCard = ({ query, timeRange }) => {
   };
 
   const openRecipe = (_id) => {
-    action(_id, true);
+    action({ _id }, true);
     toggleModal();
   };
 

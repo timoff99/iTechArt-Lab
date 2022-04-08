@@ -19,7 +19,7 @@ export const CommentsCard = ({ message, time, user_id }) => {
           <Paragraph fontSize={2} semiBold>
             {user_id.username}
           </Paragraph>
-          <Paragraph>{moment.tz(time, "YYYYMMDD", "America/Inuvik").fromNow()}</Paragraph>
+          <Paragraph>{moment(time).fromNow()}</Paragraph>
         </FlexBetween>
         <Paragraph>{message}</Paragraph>
       </Box>

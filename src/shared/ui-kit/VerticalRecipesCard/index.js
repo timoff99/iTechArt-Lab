@@ -45,7 +45,7 @@ export const VerticalRecipesCard = ({
 
   const handleLikes = (event) => {
     event.stopPropagation();
-    updateRecipeLikes(_id);
+    updateRecipeLikes({ _id });
   };
 
   return (
@@ -56,7 +56,7 @@ export const VerticalRecipesCard = ({
             <Eye />
             <Paragraph ml={2}>{views} views</Paragraph>
           </FlexAlignCenter>
-          <FlexAlignCenter onClick={(e) => handleOption(e)} height={20} position="relative">
+          <FlexAlignCenter onClick={handleOption} height={20} position="relative">
             <Options />
             {optionMenu && (
               <OptionMenu>

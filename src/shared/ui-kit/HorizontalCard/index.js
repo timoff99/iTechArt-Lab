@@ -15,6 +15,7 @@ import {
   useDeleteRecipeMutation,
   useUpdateRecipeLikesMutation,
 } from "../../../services/recipe.service";
+import UserService from "../../../services/user.service";
 
 export const HorizontalCard = ({
   title,
@@ -51,9 +52,10 @@ export const HorizontalCard = ({
     setOptionMenu(false);
   };
 
-  const onDelete = (event) => {
+  const onDelete = async (event) => {
     event.stopPropagation();
-    deleteRecipe(_id);
+    deleteRecipe({ _id });
+    await UserService.deleteUserRecipeId(_id);
     setOptionMenu(false);
   };
 
@@ -65,7 +67,7 @@ export const HorizontalCard = ({
 
   const handleLikes = (event) => {
     event.stopPropagation();
-    updateRecipeLikes(_id);
+    updateRecipeLikes({ _id });
   };
 
   const toggleModal = () => {
@@ -85,18 +87,18 @@ export const HorizontalCard = ({
             Save
           </Button>
         ) : (
-          <FlexAlignCenter onClick={(e) => handleOption(e)} height={20} position="relative">
+          <FlexAlignCenter onClick={handleOption} height={20} position="relative">
             <Options />
             {optionMenu && props.profile && (
               <OptionMenu>
                 <Button variant="secondary" variantMenu="secondaryMenu" size="box" onClick={onEdit}>
                   <Paragraph as={"pre"} fontWeight={"normal"}>
-                    Edit CookBook
+                    Edit Recipe
                   </Paragraph>
                 </Button>
                 <Button variant="secondary" variantMenu="secondaryMenu" size="box" onClick={onDelete}>
                   <Paragraph as={"pre"} fontWeight={"normal"}>
-                    Delete CookBook
+                    Delete Recipe
                   </Paragraph>
                 </Button>
               </OptionMenu>
@@ -105,7 +107,7 @@ export const HorizontalCard = ({
               <OptionMenu>
                 <Button variant="secondary" variantMenu="secondaryMenu" size="box" onClick={onClone}>
                   <Paragraph as={"pre"} fontWeight={"normal"}>
-                    Clone to My CookBooks
+                    Clone to My Recipe
                   </Paragraph>
                 </Button>
               </OptionMenu>

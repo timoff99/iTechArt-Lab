@@ -24,7 +24,7 @@ export const CookBookTab = () => {
   };
 
   const openCookBook = (_id) => {
-    cookBookAction(_id, true);
+    cookBookAction({ _id }, true);
     toggleModal();
   };
 

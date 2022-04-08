@@ -38,7 +38,7 @@ export const CookBook = ({ _id, recipes, title, description, author, likes, comm
   };
 
   const openRecipe = (_id) => {
-    action(_id, true);
+    action({ _id }, true);
     toggleModal();
   };
   const onClone = async (_id) => {

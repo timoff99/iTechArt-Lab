@@ -81,12 +81,12 @@ export const Recipes = ({ _id, title, description, author, views, likes, comment
               </Heading>
               {ingredients &&
                 ingredients.map((ingredient, i) => (
-                  <Box key={i}>
+                  <FlexAlignCenter key={i}>
                     <Circle />
                     <Paragraph inline ml={2}>
                       {ingredient}
                     </Paragraph>
-                  </Box>
+                  </FlexAlignCenter>
                 ))}
             </Box>
           </FlexBetween>

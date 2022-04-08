@@ -25,7 +25,7 @@ export const RecipeTab = () => {
   };
 
   const openRecipe = (_id) => {
-    recipeAction(_id, true);
+    recipeAction({ _id }, true);
     toggleModal();
   };
 
