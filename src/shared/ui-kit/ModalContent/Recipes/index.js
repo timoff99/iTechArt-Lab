@@ -17,7 +17,6 @@ import { useAddRecipeCloneMutation } from "../../../../services/recipe.service";
 const Image = styled(Box)`
   width: 100%;
   max-height: 660px;
-  max-width: 440px;
   border-radius: 50px 0px 10px;
   object-fit: cover;
 `;
@@ -38,7 +37,13 @@ export const Recipes = ({ _id, title, description, author, views, likes, comment
   return (
     <Box>
       <FlexBetween flexDirection={["column", "row", "row"]}>
-        <Image as="img" src={image} alt="image" alignSelf={["center", "normal", "normal"]} />
+        <Image
+          as="img"
+          src={image}
+          alt="image"
+          alignSelf={["center", "normal", "normal"]}
+          maxWidth={[440, "fit-content"]}
+        />
         <FlexColumn pl={[5, 40, 40]} pr={[5, 40, 11]} pt={72}>
           <FlexBetween>
             <Heading as={"h2"} bold mb={5} maxWidth={427}>
@@ -57,9 +62,9 @@ export const Recipes = ({ _id, title, description, author, views, likes, comment
           <Heading as={"h3"} semiBold mb={5}>
             Description
           </Heading>
-          <Paragraph>{description}</Paragraph>
-          <FlexBetween mt={8}>
-            <Box mr={11}>
+          <Paragraph maxWidth="fit-content">{description}</Paragraph>
+          <Box mt={8} display={["block", "flex"]} justifyContent="space-between">
+            <Box mr={11} mb={[3, 0]} flex={1} maxWidth={"300px"}>
               <Heading as={"h3"} semiBold mb={5}>
                 Directions
               </Heading>
@@ -75,7 +80,7 @@ export const Recipes = ({ _id, title, description, author, views, likes, comment
                   </Box>
                 ))}
             </Box>
-            <Box>
+            <Box flex={1} maxWidth={"300px"}>
               <Heading as={"h3"} semiBold mb={5}>
                 Ingredients
               </Heading>
@@ -89,7 +94,7 @@ export const Recipes = ({ _id, title, description, author, views, likes, comment
                   </FlexAlignCenter>
                 ))}
             </Box>
-          </FlexBetween>
+          </Box>
           <FlexAlignCenter pt={9}>
             <FlexAlignCenter mr={8}>
               <Eye />

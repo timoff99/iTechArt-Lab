@@ -128,7 +128,7 @@ export const HorizontalCard = ({
             </Heading>
           </FlexBetween>
           {description && (
-            <Paragraph textAlign="left" pb={[0, 0, 5]} flex={1}>
+            <Paragraph textAlign="left" pb={[0, 0, 5]} overflow="hidden" height="46px">
               {description}
             </Paragraph>
           )}

@@ -23,6 +23,7 @@ import { RecipeTab } from "../../components/Profile/RecipeTab";
 const UserImage = styled(Box)`
   border-radius: 50%;
   max-width: 160px;
+  object-fit: cover;
   cursor: pointer;
 `;
 

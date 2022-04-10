@@ -102,7 +102,7 @@ export const Header = memo(({ mainPage }) => {
           <LinkRenderer href={ROUTE_NAMES.PROFILETABCOOKBOOKS} color="secondary.main" inline>
             <User>
               <img src={person} alt="person" />
-              <Paragraph fontSize={1} color="secondary.main">
+              <Paragraph fontSize={1} color="secondary.main" overflow="hidden" height="26px" width="76px">
                 {user.username}
               </Paragraph>
             </User>

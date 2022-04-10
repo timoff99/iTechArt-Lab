@@ -64,9 +64,7 @@ export const CreateRecipes = memo(
       }
       return true;
     };
-    const a = (values) => {
-      console.log(values);
-    };
+
     const createRecipe = async (values) => {
       try {
         let newImage;
@@ -87,7 +85,7 @@ export const CreateRecipes = memo(
         };
         if (update) {
           updateRecipe(recipesData);
-          await UserService.updateUserRecipes(_id); 
+          await UserService.updateUserRecipes(_id);
           setShowModal();
           return setUpdate(false);
         }
@@ -130,13 +128,15 @@ export const CreateRecipes = memo(
           title: oldTitle || "",
           file: "",
           description: oldDescription || "",
+          steps: "",
+          ingredients: "",
         }}
         validationSchema={recipeSchema}
         onSubmit={async (values) => {
           await createRecipe(values);
         }}
       >
-        {({ handleChange, setFieldValue }) => (
+        {({ values, handleChange, setFieldValue }) => (
           <Form>
             <Box px={56} py={72}>
               <Heading as={"h2"} bold mb={10}>
@@ -176,7 +176,13 @@ export const CreateRecipes = memo(
                 </Paragraph>
                 <Slider timeRange={time} setTimeRange={setTime} type="create" />
               </Box>
-              <Input labelBold="labelBold" {...createRecipeData[2]} onKeyPress={(e) => handleAdd(e)} />
+              <Input
+                labelBold="labelBold"
+                {...createRecipeData[2]}
+                values={values.steps}
+                onKeyPress={handleAdd}
+                handleChange={handleChange}
+              />
               <Box mb={10} minWidth={170} width="fit-content">
                 {ingredients.map((ingredient, index) => (
                   <FlexBetween key={index}>
@@ -186,7 +192,13 @@ export const CreateRecipes = memo(
                 ))}
               </Box>
 
-              <Input labelBold="labelBold" {...createRecipeData[3]} onKeyPress={(e) => handleAdd(e)} />
+              <Input
+                labelBold="labelBold"
+                {...createRecipeData[3]}
+                values={values.ingredients}
+                onKeyPress={handleAdd}
+                handleChange={handleChange}
+              />
               <Box mb={10} minWidth={170} width="fit-content">
                 {steps.map((step, index) => (
                   <FlexBetween key={index}>
