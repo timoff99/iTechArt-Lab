@@ -5,11 +5,12 @@ import { ReactComponent as Heart } from "../../../../static/icons/heart.svg";
 import { ReactComponent as Comment } from "../../../../static/icons/comment.svg";
 import { ReactComponent as Eye } from "../../../../static/icons/small-eye.svg";
 import { Box } from "../../../helpers/Box";
-import { FlexBetween, FlexColumn, FlexAlignCenter } from "../../../helpers/Flex";
+import { FlexBetween, FlexColumn, FlexAlignCenter, Flex } from "../../../helpers/Flex";
 import { Paragraph, Heading } from "../../../helpers/Text";
 import { Button } from "../../Button";
 import { Comments } from "../../Comments";
 import theme from "../../../../theme";
+
 import { useCreateRecipeCommentsMutation } from "../../../../services/comments.service";
 import { useUpdateRecipeCommentsMutation } from "../../../../services/recipe.service";
 import { useAddRecipeCloneMutation } from "../../../../services/recipe.service";
@@ -36,7 +37,7 @@ export const Recipes = ({ _id, title, description, author, views, likes, comment
 
   return (
     <Box>
-      <FlexBetween flexDirection={["column", "row", "row"]}>
+      <Flex flexDirection={["column", "row", "row"]}>
         <Image
           as="img"
           src={image}
@@ -110,7 +111,7 @@ export const Recipes = ({ _id, title, description, author, views, likes, comment
             </FlexAlignCenter>
           </FlexAlignCenter>
         </FlexColumn>
-      </FlexBetween>
+      </Flex>
       <Box px={[3, 11, 11]} pt={72}>
         <FlexColumn mb={10}>
           <Comments

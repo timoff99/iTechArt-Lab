@@ -20,6 +20,9 @@ export const StyledButton = styled(Button)`
 export const RelativeCard = styled(Box)`
   position: relative;
   padding-top: ${(540 / 600) * 100}%;
+  ${mediaQueries.small} {
+    padding-top: ${(300 / 600) * 100}%;
+  }
   border-radius: 50px 10px;
   ${({ bg }) => {
     return `background: url(${bg}) no-repeat center center / cover;`;

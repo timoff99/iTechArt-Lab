@@ -26,7 +26,7 @@ export const Footer = () => {
     <Box background={theme.colors.secondary.main}>
       <StyledContainer flexDirection={["column", "column", "row"]}>
         <Logo2 />
-        <Ul display={["flex", null, null]} flexDirection={["column", "row", "row"]} p={0}>
+        <Ul display={["flex", null, null]} flexDirection={["column", "row", "row"]} p={0} alignItems={"center"}>
           <Li m={5}>
             <LinkRenderer href={ROUTE_NAMES.SEARCHTABCOOKBOOKS} color="background.main" inline>
               Cookbooks

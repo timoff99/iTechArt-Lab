@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import styled from "styled-components";
+import { toast, ToastContainer } from "react-toastify";
 
 import { Box } from "../../shared/helpers/Box";
 import { Flex } from "../../shared/helpers/Flex";
@@ -9,7 +10,6 @@ import { Button } from "../../shared/ui-kit/Button";
 import UserService from "../../services/user.service";
 import { UserContext } from "../../shared/ui-kit/UserProvider";
 import theme from "../../theme";
-import { toast, ToastContainer } from "react-toastify";
 
 const InfoBlock = styled(Box)`
   box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.08);
@@ -99,16 +99,18 @@ export const SettingsTab = () => {
               {user.username && !personName ? (
                 user.username
               ) : (
-                <Input
-                  ml={5}
-                  labelSize="sm"
-                  name="username"
-                  defaultValue={user.username}
-                  onKeyPress={saveNewUserInfo}
-                />
+                <Box mr={5}>
+                  <Input
+                    ml={5}
+                    labelSize="sm"
+                    name="username"
+                    defaultValue={user.username}
+                    onKeyPress={saveNewUserInfo}
+                  />
+                </Box>
               )}
             </ProfileInfo>
-            <Button variant="link" size="link" ml={5} alignItems="center" onClick={handleOpenNameInput}>
+            <Button variant="settings" size="link" ml={5} alignItems="center" onClick={handleOpenNameInput}>
               Edit
             </Button>
           </Flex>
@@ -119,10 +121,12 @@ export const SettingsTab = () => {
               {user.email && !personEmail ? (
                 user.email
               ) : (
-                <Input ml={5} labelSize="sm" name="email" defaultValue={user.email} onKeyPress={saveNewUserInfo} />
+                <Box mr={5}>
+                  <Input ml={5} labelSize="sm" name="email" defaultValue={user.email} onKeyPress={saveNewUserInfo} />
+                </Box>
               )}
             </ProfileInfo>
-            <Button variant="link" size="link" ml={5} alignItems="center" onClick={handleOpenEmailInput}>
+            <Button variant="settings" size="link" ml={5} alignItems="center" onClick={handleOpenEmailInput}>
               Edit
             </Button>
           </Flex>
@@ -133,10 +137,13 @@ export const SettingsTab = () => {
               {user.status && !personStatus ? (
                 user.status
               ) : (
-                <Input ml={5} labelSize="sm" name="status" defaultValue={user.status} onKeyPress={saveNewUserInfo} />
+                <Box mr={5}>
+                  <Input ml={5} labelSize="sm" name="status" defaultValue={user.status} onKeyPress={saveNewUserInfo} />
+                </Box>
               )}
             </ProfileInfo>
-            <Button variant="link" size="link" ml={5} alignItems="center" onClick={handleOpenStatusInput}>
+
+            <Button variant="settings" size="link" ml={5} alignItems="center" onClick={handleOpenStatusInput}>
               Edit
             </Button>
           </Flex>
@@ -149,15 +156,15 @@ export const SettingsTab = () => {
                 *********
               </ProfileInfo>
             ) : (
-              <Flex as="form" onSubmit={saveNewUserPassword}>
+              <Flex as="form" onSubmit={saveNewUserPassword} flexDirection={["column", "row", "row"]} mr={5}>
                 <Input ml={5} labelSize="sm" name="password" noForm placeholder="Old Password" />
                 <Input ml={5} labelSize="sm" name="password" noForm placeholder="New Password" />
-                <Input type="submit" labelSize="sm" />
+                <Input type="submit" display="none" />
               </Flex>
             )}
 
-            <Button variant="link" size="link" ml={5} alignItems="center" onClick={handleOpenPasswordInput}>
-              Change My Password
+            <Button variant="settings" size="link" ml={5} alignItems="center" onClick={handleOpenPasswordInput}>
+              Change Password
             </Button>
           </Flex>
         </Box>

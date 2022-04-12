@@ -14,18 +14,21 @@ import { Input } from "../../shared/ui-kit/Input";
 import { Swiper } from "../../shared/ui-kit/Swiper";
 import { Button } from "../../shared/ui-kit/Button";
 import { Modal } from "../../shared/ui-kit/Modal";
-import { CookBook } from "../../shared/ui-kit/ModalContent/CookBook";
 import { Recipes } from "../../shared/ui-kit/ModalContent/Recipes";
 import { VerticalRecipesCard } from "../../shared/ui-kit/VerticalRecipesCard";
-import { PopularCard } from "../../components/Home/PopularCard";
+import { CookbookCollection } from "../../shared/ui-kit/ModalContent/CookbookCollection";
 
+import { PopularCard } from "../../components/Home/PopularCard";
 import { listMenu } from "./mockData";
+import { ROUTE_NAMES } from "../../router/routeNames";
 import pear from "../../static/icons/pear.svg";
 import homeBg from "../../static/images/homeBg.png";
 
 import { useGetRecipesForMainQuery, useLazyGetRecipeQuery } from "../../services/recipe.service";
-import { useGetCookBooksForMainQuery, useLazyGetCookBookQuery } from "../../services/cookbook.service";
-import { ROUTE_NAMES } from "../../router/routeNames";
+import {
+  useGetFourCookbookCollectionQuery,
+  useLazyGetOneCookbookCollectionQuery,
+} from "../../services/cookbookCollection.service";
 
 const StyledLinkRenderer = styled(LinkRenderer)`
   color: ${theme.colors.background.main};
@@ -56,9 +59,9 @@ export const Home = () => {
 
   const { data: likesRecipes } = useGetRecipesForMainQuery({ limit: 4, type: "likes" });
   const { data: viewsRecipes } = useGetRecipesForMainQuery({ limit: 9, type: "views" });
-  const { data: viewsCookBooks } = useGetCookBooksForMainQuery({ limit: 4, type: "views" });
+  const { data: fourCookbookCollection } = useGetFourCookbookCollectionQuery();
   const [action, { data: recipe }] = useLazyGetRecipeQuery();
-  const [cookBookAction, { data: cookBook }] = useLazyGetCookBookQuery();
+  const [cookbookCollectionAction, { data: oneCookbookCollection }] = useLazyGetOneCookbookCollectionQuery();
   const navigation = useNavigate();
 
   const handleSubmit = (e) => {
@@ -79,9 +82,10 @@ export const Home = () => {
     toggleRecipeModal();
   };
   const openCookBook = (_id) => {
-    cookBookAction({ _id }, true);
+    cookbookCollectionAction({ id: _id }, true);
     toggleCookBookModal();
   };
+
   return (
     <>
       <StyledLogin mx={[2, 2, 9]}>
@@ -127,7 +131,7 @@ export const Home = () => {
           {likesRecipes?.recipes &&
             likesRecipes?.recipes.map((props, index) => {
               return (
-                <Col key={index} span={[4, 6, 3]} display="flex" justifyContent="center">
+                <Col key={index} span={[4, 6, 3]} display="flex" justifyContent="center" mb={4}>
                   <VerticalRecipesCard
                     {...props}
                     sizes="sm"
@@ -150,9 +154,9 @@ export const Home = () => {
           Our choice
         </Paragraph>
         <Heading as={"h2"} bold mb={8} color="secondary.main">
-          Most Popular CookBooks
+          Picked By Us
         </Heading>
-        <PopularCard items={viewsCookBooks?.cookbooks} variant={"secondary"} openCookBook={openCookBook} mb={100} />
+        <PopularCard items={fourCookbookCollection} variant={"secondary"} openCookBook={openCookBook} mb={100} />
         <LinkRenderer href={ROUTE_NAMES.SEARCHTABCOOKBOOKS} inline mt={10} mb={13}>
           <Button size="lg" variant="outlined">
             Show More
@@ -197,7 +201,7 @@ export const Home = () => {
       )}
       {showCookBookModal && (
         <Modal showModal={showCookBookModal} setShowModal={setShowCookBookModal}>
-          <CookBook {...cookBook} />
+          <CookbookCollection {...oneCookbookCollection} />
         </Modal>
       )}
     </>

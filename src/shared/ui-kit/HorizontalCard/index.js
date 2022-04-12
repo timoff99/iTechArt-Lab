@@ -10,6 +10,7 @@ import { StyledCard, ImgBox, OptionMenu } from "./styles";
 import { Button } from "../Button";
 import { CreateRecipes } from "../ModalContent/CreateRecipes";
 import { Modal } from "../Modal";
+
 import {
   useAddRecipeCloneMutation,
   useDeleteRecipeMutation,
@@ -31,6 +32,7 @@ export const HorizontalCard = ({
   steps,
   ingredients,
   modalCookBook,
+  collection,
   _id,
   ...props
 }) => {
@@ -86,6 +88,8 @@ export const HorizontalCard = ({
           <Button variant="outlined" ml={5} onClick={save}>
             Save
           </Button>
+        ) : collection ? (
+          <></>
         ) : (
           <FlexAlignCenter onClick={handleOption} height={20} position="relative">
             <Options />

@@ -29,4 +29,11 @@ export default (disabled) => ({
     bg: "background.main",
     opacity: disabled ? "0.6" : "1",
   },
+
+  settings: {
+    fontSize: "18px",
+    color: "primary.main",
+    bg: "background.main",
+    opacity: disabled ? "0.6" : "1",
+  },
 });
