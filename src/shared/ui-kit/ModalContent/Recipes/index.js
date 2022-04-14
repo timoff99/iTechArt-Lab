@@ -1,15 +1,17 @@
 import React from "react";
 import styled from "styled-components";
+import { toast, ToastContainer } from "react-toastify";
 
 import { ReactComponent as Heart } from "../../../../static/icons/heart.svg";
 import { ReactComponent as Comment } from "../../../../static/icons/comment.svg";
 import { ReactComponent as Eye } from "../../../../static/icons/small-eye.svg";
-import { Box } from "../../../helpers/Box";
 import { FlexBetween, FlexColumn, FlexAlignCenter, Flex } from "../../../helpers/Flex";
+import { Box } from "../../../helpers/Box";
 import { Paragraph, Heading } from "../../../helpers/Text";
 import { Button } from "../../Button";
 import { Comments } from "../../Comments";
-import theme from "../../../../theme";
+import theme, { colors, mediaQueries } from "../../../../theme";
+import { Loader } from "../../Loader";
 
 import { useCreateRecipeCommentsMutation } from "../../../../services/comments.service";
 import { useUpdateRecipeCommentsMutation } from "../../../../services/recipe.service";
@@ -18,6 +20,12 @@ import { useAddRecipeCloneMutation } from "../../../../services/recipe.service";
 const Image = styled(Box)`
   width: 100%;
   max-height: 660px;
+  ${mediaQueries.medium} {
+    min-width: 340px;
+  }
+  ${mediaQueries.large} {
+    min-width: 440px;
+  }
   border-radius: 50px 0px 10px;
   object-fit: cover;
 `;
@@ -35,23 +43,37 @@ export const Recipes = ({ _id, title, description, author, views, likes, comment
   const [updateRecipeComments] = useUpdateRecipeCommentsMutation();
   const [addRecipeClone] = useAddRecipeCloneMutation();
 
+  const successNotify = (msg) => {
+    return toast.success(msg);
+  };
+
+  const onClone = () => {
+    addRecipeClone(_id);
+    successNotify("recipe copied to your recipes collection");
+  };
   return (
     <Box>
       <Flex flexDirection={["column", "row", "row"]}>
-        <Image
-          as="img"
-          src={image}
-          alt="image"
-          alignSelf={["center", "normal", "normal"]}
-          maxWidth={[440, "fit-content"]}
-        />
-        <FlexColumn pl={[5, 40, 40]} pr={[5, 40, 11]} pt={72}>
+        {image ? (
+          <Image
+            as="img"
+            src={image}
+            alt="image"
+            alignSelf={["center", "normal", "normal"]}
+            maxWidth={["auto", "fit-content"]}
+          />
+        ) : (
+          <Box display="flex" justifyContent="center">
+            <Loader color={colors.primary.main} height={"lg"} width={"lg"} />
+          </Box>
+        )}
+        <FlexColumn pl={[5, 40, 40]} pr={[5, 40, 11]} pt={72} flex="1">
           <FlexBetween>
             <Heading as={"h2"} bold mb={5} maxWidth={427}>
               {title}
             </Heading>
             <Box>
-              <Button size="box" variant="outlined" onClick={() => addRecipeClone(_id)}>
+              <Button size="box" variant="outlined" onClick={onClone}>
                 +
               </Button>
             </Box>
@@ -65,7 +87,7 @@ export const Recipes = ({ _id, title, description, author, views, likes, comment
           </Heading>
           <Paragraph maxWidth="fit-content">{description}</Paragraph>
           <Box mt={8} display={["block", "flex"]} justifyContent="space-between">
-            <Box mr={11} mb={[3, 0]} flex={1} maxWidth={"300px"}>
+            <Box mr={11} mb={[3, 0]} flex={1} maxWidth={["inherit", "300px"]}>
               <Heading as={"h3"} semiBold mb={5}>
                 Directions
               </Heading>
@@ -81,7 +103,7 @@ export const Recipes = ({ _id, title, description, author, views, likes, comment
                   </Box>
                 ))}
             </Box>
-            <Box flex={1} maxWidth={"300px"}>
+            <Box flex={1} maxWidth={["inherit", "300px"]}>
               <Heading as={"h3"} semiBold mb={5}>
                 Ingredients
               </Heading>
@@ -96,7 +118,7 @@ export const Recipes = ({ _id, title, description, author, views, likes, comment
                 ))}
             </Box>
           </Box>
-          <FlexAlignCenter pt={9}>
+          <FlexAlignCenter pt={9} flexWrap="wrap">
             <FlexAlignCenter mr={8}>
               <Eye />
               <Paragraph ml={2}>{views} views</Paragraph>
@@ -122,6 +144,7 @@ export const Recipes = ({ _id, title, description, author, views, likes, comment
           />
         </FlexColumn>
       </Box>
+      <ToastContainer theme="colored" />
     </Box>
   );
 };

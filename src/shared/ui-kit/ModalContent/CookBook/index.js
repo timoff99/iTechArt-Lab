@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { toast, ToastContainer } from "react-toastify";
 
 import { ReactComponent as Heart } from "../../../../static/icons/heart.svg";
 import { ReactComponent as Comment } from "../../../../static/icons/comment.svg";
@@ -15,6 +16,9 @@ import { Modal } from "../../Modal";
 import { useLazyGetRecipeQuery } from "../../../../services/recipe.service";
 import { useCreateCookBookCommentsMutation } from "../../../../services/comments.service";
 import { useAddCookBookCloneMutation, useUpdateCookBookCommentsMutation } from "../../../../services/cookbook.service";
+import { Col } from "../../../helpers/Grid/Col";
+import { Loader } from "../../Loader";
+import { colors } from "../../../../theme";
 
 const Image = styled(Box)`
   border-radius: 50px 10px;
@@ -38,8 +42,14 @@ export const CookBook = ({ _id, recipes, title, description, author, likes, comm
     action({ _id }, true);
     toggleModal();
   };
-  const onClone = async (_id) => {
+
+  const successNotify = (msg) => {
+    return toast.success(msg);
+  };
+
+  const onClone = async () => {
     addCookBookClone(_id);
+    successNotify("cookbook copied to your cookbooks collection");
   };
 
   return (
@@ -60,14 +70,21 @@ export const CookBook = ({ _id, recipes, title, description, author, likes, comm
           </Paragraph>
         </FlexColumn>
         <Box>
-          <Button size="md" variant="primary" onClick={() => onClone(_id)}>
+          <Button size="md" variant="primary" onClick={onClone}>
             Clone to My CookBook
           </Button>
         </Box>
       </Flex>
       <Flex mb={12} flexWrap={["wrap", "nowrap", "nowrap"]} justifyContent={["center", "stretch", "stretch"]}>
         <Box mr={[0, 9, 9]}>
-          <Image as="img" src={image} alt="image" />
+          {image ? (
+            <Image as="img" src={image} alt="image" />
+          ) : (
+            <Box display="flex" justifyContent="center">
+              <Loader color={colors.primary.main} height={"lg"} width={"lg"} />
+            </Box>
+          )}
+
           <FlexAlignCenter pt={9} justifyContent={["center", "stretch", "stretch"]}>
             <FlexAlignCenter mr={8}>
               <Heart />
@@ -111,6 +128,7 @@ export const CookBook = ({ _id, recipes, title, description, author, likes, comm
           <Recipes {...recipe} />
         </Modal>
       )}
+      <ToastContainer theme="colored" />
     </Box>
   );
 };

@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { Box } from "../../shared/helpers/Box";
+import * as yup from "yup";
 
+import { Box } from "../../shared/helpers/Box";
 import { Form } from "../../shared/ui-kit/Form";
 import signUpBg from "../../static/images/signupBg.png";
 import { signUpData } from "./mockData";
@@ -21,7 +22,13 @@ const StyledLogin = styled(Box)`
   top: 16px;
   width: 100%;
   z-index: -1;
-
+  ${mediaQueries.small} {
+    left: 0;
+    top: 0;
+    height: 100%;
+    border-radius: 0;
+    background-size: inherit;
+  }
   ${mediaQueries.medium} {
     left: 0;
   }
@@ -32,6 +39,16 @@ const StyledLogin = styled(Box)`
     left: -10vw;
   }
 `;
+
+const signupSchema = yup.object().shape({
+  email: yup.string().email().required(),
+  password: yup
+    .string()
+    .trim()
+    .required("Please enter your password")
+    .matches(/^.*(?=.{5,})(?=.*[!@#$%^&*()\-_=+{};:,<.>])(?=.*\d)(?=.*[a-z,A-Z])/, "Incorrect, read down below"),
+  confirmPassword: yup.string().oneOf([yup.ref("password"), null], "Passwords must match"),
+});
 
 export const SignUp = () => {
   return (
@@ -48,6 +65,7 @@ export const SignUp = () => {
             buttonText="Sign Up"
             href="/login"
             auth="signup"
+            schema={signupSchema}
           />
         </Col>
       </Grid>

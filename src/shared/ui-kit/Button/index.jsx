@@ -68,12 +68,7 @@ const StyledButton = styled(Box)`
 `;
 
 export const Button = memo(({ children, ...props }) => {
-  return (
-    <StyledButton {...props}>
-      {props.loading && <Loader />}
-      <span>{children}</span>
-    </StyledButton>
-  );
+  return <StyledButton {...props}>{props.loading ? <Loader /> : <span>{children}</span>}</StyledButton>;
 });
 
 Button.defaultProps = {

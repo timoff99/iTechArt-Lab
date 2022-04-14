@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { Flex } from "../../helpers/Flex";
-import { Heading } from "../../helpers/Text";
+import { Heading, Paragraph } from "../../helpers/Text";
 import { Button } from "../Button";
 import { Input } from "../Input";
 import { ReactComponent as Send } from "../../../static/icons/send.svg";
@@ -52,7 +52,9 @@ export const Comments = ({ id, createComments, comments, updateComments }) => {
             return <CommentsCard key={index} {...props} />;
           })
         ) : (
-          <h3>No comments, be the first</h3>
+          <Box mt={4}>
+            <Paragraph fontSize={2}>No comments, be the first</Paragraph>
+          </Box>
         )}
       </Box>
     </>

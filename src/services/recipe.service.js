@@ -6,7 +6,6 @@ const axiosBaseQuery =
   () =>
   async ({ url, method, data, params }) => {
     try {
-      // console.log("a", `recipe/${url}`, method, data, params);
       const result = await api({ url: `recipe/${url}`, method, data, params });
       return { data: result.data };
     } catch (axiosError) {

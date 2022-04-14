@@ -63,6 +63,7 @@ export const colors = {
     light: "#F7F7F7",
     dark: "#EDEDED",
     contrast: "#DADADA",
+    grey: "#BFBFBF",
   },
 };
 

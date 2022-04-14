@@ -5,6 +5,11 @@
   display: flex;
 }
 
+.slick-list {
+  margin-right: 16px;
+  margin-left: 16px;
+}
+
 .slick-initialized .slick-slide {
   display: flex;
 }
@@ -12,7 +17,13 @@
 .slick-slide {
   justify-content: center;
   height: auto;
+  margin-right: 16px;
+  margin-left: 16px;
   > div > div {
     height: 100%;
+  }
+  @media (max-width: 700px) {
+    margin-right: 1px;
+    margin-left: 1px;
   }
 }

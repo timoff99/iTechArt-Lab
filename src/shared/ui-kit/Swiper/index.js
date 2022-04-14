@@ -2,7 +2,6 @@ import React from "react";
 import Slider from "react-slick";
 
 import styles from "./styles.scss";
-import { breakpointsAsInts } from "../../../theme";
 import { ReactComponent as Arrow } from "../../../static/icons/rightArrow.svg";
 
 function SampleNextArrow(props) {
@@ -38,14 +37,14 @@ const settings = {
   adaptiveHeight: true,
   responsive: [
     {
-      breakpoint: 1440,
+      breakpoint: 1356,
       settings: {
         slidesToShow: 2,
         slidesToScroll: 2,
       },
     },
     {
-      breakpoint: breakpointsAsInts[1],
+      breakpoint: 700,
       settings: {
         slidesToShow: 1,
         slidesToScroll: 1,

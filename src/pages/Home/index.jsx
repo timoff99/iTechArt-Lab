@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
-import theme from "../../theme";
+import theme, { colors } from "../../theme";
 import { Box } from "../../shared/helpers/Box";
 import { Grid } from "../../shared/helpers/Grid";
 import { Col } from "../../shared/helpers/Grid/Col";
@@ -17,6 +17,7 @@ import { Modal } from "../../shared/ui-kit/Modal";
 import { Recipes } from "../../shared/ui-kit/ModalContent/Recipes";
 import { VerticalRecipesCard } from "../../shared/ui-kit/VerticalRecipesCard";
 import { CookbookCollection } from "../../shared/ui-kit/ModalContent/CookbookCollection";
+import { Loader } from "../../shared/ui-kit/Loader";
 
 import { PopularCard } from "../../components/Home/PopularCard";
 import { listMenu } from "./mockData";
@@ -128,7 +129,7 @@ export const Home = () => {
           20 Highest-Rated Recipes
         </Heading>
         <Grid nested mt={10}>
-          {likesRecipes?.recipes &&
+          {likesRecipes?.recipes ? (
             likesRecipes?.recipes.map((props, index) => {
               return (
                 <Col key={index} span={[4, 6, 3]} display="flex" justifyContent="center" mb={4}>
@@ -141,7 +142,12 @@ export const Home = () => {
                   />
                 </Col>
               );
-            })}
+            })
+          ) : (
+            <Col display="flex" justifyContent="center">
+              <Loader color={colors.primary.main} height={"lg"} width={"lg"} />
+            </Col>
+          )}
         </Grid>
         <LinkRenderer href={ROUTE_NAMES.SEARCHTABRECIPES} inline mt={10} mb={13}>
           <Button size="lg" variant="outlined">
@@ -163,21 +169,21 @@ export const Home = () => {
           </Button>
         </LinkRenderer>
       </Container>
-      <SwiperBox mb={8} mx={[5, 9, 9]} px={[1, "196px", "196px"]}>
+      <SwiperBox mb={8} mx={[0, 9, 9]} px={["16px", "16px", "150px"]}>
         <Paragraph uppercase fontSize={1} pt={13} color="background.main">
           top 10
         </Paragraph>
         <Heading as={"h2"} bold mt={8} color="secondary.main">
           Trending Recipes
         </Heading>
-        <Container mt="48px" mb="112px">
+        <Box mt="48px" mb="112px">
           <Swiper>
-            {viewsRecipes?.recipes &&
+            {viewsRecipes?.recipes ? (
               viewsRecipes?.recipes.map((props, index) => {
                 return (
                   <Box key={index}>
                     <VerticalRecipesCard
-                      maxWidth={"288px"}
+                      maxWidth={"450px"}
                       {...props}
                       sizes="sm"
                       openRecipe={openRecipe}
@@ -185,9 +191,14 @@ export const Home = () => {
                     />
                   </Box>
                 );
-              })}
+              })
+            ) : (
+              <Box display="flex" justifyContent="center">
+                <Loader height={"lg"} width={"lg"} />
+              </Box>
+            )}
           </Swiper>
-        </Container>
+        </Box>
         <LinkRenderer href={ROUTE_NAMES.SEARCHTABRECIPES} inline mb={13}>
           <Button size="lg" variant="outlined">
             Show More

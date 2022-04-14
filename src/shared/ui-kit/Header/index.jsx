@@ -70,7 +70,7 @@ export const Header = memo(({ mainPage }) => {
         </LinkRenderer>
 
         <Ul display={["none", "flex", null]} pl={0}>
-          <Li mr={9}>
+          <Li mr={mainPage ? "72px" : 9}>
             <LinkRenderer href={ROUTE_NAMES.SEARCHTABRECIPES} color="secondary.main" inline>
               Recipes
             </LinkRenderer>

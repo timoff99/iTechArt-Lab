@@ -8,6 +8,8 @@ import { Modal } from "../../Modal";
 import { CookBook } from "../CookBook";
 
 import { useLazyGetCookBookQuery } from "../../../../services/cookbook.service";
+import { Loader } from "../../Loader";
+import { colors } from "../../../../theme";
 
 export const CookbookCollection = ({ collection_arr, title }) => {
   const [showModal, setShowModal] = useState(false);
@@ -37,7 +39,7 @@ export const CookbookCollection = ({ collection_arr, title }) => {
         </FlexColumn>
       </Flex>
 
-      {collection_arr?.length > 0 && (
+      {collection_arr?.length > 0 ? (
         <>
           <FlexColumn mb={10}>
             {collection_arr.map((props, index) => {
@@ -45,6 +47,10 @@ export const CookbookCollection = ({ collection_arr, title }) => {
             })}
           </FlexColumn>
         </>
+      ) : (
+        <Box display="flex" justifyContent="center">
+          <Loader color={colors.primary.main} height={"lg"} width={"lg"} />
+        </Box>
       )}
       {showModal && (
         <Modal showModal={showModal} setShowModal={toggleModal}>
