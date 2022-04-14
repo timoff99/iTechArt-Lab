@@ -1,13 +1,16 @@
 import React from "react";
 
+import { Box } from "../../../shared/helpers/Box";
 import { Grid } from "../../../shared/helpers/Grid";
 import { Col } from "../../../shared/helpers/Grid/Col";
+import { Loader } from "../../../shared/ui-kit/Loader";
+import { colors } from "../../../theme";
 import { MostPopularCard } from "../MostPopularCard";
 
 export const PopularCard = ({ items, variant, openCookBook }) => {
   return (
     <>
-      {items && (
+      {items ? (
         <Grid>
           <Col span={[4, 6, 6]}>
             <MostPopularCard items={items[0]} variant={variant} openCookBook={openCookBook} />
@@ -29,6 +32,10 @@ export const PopularCard = ({ items, variant, openCookBook }) => {
             </Grid>
           </Col>
         </Grid>
+      ) : (
+        <Box display="flex" justifyContent="center">
+          <Loader color={colors.primary.main} height={"lg"} width={"lg"} />
+        </Box>
       )}
     </>
   );

@@ -6,7 +6,7 @@ export const FontConfigurations = {
   },
   h2: {
     fontFamily: "header",
-    fontSize: [36, null, 40],
+    fontSize: [25, null, 40],
     lineHeight: 0,
   },
   h3: {

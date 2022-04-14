@@ -32,7 +32,8 @@ export const Filter = ({ label, options, value, onChange, timeRange, setTimeRang
       cookingRange: value,
     });
   };
-  const handleClearAll = (e) => {
+  const handleClearAll = () => {
+    onChange({ value: "views", label: "Views" });
     clearAll();
   };
 
@@ -42,7 +43,7 @@ export const Filter = ({ label, options, value, onChange, timeRange, setTimeRang
         <Heading as={"h3"} semiBold>
           Filter
         </Heading>
-        <Clear color="primary.main" cursor="pointer" onClick={(e) => handleClearAll(e)}>
+        <Clear color="primary.main" cursor="pointer" onClick={handleClearAll}>
           clear all
         </Clear>
       </FlexBetween>

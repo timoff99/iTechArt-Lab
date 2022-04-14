@@ -8,6 +8,7 @@ export const signUpData = [
     type: "password",
     label: "Password",
     name: "password",
+    matchMess: "Password must contain at least 5 characters, one uppercase, one number and one special case character",
   },
   {
     type: "password",

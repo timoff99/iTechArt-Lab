@@ -10,11 +10,13 @@ import { StyledCard, ImgBox, OptionMenu } from "./styles";
 import { Button } from "../Button";
 import { CreateRecipes } from "../ModalContent/CreateRecipes";
 import { Modal } from "../Modal";
+
 import {
   useAddRecipeCloneMutation,
   useDeleteRecipeMutation,
   useUpdateRecipeLikesMutation,
 } from "../../../services/recipe.service";
+import UserService from "../../../services/user.service";
 
 export const HorizontalCard = ({
   title,
@@ -30,6 +32,7 @@ export const HorizontalCard = ({
   steps,
   ingredients,
   modalCookBook,
+  collection,
   _id,
   ...props
 }) => {
@@ -51,9 +54,10 @@ export const HorizontalCard = ({
     setOptionMenu(false);
   };
 
-  const onDelete = (event) => {
+  const onDelete = async (event) => {
     event.stopPropagation();
-    deleteRecipe(_id);
+    deleteRecipe({ _id });
+    await UserService.deleteUserRecipeId(_id);
     setOptionMenu(false);
   };
 
@@ -65,7 +69,7 @@ export const HorizontalCard = ({
 
   const handleLikes = (event) => {
     event.stopPropagation();
-    updateRecipeLikes(_id);
+    updateRecipeLikes({ _id });
   };
 
   const toggleModal = () => {
@@ -84,19 +88,21 @@ export const HorizontalCard = ({
           <Button variant="outlined" ml={5} onClick={save}>
             Save
           </Button>
+        ) : collection ? (
+          <></>
         ) : (
-          <FlexAlignCenter onClick={(e) => handleOption(e)} height={20} position="relative">
+          <FlexAlignCenter onClick={handleOption} height={20} position="relative">
             <Options />
             {optionMenu && props.profile && (
               <OptionMenu>
                 <Button variant="secondary" variantMenu="secondaryMenu" size="box" onClick={onEdit}>
                   <Paragraph as={"pre"} fontWeight={"normal"}>
-                    Edit CookBook
+                    Edit Recipe
                   </Paragraph>
                 </Button>
                 <Button variant="secondary" variantMenu="secondaryMenu" size="box" onClick={onDelete}>
                   <Paragraph as={"pre"} fontWeight={"normal"}>
-                    Delete CookBook
+                    Delete Recipe
                   </Paragraph>
                 </Button>
               </OptionMenu>
@@ -105,7 +111,7 @@ export const HorizontalCard = ({
               <OptionMenu>
                 <Button variant="secondary" variantMenu="secondaryMenu" size="box" onClick={onClone}>
                   <Paragraph as={"pre"} fontWeight={"normal"}>
-                    Clone to My CookBooks
+                    Clone to My Recipe
                   </Paragraph>
                 </Button>
               </OptionMenu>
@@ -126,7 +132,7 @@ export const HorizontalCard = ({
             </Heading>
           </FlexBetween>
           {description && (
-            <Paragraph textAlign="left" pb={[0, 0, 5]} flex={1}>
+            <Paragraph textAlign="left" pb={[0, 0, 5]} overflow="hidden" height="46px">
               {description}
             </Paragraph>
           )}

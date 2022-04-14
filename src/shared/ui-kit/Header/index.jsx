@@ -13,11 +13,12 @@ import { LinkRenderer, Paragraph } from "../../helpers/Text";
 import { Modal } from "../Modal";
 import { CreateCookBook } from "../ModalContent/CreateCookBook";
 import { UserContext } from "../UserProvider";
-import UserService from "../../../services/user.service";
 import { useUrl } from "../../../hooks/useUrl";
 import { ROUTE_NAMES } from "../../../router/routeNames";
 import { Burger } from "./Burger";
 import { Menu } from "./Menu";
+
+import UserService from "../../../services/user.service";
 
 export const Header = memo(({ mainPage }) => {
   const [showModal, setShowModal] = useState(false);
@@ -68,8 +69,8 @@ export const Header = memo(({ mainPage }) => {
           <Logo />
         </LinkRenderer>
 
-        <Ul display={["none", "flex", null]}>
-          <Li mr="72px">
+        <Ul display={["none", "flex", null]} pl={0}>
+          <Li mr={mainPage ? "72px" : 9}>
             <LinkRenderer href={ROUTE_NAMES.SEARCHTABRECIPES} color="secondary.main" inline>
               Recipes
             </LinkRenderer>
@@ -102,7 +103,7 @@ export const Header = memo(({ mainPage }) => {
           <LinkRenderer href={ROUTE_NAMES.PROFILETABCOOKBOOKS} color="secondary.main" inline>
             <User>
               <img src={person} alt="person" />
-              <Paragraph fontSize={1} color="secondary.main">
+              <Paragraph fontSize={1} color="secondary.main" overflow="hidden" height="26px" width="76px">
                 {user.username}
               </Paragraph>
             </User>

@@ -46,6 +46,7 @@ export const Form = ({
   ...props
 }) => {
   const [disable, setDisable] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { setUser } = useContext(UserContext);
   const navigation = useNavigate();
   const errorNotify = (errors) => {
@@ -59,6 +60,7 @@ export const Form = ({
   };
 
   const asyncHandleSubmit = async (values) => {
+    setLoading(true);
     if (auth === "signup") {
       try {
         const signinData = await AuthService.signup(values.email, values.password);
@@ -75,6 +77,8 @@ export const Form = ({
         return true;
       } catch (e) {
         return errorNotify(e?.response?.data);
+      } finally {
+        setLoading(false);
       }
     }
     try {
@@ -92,6 +96,8 @@ export const Form = ({
       return true;
     } catch (e) {
       return errorNotify(e?.response?.data);
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -137,7 +143,7 @@ export const Form = ({
             );
           })}
 
-          <Button size="fit" mt="14px" type="submit" disabled={disable}>
+          <Button size="fit" mt="14px" type="submit" disabled={disable} loading={+loading}>
             {buttonText}
           </Button>
           <ToastContainer theme="colored" />

@@ -5,6 +5,7 @@ import * as yup from "yup";
 
 import { useAddRecipeMutation, useUpdateRecipeMutation } from "../../../../services/recipe.service";
 import ImageService from "../../../../services/image.service";
+import UserService from "../../../../services/user.service";
 
 import { Flex, FlexBetween } from "../../../helpers/Flex";
 import { Box } from "../../../helpers/Box";
@@ -48,12 +49,12 @@ export const CreateRecipes = memo(
     const [ingredients, setIngredients] = useState(oldIngredients || []);
     const [steps, setSteps] = useState(oldSteps || []);
     const [time, setTime] = useState(oldCooking_time || 0);
+    const [loading, setLoading] = useState(false);
 
     const [addRecipe] = useAddRecipeMutation();
     const [updateRecipe] = useUpdateRecipeMutation();
     const formData = new FormData();
     const refFileInput = useRef();
-
     const createImage = async (fileImage) => {
       try {
         formData.append("image", fileImage);
@@ -64,11 +65,10 @@ export const CreateRecipes = memo(
       }
       return true;
     };
-    const a = (values) => {
-      console.log(values);
-    };
+
     const createRecipe = async (values) => {
       try {
+        setLoading(true);
         let newImage;
         if (!oldImage?.includes("http")) {
           newImage = await createImage(values.file);
@@ -87,13 +87,17 @@ export const CreateRecipes = memo(
         };
         if (update) {
           updateRecipe(recipesData);
+          await UserService.updateUserRecipes(_id);
           setShowModal();
           return setUpdate(false);
         }
-        addRecipe(recipesData);
+        const newRecipe = await addRecipe(recipesData);
+        await UserService.updateUserRecipes(newRecipe.data._id);
         setShowModal();
       } catch (error) {
         console.log("error recept", error);
+      } finally {
+        setLoading(false);
       }
       return true;
     };
@@ -128,15 +132,17 @@ export const CreateRecipes = memo(
           title: oldTitle || "",
           file: "",
           description: oldDescription || "",
+          steps: "",
+          ingredients: "",
         }}
         validationSchema={recipeSchema}
         onSubmit={async (values) => {
           await createRecipe(values);
         }}
       >
-        {({ handleChange, setFieldValue }) => (
+        {({ values, handleChange, setFieldValue }) => (
           <Form>
-            <Box px={56} py={72}>
+            <Box px={[4, 56, 56]} py={[10, 72, 72]}>
               <Heading as={"h2"} bold mb={10}>
                 Create New Recipe
               </Heading>
@@ -174,7 +180,13 @@ export const CreateRecipes = memo(
                 </Paragraph>
                 <Slider timeRange={time} setTimeRange={setTime} type="create" />
               </Box>
-              <Input labelBold="labelBold" {...createRecipeData[2]} onKeyPress={(e) => handleAdd(e)} />
+              <Input
+                labelBold="labelBold"
+                {...createRecipeData[2]}
+                values={values.steps}
+                onKeyPress={handleAdd}
+                handleChange={handleChange}
+              />
               <Box mb={10} minWidth={170} width="fit-content">
                 {ingredients.map((ingredient, index) => (
                   <FlexBetween key={index}>
@@ -184,14 +196,18 @@ export const CreateRecipes = memo(
                 ))}
               </Box>
 
-              <Input labelBold="labelBold" {...createRecipeData[3]} onKeyPress={(e) => handleAdd(e)} />
+              <Input
+                labelBold="labelBold"
+                {...createRecipeData[3]}
+                values={values.ingredients}
+                onKeyPress={handleAdd}
+                handleChange={handleChange}
+              />
               <Box mb={10} minWidth={170} width="fit-content">
                 {steps.map((step, index) => (
                   <FlexBetween key={index}>
-                    <Paragraph>
-                      {step}
-                      <X onClick={() => handleCloseSteps(step)} />
-                    </Paragraph>
+                    <Paragraph>{step}</Paragraph>
+                    <X onClick={() => handleCloseSteps(step)} />
                   </FlexBetween>
                 ))}
               </Box>
@@ -200,7 +216,7 @@ export const CreateRecipes = memo(
                 <Button size="md" variant="outlined" mr={10} onClick={setShowModal}>
                   Cancel
                 </Button>
-                <Button size="md" variant="primary" type="submit">
+                <Button size="md" variant="primary" type="submit" loading={+loading}>
                   Confirm
                 </Button>
               </Flex>

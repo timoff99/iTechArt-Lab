@@ -24,6 +24,7 @@ import { MultiSelect } from "../../MultiSelect";
 import { createCookBookData, CheckboxData } from "./mockData";
 import { Modal } from "../../Modal";
 import { Recipes } from "../Recipes";
+import UserService from "../../../../services/user.service";
 
 const FileUploader = styled(Box)`
   display: none;
@@ -41,6 +42,7 @@ export const CreateCookBook = memo(
     const [selectedRecipes, SetSelectedRecipes] = useState([]);
     const [oldCookbookRecipes, SetOldCookbookRecipes] = useState("");
     const [checkbox, setCheckbox] = useState(CheckboxData);
+    const [loading, setLoading] = useState(false);
 
     const [addCookBook] = useAddCookBookMutation();
     const [updateCookBook] = useUpdateCookBookMutation();
@@ -49,7 +51,7 @@ export const CreateCookBook = memo(
     const { data: recipeWithCookbook } = useGetRecipeWithoutCookBookQuery();
     const [action, { data: recipe }] = useLazyGetRecipeQuery();
     const openRecipe = (_id) => {
-      action(_id, true);
+      action({ _id }, true);
       recipeToggleModal();
     };
 
@@ -107,6 +109,7 @@ export const CreateCookBook = memo(
 
     const createCookBook = async (values) => {
       try {
+        setLoading(true);
         let newImage;
         if (!oldImage?.includes("http")) {
           newImage = await createImage(values.file);
@@ -132,16 +135,22 @@ export const CreateCookBook = memo(
           await deleteRecipesCookBookId({ selectedRecipes: oldCookbookRecipes, _id });
           await updateCookBook(cookbookData);
           updateRecipesCookBookId({ selectedRecipes, _id });
+
+          await UserService.updateUserCookBooks(_id);
           setShowModal();
           return setUpdate(false);
         } else {
           const recept = await addCookBook(cookbookData);
           const { _id } = recept.data;
           updateRecipesCookBookId({ selectedRecipes, _id });
+
+          await UserService.updateUserCookBooks(_id);
           setShowModal();
         }
       } catch (error) {
         console.log("error cookBook", error);
+      } finally {
+        setLoading(false);
       }
       return true;
     };
@@ -174,7 +183,7 @@ export const CreateCookBook = memo(
         >
           {({ handleChange, setFieldValue }) => (
             <Form>
-              <Box px={56} py={72}>
+              <Box px={[4, 56, 56]} py={[10, 72, 72]}>
                 <Heading as={"h2"} bold mb={10}>
                   Create New CookBook
                 </Heading>
@@ -208,10 +217,10 @@ export const CreateCookBook = memo(
                   <Heading as={"h3"} fontSize={16} semiBold mb={3} color="secondary.main">
                     CookBook Types
                   </Heading>
-                  <Flex as="form">
+                  <Flex as="form" flexWrap={"wrap"}>
                     {checkbox.map(({ value, children, checked }, index) => {
                       return (
-                        <Box as="label" mr={5} key={index}>
+                        <Box as="label" mr={5} mb={3} key={index}>
                           <Box
                             mr={1}
                             key={index}
@@ -242,11 +251,11 @@ export const CreateCookBook = memo(
                   selectedRecipes.map((props, index) => {
                     return <HorizontalCard key={index} openRecipe={openRecipe} place={"no-rates"} {...props} />;
                   })}
-                <Flex justifyContent="flex-end" mt={11}>
-                  <Button size="md" variant="outlined" mr={10} onClick={setShowModal}>
+                <Flex justifyContent={["space-between", "flex-end", "flex-end"]} mt={11}>
+                  <Button size="md" variant="outlined" mr={[0, 10, 10]} onClick={setShowModal}>
                     Cancel
                   </Button>
-                  <Button size="md" variant="primary" type="submit">
+                  <Button size="md" variant="primary" mr={[0, 10, 10]} type="submit" loading={+loading}>
                     Confirm
                   </Button>
                 </Flex>

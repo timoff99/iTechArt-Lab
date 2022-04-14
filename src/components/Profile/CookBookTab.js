@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
 
 import { useLazyGetCookBookQuery, useLazyGetUserCookBooksQuery } from "../../services/cookbook.service";
+
 import { Box } from "../../shared/helpers/Box";
 import { Grid } from "../../shared/helpers/Grid";
 import { Pagination } from "../../shared/ui-kit/Pagination";
 import { CookBookCard } from "../../shared/ui-kit/CookBookCard";
 import { Modal } from "../../shared/ui-kit/Modal";
 import { CookBook } from "../../shared/ui-kit/ModalContent/CookBook";
+import { Loader } from "../../shared/ui-kit/Loader";
+import { Col } from "../../shared/helpers/Grid/Col";
+import { colors } from "../../theme";
+import { Heading } from "../../shared/helpers/Text";
 
 export const CookBookTab = () => {
   const [showModal, setShowModal] = useState(false);
@@ -24,7 +29,7 @@ export const CookBookTab = () => {
   };
 
   const openCookBook = (_id) => {
-    cookBookAction(_id, true);
+    cookBookAction({ _id }, true);
     toggleModal();
   };
 
@@ -34,7 +39,7 @@ export const CookBookTab = () => {
   return (
     <Box display="flex" flexDirection="column">
       <Grid nested mb={11}>
-        {data?.cookBook &&
+        {data?.cookBook ? (
           data?.cookBook.map((props, index) => {
             return (
               <CookBookCard
@@ -45,8 +50,18 @@ export const CookBookTab = () => {
                 profile={"profile"}
               />
             );
-          })}
+          })
+        ) : (
+          <Col display="flex" justifyContent="center">
+            <Loader color={colors.primary.main} height={"lg"} width={"lg"} />
+          </Col>
+        )}
       </Grid>
+      {data?.cookBook.length === 0 && (
+        <Box display="flex" justifyContent="center">
+          <Heading as={"h3"}>Create your first Cookbook</Heading>
+        </Box>
+      )}
       {data?.totalPages > 1 && <Pagination totalPages={data?.totalPages} handlePageClick={handlePageClick} />}
 
       {showModal && (

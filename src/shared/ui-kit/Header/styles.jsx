@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 import { Container } from "../../helpers/Container";
-import theme from "../../../theme";
 import { Box } from "../../helpers/Box";
 
 export const StyledContainer = styled(Container)`

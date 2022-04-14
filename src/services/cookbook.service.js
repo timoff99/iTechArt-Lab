@@ -5,7 +5,6 @@ const axiosBaseQuery =
   () =>
   async ({ url, method, data, params }) => {
     try {
-      // console.log("a", `cookbook/${url}`, method, data, params);
       const result = await api({ url: `cookbook/${url}`, method, data, params });
       return { data: result.data };
     } catch (axiosError) {

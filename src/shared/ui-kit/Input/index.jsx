@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { variant } from "styled-system";
 
 import variants from "./inputVariants";
-import theme, { mediaQueries } from "../../../theme";
+import theme, { colors, mediaQueries } from "../../../theme";
 import { Button } from "../Button";
 import { ReactComponent as EyeClose } from "../../../static/icons/eye-close.svg";
 import smallSearch from "../../../static/icons/smallSearch.svg";
@@ -163,6 +163,7 @@ export const Input = memo(
           </StyledButton>
         )}
         <Box color="red">{form && <ErrorMessage name={name} />}</Box>
+        {props.matchMess ? <Paragraph color={colors.background.grey}>{props.matchMess}</Paragraph> : null}
       </LabelStyle>
     );
   }

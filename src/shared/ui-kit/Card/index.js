@@ -15,6 +15,7 @@ import {
 } from "../../../services/cookbook.service";
 import { Modal } from "../Modal";
 import { CreateCookBook } from "../ModalContent/CreateCookBook";
+import UserService from "../../../services/user.service";
 
 export const Card = ({
   _id,
@@ -51,9 +52,10 @@ export const Card = ({
     setOptionMenu(false);
   };
 
-  const onDelete = (event) => {
+  const onDelete = async (event) => {
     event.stopPropagation();
-    deleteCookBook(_id);
+    deleteCookBook({ _id });
+    await UserService.deleteUserCookBookId(_id);
     setOptionMenu(false);
   };
 
@@ -65,7 +67,7 @@ export const Card = ({
 
   const handleLikes = (event) => {
     event.stopPropagation();
-    updateCookBookLikes(_id);
+    updateCookBookLikes({ _id });
   };
 
   const toggleModal = () => {
@@ -80,7 +82,7 @@ export const Card = ({
             <Eye />
             <Paragraph ml={2}>{views} views</Paragraph>
           </FlexAlignCenter>
-          <FlexAlignCenter onClick={(e) => handleOption(e)} height={20} position="relative">
+          <FlexAlignCenter onClick={handleOption} height={20} position="relative">
             <Options />
             {optionMenu && props.profile && (
               <OptionMenu>

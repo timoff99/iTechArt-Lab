@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
-import { Box } from "../../helpers/Box";
-import { FlexBetween, FlexCenter, FlexAlignCenter, Flex, FlexColumn } from "../../helpers/Flex";
+import { FlexBetween, FlexCenter, FlexAlignCenter, FlexColumn } from "../../helpers/Flex";
 import { ReactComponent as Eye } from "../../../static/icons/small-eye.svg";
 import { ReactComponent as Options } from "../../../static/icons/options.svg";
 import { ReactComponent as Heart } from "../../../static/icons/heart.svg";
@@ -9,6 +8,7 @@ import { ReactComponent as Comment } from "../../../static/icons/comment.svg";
 import { Paragraph, Heading } from "../../helpers/Text";
 import { StyledCard, OptionMenu, ImgBox } from "./styles";
 import { Button } from "../Button";
+
 import { useAddRecipeCloneMutation, useUpdateRecipeLikesMutation } from "../../../services/recipe.service";
 
 export const VerticalRecipesCard = ({
@@ -45,7 +45,7 @@ export const VerticalRecipesCard = ({
 
   const handleLikes = (event) => {
     event.stopPropagation();
-    updateRecipeLikes(_id);
+    updateRecipeLikes({ _id });
   };
 
   return (
@@ -56,7 +56,7 @@ export const VerticalRecipesCard = ({
             <Eye />
             <Paragraph ml={2}>{views} views</Paragraph>
           </FlexAlignCenter>
-          <FlexAlignCenter onClick={(e) => handleOption(e)} height={20} position="relative">
+          <FlexAlignCenter onClick={handleOption} height={20} position="relative">
             <Options />
             {optionMenu && (
               <OptionMenu>
@@ -74,7 +74,7 @@ export const VerticalRecipesCard = ({
         </FlexCenter>
 
         <FlexBetween pt={5} alignItems="center">
-          <Heading as={"h3"} semiBold overflow="hidden" height="20px">
+          <Heading as={"h3"} semiBold overflow="hidden" height={["16px", "16px", "20px"]}>
             {title}
           </Heading>
           <Paragraph>{author}</Paragraph>
