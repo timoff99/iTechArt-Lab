@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Box } from "../../helpers/Box";
 import { Flex, FlexBetween, FlexAlignCenter, FlexCenter } from "../../helpers/Flex";
 import { ReactComponent as Eye } from "../../../static/icons/small-eye.svg";
@@ -17,6 +17,7 @@ import {
   useUpdateRecipeLikesMutation,
 } from "../../../services/recipe.service";
 import UserService from "../../../services/user.service";
+import { UserContext } from "../UserProvider";
 
 export const HorizontalCard = ({
   title,
@@ -42,6 +43,8 @@ export const HorizontalCard = ({
   const [deleteRecipe] = useDeleteRecipeMutation();
   const [updateRecipeLikes] = useUpdateRecipeLikesMutation();
   const [addRecipeClone] = useAddRecipeCloneMutation();
+  const { user } = useContext(UserContext);
+
   const handleOption = (event) => {
     event.stopPropagation();
     setOptionMenu((prev) => !prev);
@@ -146,7 +149,7 @@ export const HorizontalCard = ({
                 <Paragraph ml={2}>{views} views</Paragraph>
               </FlexAlignCenter>
               <FlexAlignCenter pr={8} onClick={handleLikes}>
-                <Heart />
+                <Heart style={{ fill: `${likes?.includes(user._id) ? "red" : "#DADADA"}` }} />
                 <Paragraph ml={2}>{likes?.length || 0} likes</Paragraph>
               </FlexAlignCenter>
               <FlexAlignCenter>

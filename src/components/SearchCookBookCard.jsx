@@ -5,6 +5,7 @@ import { useLazyGetCookBookQuery, useLazyGetFilteredCookBookQuery } from "../ser
 import { Box } from "../shared/helpers/Box";
 import { Grid } from "../shared/helpers/Grid";
 import { Col } from "../shared/helpers/Grid/Col";
+import { Heading } from "../shared/helpers/Text";
 import { CookBookCard } from "../shared/ui-kit/CookBookCard";
 import { Loader } from "../shared/ui-kit/Loader";
 import { Modal } from "../shared/ui-kit/Modal";
@@ -53,6 +54,11 @@ export const SearchCookBookCard = ({ query }) => {
           </Col>
         )}
       </Grid>
+      {data?.sorted.length === 0 && (
+        <Box display="flex" justifyContent="center">
+          <Heading as={"h3"}>Empty Page</Heading>
+        </Box>
+      )}
       {data?.totalPages > 1 && <Pagination totalPages={data?.totalPages} handlePageClick={handlePageClick} />}
 
       {showModal && (

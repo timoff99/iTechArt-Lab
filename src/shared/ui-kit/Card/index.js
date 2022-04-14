@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 import { FlexBetween, FlexCenter, FlexAlignCenter, Flex, FlexColumn } from "../../helpers/Flex";
 import { ReactComponent as Eye } from "../../../static/icons/small-eye.svg";
@@ -16,6 +16,7 @@ import {
 import { Modal } from "../Modal";
 import { CreateCookBook } from "../ModalContent/CreateCookBook";
 import UserService from "../../../services/user.service";
+import { UserContext } from "../UserProvider";
 
 export const Card = ({
   _id,
@@ -39,7 +40,8 @@ export const Card = ({
   const [deleteCookBook] = useDeleteCookBookMutation();
   const [updateCookBookLikes] = useUpdateCookBookLikesMutation();
   const [addCookBookClone] = useAddCookBookCloneMutation();
-
+  const { user } = useContext(UserContext);
+  console.log(likes?.includes(user._id));
   const handleOption = (event) => {
     event.stopPropagation();
     setOptionMenu((prev) => !prev);
@@ -128,7 +130,7 @@ export const Card = ({
 
         <FlexAlignCenter pt={9} justifyContent="space-between" mt="auto">
           <FlexAlignCenter onClick={handleLikes}>
-            <Heart />
+            <Heart style={{ fill: `${likes?.includes(user._id) ? "red" : "#DADADA"}` }} />
             <Paragraph ml={2}>{likes?.length || 0} likes</Paragraph>
           </FlexAlignCenter>
           <FlexAlignCenter>

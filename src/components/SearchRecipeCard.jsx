@@ -11,6 +11,7 @@ import { Pagination } from "../shared/ui-kit/Pagination";
 import { Loader } from "../shared/ui-kit/Loader";
 import { Col } from "../shared/helpers/Grid/Col";
 import { colors } from "../theme";
+import { Heading } from "../shared/helpers/Text";
 
 export const SearchRecipeCard = ({ query, timeRange }) => {
   const [showModal, setShowModal] = useState(false);
@@ -52,6 +53,11 @@ export const SearchRecipeCard = ({ query, timeRange }) => {
           </Col>
         )}
       </Grid>
+      {data?.recipe.length === 0 && (
+        <Box display="flex" justifyContent="center">
+          <Heading as={"h3"}>Empty Page</Heading>
+        </Box>
+      )}
       {data?.totalPages > 1 && <Pagination totalPages={data?.totalPages} handlePageClick={handlePageClick} />}
       {showModal && (
         <Modal showModal={showModal} setShowModal={toggleModal}>

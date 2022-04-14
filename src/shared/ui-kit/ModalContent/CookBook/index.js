@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { toast, ToastContainer } from "react-toastify";
 
@@ -19,6 +19,7 @@ import { useAddCookBookCloneMutation, useUpdateCookBookCommentsMutation } from "
 import { Col } from "../../../helpers/Grid/Col";
 import { Loader } from "../../Loader";
 import { colors } from "../../../../theme";
+import { UserContext } from "../../UserProvider";
 
 const Image = styled(Box)`
   border-radius: 50px 10px;
@@ -34,6 +35,8 @@ export const CookBook = ({ _id, recipes, title, description, author, likes, comm
   const [updateCookBookComments] = useUpdateCookBookCommentsMutation();
   const [action, { data: recipe }] = useLazyGetRecipeQuery();
   const [addCookBookClone] = useAddCookBookCloneMutation();
+  const { user } = useContext(UserContext);
+
   const toggleModal = () => {
     setShowModal((prev) => !prev);
   };
@@ -87,7 +90,7 @@ export const CookBook = ({ _id, recipes, title, description, author, likes, comm
 
           <FlexAlignCenter pt={9} justifyContent={["center", "stretch", "stretch"]}>
             <FlexAlignCenter mr={8}>
-              <Heart />
+              <Heart style={{ fill: `${likes?.includes(user._id) ? "red" : "#DADADA"}` }} />
               <Paragraph ml={2}>{likes?.length || 0} likes</Paragraph>
             </FlexAlignCenter>
             <FlexAlignCenter>

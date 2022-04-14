@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { toast, ToastContainer } from "react-toastify";
 
@@ -16,6 +16,7 @@ import { Loader } from "../../Loader";
 import { useCreateRecipeCommentsMutation } from "../../../../services/comments.service";
 import { useUpdateRecipeCommentsMutation } from "../../../../services/recipe.service";
 import { useAddRecipeCloneMutation } from "../../../../services/recipe.service";
+import { UserContext } from "../../UserProvider";
 
 const Image = styled(Box)`
   width: 100%;
@@ -42,6 +43,7 @@ export const Recipes = ({ _id, title, description, author, views, likes, comment
   const [createRecipeComments] = useCreateRecipeCommentsMutation();
   const [updateRecipeComments] = useUpdateRecipeCommentsMutation();
   const [addRecipeClone] = useAddRecipeCloneMutation();
+  const { user } = useContext(UserContext);
 
   const successNotify = (msg) => {
     return toast.success(msg);
@@ -124,7 +126,7 @@ export const Recipes = ({ _id, title, description, author, views, likes, comment
               <Paragraph ml={2}>{views} views</Paragraph>
             </FlexAlignCenter>
             <FlexAlignCenter mr={8}>
-              <Heart />
+              <Heart style={{ fill: `${likes?.includes(user._id) ? "red" : "#DADADA"}` }} />
               <Paragraph ml={2}>{likes?.length || 0} likes</Paragraph>
             </FlexAlignCenter>
             <FlexAlignCenter>

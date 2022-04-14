@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 import { FlexBetween, FlexCenter, FlexAlignCenter, FlexColumn } from "../../helpers/Flex";
 import { ReactComponent as Eye } from "../../../static/icons/small-eye.svg";
@@ -10,6 +10,7 @@ import { StyledCard, OptionMenu, ImgBox } from "./styles";
 import { Button } from "../Button";
 
 import { useAddRecipeCloneMutation, useUpdateRecipeLikesMutation } from "../../../services/recipe.service";
+import { UserContext } from "../UserProvider";
 
 export const VerticalRecipesCard = ({
   title,
@@ -31,6 +32,7 @@ export const VerticalRecipesCard = ({
   const [optionMenu, setOptionMenu] = useState(false);
   const [updateRecipeLikes] = useUpdateRecipeLikesMutation();
   const [addCookBookClone] = useAddRecipeCloneMutation();
+  const { user } = useContext(UserContext);
 
   const handleOption = (event) => {
     event.stopPropagation();
@@ -88,7 +90,7 @@ export const VerticalRecipesCard = ({
 
         <FlexAlignCenter pt={9} justifyContent="space-between" mt="auto">
           <FlexAlignCenter onClick={handleLikes}>
-            <Heart />
+            <Heart style={{ fill: `${likes?.includes(user._id) ? "red" : "#DADADA"}` }} />
             <Paragraph ml={2}>{likes?.length || 0} likes</Paragraph>
           </FlexAlignCenter>
           <FlexAlignCenter>

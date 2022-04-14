@@ -18,49 +18,6 @@ export const StyledCard = styled(Box)`
     cursor: pointer;
     transition: all 0.4s;
   }
-  ${({ place }) => {
-    switch (place) {
-      case "highest-rates":
-        return `
-        &:hover {
-    ${Heading},
-    svg {
-      fill: ${theme.colors.primary.main};
-      color: ${theme.colors.primary.main};
-      transition: all 0.4s;
-    }
-  }`;
-      case "no-rates":
-        return `
-        &:hover {
-     path {
-      fill: ${theme.colors.primary.main};
-      transition: all 0.4s;
-    }
-  }`;
-
-      case "horizontal":
-        return `
-        &:hover {
-     path, circle {
-      fill: ${theme.colors.primary.main};
-      circle: ${theme.colors.primary.main};
-      transition: all 0.4s;
-    }
-  }`;
-
-      default:
-        return `
-        &:hover {
-    ${Heading},
-    svg {
-      fill: ${theme.colors.primary.main};
-      color: ${theme.colors.primary.main};
-      transition: all 0.4s;
-    }
-  }`;
-    }
-  }}
 `;
 
 export const OptionMenu = styled(Box)`
