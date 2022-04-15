@@ -6,14 +6,15 @@ import { Heading } from "../../../helpers/Text";
 import { HorizontalCard } from "../../HorizontalCard";
 import { Modal } from "../../Modal";
 import { CookBook } from "../CookBook";
-
-import { useLazyGetCookBookQuery } from "../../../../services/cookbook.service";
 import { Loader } from "../../Loader";
 import { colors } from "../../../../theme";
+
+import { useLazyGetCookBookQuery } from "../../../../services/cookbook.service";
 
 export const CookbookCollection = ({ collection_arr, title }) => {
   const [showModal, setShowModal] = useState(false);
   const [action, { data: cookbook }] = useLazyGetCookBookQuery();
+  const withoutTag = true;
   const toggleModal = () => {
     setShowModal((prev) => !prev);
   };
@@ -54,7 +55,7 @@ export const CookbookCollection = ({ collection_arr, title }) => {
       )}
       {showModal && (
         <Modal showModal={showModal} setShowModal={toggleModal}>
-          <CookBook {...cookbook} />
+          <CookBook {...cookbook} withoutTag={withoutTag} />
         </Modal>
       )}
     </Box>

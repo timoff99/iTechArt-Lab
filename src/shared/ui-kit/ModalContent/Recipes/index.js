@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 import { ReactComponent as Heart } from "../../../../static/icons/heart.svg";
 import { ReactComponent as Comment } from "../../../../static/icons/comment.svg";
@@ -14,7 +14,10 @@ import theme, { colors, mediaQueries } from "../../../../theme";
 import { Loader } from "../../Loader";
 
 import { useCreateRecipeCommentsMutation } from "../../../../services/comments.service";
-import { useUpdateRecipeCommentsMutation } from "../../../../services/recipe.service";
+import {
+  useAddRecipeCloneWithoutTagMutation,
+  useUpdateRecipeCommentsMutation,
+} from "../../../../services/recipe.service";
 import { useAddRecipeCloneMutation } from "../../../../services/recipe.service";
 import { UserContext } from "../../UserProvider";
 
@@ -39,10 +42,23 @@ const Circle = styled(Box)`
   display: inline-block;
 `;
 
-export const Recipes = ({ _id, title, description, author, views, likes, comments, image, steps, ingredients }) => {
+export const Recipes = ({
+  _id,
+  title,
+  description,
+  author,
+  views,
+  likes,
+  comments,
+  image,
+  steps,
+  ingredients,
+  withoutTag,
+}) => {
   const [createRecipeComments] = useCreateRecipeCommentsMutation();
   const [updateRecipeComments] = useUpdateRecipeCommentsMutation();
   const [addRecipeClone] = useAddRecipeCloneMutation();
+  const [addRecipeCloneWithoutTag] = useAddRecipeCloneWithoutTagMutation();
   const { user } = useContext(UserContext);
 
   const successNotify = (msg) => {
@@ -50,7 +66,11 @@ export const Recipes = ({ _id, title, description, author, views, likes, comment
   };
 
   const onClone = () => {
-    addRecipeClone(_id);
+    if (withoutTag) {
+      addRecipeCloneWithoutTag(_id);
+    } else {
+      addRecipeClone(_id);
+    }
     successNotify("recipe copied to your recipes collection");
   };
   return (
@@ -146,7 +166,6 @@ export const Recipes = ({ _id, title, description, author, views, likes, comment
           />
         </FlexColumn>
       </Box>
-      <ToastContainer theme="colored" />
     </Box>
   );
 };

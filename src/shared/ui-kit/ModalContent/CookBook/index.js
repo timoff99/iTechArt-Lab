@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 import { ReactComponent as Heart } from "../../../../static/icons/heart.svg";
 import { ReactComponent as Comment } from "../../../../static/icons/comment.svg";
@@ -29,7 +29,7 @@ const Image = styled(Box)`
   object-fit: cover;
 `;
 
-export const CookBook = ({ _id, recipes, title, description, author, likes, comments, image }) => {
+export const CookBook = ({ _id, recipes, title, description, author, likes, comments, image, withoutTag }) => {
   const [showModal, setShowModal] = useState(false);
   const [createCookBookComments] = useCreateCookBookCommentsMutation();
   const [updateCookBookComments] = useUpdateCookBookCommentsMutation();
@@ -113,7 +113,16 @@ export const CookBook = ({ _id, recipes, title, description, author, likes, comm
               Recipes
             </Heading>
             {recipes.map((props, index) => {
-              return <HorizontalCard openRecipe={openRecipe} key={index} modalCookBook place={"no-rates"} {...props} />;
+              return (
+                <HorizontalCard
+                  openRecipe={openRecipe}
+                  key={index}
+                  modalCookBook
+                  withoutTag={withoutTag}
+                  place={"no-rates"}
+                  {...props}
+                />
+              );
             })}
           </FlexColumn>
         </>
@@ -128,10 +137,9 @@ export const CookBook = ({ _id, recipes, title, description, author, likes, comm
       </FlexColumn>
       {showModal && (
         <Modal showModal={showModal} setShowModal={toggleModal}>
-          <Recipes {...recipe} />
+          <Recipes {...recipe} withoutTag={withoutTag} />}
         </Modal>
       )}
-      <ToastContainer theme="colored" />
     </Box>
   );
 };

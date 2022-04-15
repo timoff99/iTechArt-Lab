@@ -3,7 +3,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Formik } from "formik";
 import * as yup from "yup";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
@@ -142,11 +142,9 @@ export const Form = ({
               />
             );
           })}
-
           <Button size="fit" mt="14px" type="submit" disabled={disable} loading={+loading}>
             {buttonText}
           </Button>
-          <ToastContainer theme="colored" />
         </StyledForm>
       )}
     </Formik>

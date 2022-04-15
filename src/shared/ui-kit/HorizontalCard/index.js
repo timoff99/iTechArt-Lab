@@ -1,4 +1,6 @@
 import React, { useContext, useState } from "react";
+import { toast } from "react-toastify";
+
 import { Box } from "../../helpers/Box";
 import { Flex, FlexBetween, FlexAlignCenter, FlexCenter } from "../../helpers/Flex";
 import { ReactComponent as Eye } from "../../../static/icons/small-eye.svg";
@@ -13,6 +15,7 @@ import { Modal } from "../Modal";
 
 import {
   useAddRecipeCloneMutation,
+  useAddRecipeCloneWithoutTagMutation,
   useDeleteRecipeMutation,
   useUpdateRecipeLikesMutation,
 } from "../../../services/recipe.service";
@@ -43,7 +46,12 @@ export const HorizontalCard = ({
   const [deleteRecipe] = useDeleteRecipeMutation();
   const [updateRecipeLikes] = useUpdateRecipeLikesMutation();
   const [addRecipeClone] = useAddRecipeCloneMutation();
+  const [addRecipeCloneWithoutTag] = useAddRecipeCloneWithoutTagMutation();
   const { user } = useContext(UserContext);
+
+  const successNotify = (msg) => {
+    return toast.success(msg);
+  };
 
   const handleOption = (event) => {
     event.stopPropagation();
@@ -79,8 +87,14 @@ export const HorizontalCard = ({
     setShowModal((prev) => !prev);
   };
 
-  const save = async () => {
-    addRecipeClone(_id);
+  const save = async (event) => {
+    event.stopPropagation();
+    if (props.withoutTag) {
+      addRecipeCloneWithoutTag(_id);
+    } else {
+      addRecipeClone(_id);
+    }
+    successNotify("recipe copied to your recipes collection");
   };
 
   const OptionUI = () => {

@@ -102,7 +102,7 @@ export const Home = () => {
                 variantInput={["middleInput", "bigInput", "bigInput"]}
                 inputSize="lg"
                 labelSize="lg"
-                placeholder="Find Best Recipes..."
+                placeholder="Find Best Cookbooks..."
                 handleSubmit={handleSubmit}
                 as={"form"}
               />

@@ -13,16 +13,17 @@ import { Col } from "../../shared/helpers/Grid/Col";
 import { colors } from "../../theme";
 import { Heading } from "../../shared/helpers/Text";
 
-export const CookBookTab = () => {
+export const CookBookTab = ({ query }) => {
   const [showModal, setShowModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
+  const search = query.search || "";
 
   const [userCookBooksAction, { data }] = useLazyGetUserCookBooksQuery();
   const [cookBookAction, { data: cookBook }] = useLazyGetCookBookQuery();
 
   useEffect(() => {
-    userCookBooksAction(currentPage, true);
-  }, [currentPage]);
+    userCookBooksAction({ page: currentPage, search }, true);
+  }, [currentPage, search]);
 
   const toggleModal = () => {
     setShowModal((prev) => !prev);

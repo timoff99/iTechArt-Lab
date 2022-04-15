@@ -37,11 +37,6 @@ export const Footer = () => {
               Recipes
             </LinkRenderer>
           </Li>
-          <Li m={5}>
-            <LinkRenderer href={ROUTE_NAMES.HOME} color="background.main" inline>
-              About Us
-            </LinkRenderer>
-          </Li>
         </Ul>
         <Paragraph color="primary.main" fontSize={1} mx={80} my={0} m={5}>
           plzfeedme@itechart.com

@@ -5,6 +5,7 @@ import theme from "./theme";
 import { UserProvider } from "./shared/ui-kit/UserProvider";
 import { store } from "./store";
 import { Provider } from "react-redux";
+import { ToastContainer } from "react-toastify";
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -22,6 +23,7 @@ function App() {
           <UserProvider>
             <Router />
           </UserProvider>
+          <ToastContainer theme="colored" />
         </div>
       </ThemeProvider>
     </Provider>

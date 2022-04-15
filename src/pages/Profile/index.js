@@ -19,6 +19,7 @@ import ImageService from "../../services/image.service";
 import { SettingsTab } from "../../components/Profile/SettingsTab";
 import { CookBookTab } from "../../components/Profile/CookBookTab";
 import { RecipeTab } from "../../components/Profile/RecipeTab";
+import { useUrl } from "../../hooks/useUrl";
 
 const UserImage = styled(Box)`
   border-radius: 50%;
@@ -49,6 +50,7 @@ const tabs = [
 export const Profile = () => {
   const [showModal, setShowModal] = useState(false);
   const { user, setUser } = useContext(UserContext);
+  const { query } = useUrl();
 
   const navigation = useNavigate();
   const location = useLocation();
@@ -111,9 +113,9 @@ export const Profile = () => {
         )}
       </FlexBetween>
       <Box>
-        {currentTab?.path === tabs[0].path && <CookBookTab />}
+        {currentTab?.path === tabs[0].path && <CookBookTab query={query} />}
 
-        {currentTab?.path === tabs[1].path && <RecipeTab />}
+        {currentTab?.path === tabs[1].path && <RecipeTab query={query} />}
 
         {currentTab?.path === tabs[2].path && <SettingsTab />}
       </Box>

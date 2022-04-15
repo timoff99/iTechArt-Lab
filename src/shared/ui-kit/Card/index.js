@@ -41,7 +41,6 @@ export const Card = ({
   const [updateCookBookLikes] = useUpdateCookBookLikesMutation();
   const [addCookBookClone] = useAddCookBookCloneMutation();
   const { user } = useContext(UserContext);
-  console.log(likes?.includes(user._id));
   const handleOption = (event) => {
     event.stopPropagation();
     setOptionMenu((prev) => !prev);

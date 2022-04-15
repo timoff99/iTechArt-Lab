@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import styled from "styled-components";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 import { Box } from "../../shared/helpers/Box";
 import { Flex } from "../../shared/helpers/Flex";
@@ -93,7 +93,7 @@ export const SettingsTab = () => {
       </Heading>
       <Flex>
         <Box>
-          <Flex alignItems="center" mb={8}>
+          <Flex alignItems="center" flexWrap="wrap" mb={8}>
             <ProfileInfo fontSize={2}>Name</ProfileInfo>
             <ProfileInfo ml={5} fontSize={2}>
               {user.username && !personName ? (
@@ -115,7 +115,7 @@ export const SettingsTab = () => {
             </Button>
           </Flex>
 
-          <Flex alignItems="center" mb={8}>
+          <Flex alignItems="center" flexWrap="wrap" mb={8}>
             <ProfileInfo fontSize={2}>Email</ProfileInfo>
             <ProfileInfo ml={5} fontSize={2}>
               {user.email && !personEmail ? (
@@ -131,7 +131,7 @@ export const SettingsTab = () => {
             </Button>
           </Flex>
 
-          <Flex alignItems="center" mb={8}>
+          <Flex alignItems="center" flexWrap="wrap" mb={8}>
             <ProfileInfo fontSize={2}>Status</ProfileInfo>
             <ProfileInfo ml={5} fontSize={2}>
               {user.status && !personStatus ? (
@@ -157,7 +157,7 @@ export const SettingsTab = () => {
               </ProfileInfo>
             ) : (
               <Flex as="form" onSubmit={saveNewUserPassword} flexDirection={["column", "row", "row"]} mr={5}>
-                <Input ml={5} labelSize="sm" name="password" noForm placeholder="Old Password" />
+                <Input ml={5} mb={4} labelSize="sm" name="password" noForm placeholder="Old Password" />
                 <Input ml={5} labelSize="sm" name="password" noForm placeholder="New Password" />
                 <Input type="submit" display="none" />
               </Flex>
@@ -169,7 +169,6 @@ export const SettingsTab = () => {
           </Flex>
         </Box>
       </Flex>
-      <ToastContainer theme="colored" />
     </InfoBlock>
   );
 };

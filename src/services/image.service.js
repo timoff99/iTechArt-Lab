@@ -1,8 +1,8 @@
-import axios from "axios";
+import api from "./api.service.js";
 
 export default class ImageService {
   static async addImage(formData) {
-    return axios.post("http://localhost:5000/api/image/create", formData, {
+    return api.post("image/create", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
   }

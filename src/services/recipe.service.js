@@ -30,8 +30,11 @@ export const recipeApi = createApi({
         query: (_id) => ({ url: `create-clone`, method: "post", data: { _id } }),
         invalidatesTags: [{ type: "Recipe", id: "RECIPE" }],
       }),
+      addRecipeCloneWithoutTag: builder.mutation({
+        query: (_id) => ({ url: `create-clone`, method: "post", data: { _id } }),
+      }),
       getUserRecipes: builder.query({
-        query: (page) => ({ url: `get-user-recipes`, method: "get", params: { page } }),
+        query: (page, search) => ({ url: `get-user-recipes`, method: "get", params: page, search }),
         providesTags: [{ type: "Recipe", id: "RECIPE" }],
       }),
       getRecipe: builder.query({
@@ -104,12 +107,11 @@ export const recipeApi = createApi({
 export const {
   useAddRecipeMutation,
   useAddRecipeCloneMutation,
-  useGetUserRecipesQuery,
+  useAddRecipeCloneWithoutTagMutation,
   useLazyGetUserRecipesQuery,
   useLazyGetRecipeQuery,
   useGetRecipeQuery,
   useGetRecipeWithoutCookBookQuery,
-  useGetFilteredRecipesQuery,
   useLazyGetFilteredRecipesQuery,
   useGetRecipesForMainQuery,
   useUpdateRecipeCommentsMutation,

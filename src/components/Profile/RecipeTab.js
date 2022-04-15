@@ -13,16 +13,17 @@ import { Loader } from "../../shared/ui-kit/Loader";
 import { colors } from "../../theme";
 import { Heading } from "../../shared/helpers/Text";
 
-export const RecipeTab = () => {
+export const RecipeTab = ({ query }) => {
   const [showModal, setShowModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
+  const search = query.search || "";
 
   const [userRecipeAction, { data }] = useLazyGetUserRecipesQuery();
   const [recipeAction, { data: recipe }] = useLazyGetRecipeQuery();
 
   useEffect(() => {
-    userRecipeAction(currentPage, true);
-  }, [currentPage]);
+    userRecipeAction({ page: currentPage, search }, true);
+  }, [currentPage, search]);
 
   const toggleModal = () => {
     setShowModal((prev) => !prev);

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import * as yup from "yup";
 
 import { Box } from "../../shared/helpers/Box";
@@ -71,7 +71,6 @@ export const ForgotPass = () => {
           />
         </Col>
       </Grid>
-      <ToastContainer theme="colored" />
     </Container>
   );
 };
