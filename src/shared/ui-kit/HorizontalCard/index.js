@@ -75,6 +75,7 @@ export const HorizontalCard = ({
   const onClone = async (event) => {
     event.stopPropagation();
     addRecipeClone(_id);
+    successNotify("recipe copied to your recipes collection");
     setOptionMenu(false);
   };
 

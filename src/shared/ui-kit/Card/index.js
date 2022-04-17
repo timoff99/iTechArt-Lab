@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { toast } from "react-toastify";
 
 import { FlexBetween, FlexCenter, FlexAlignCenter, Flex, FlexColumn } from "../../helpers/Flex";
 import { ReactComponent as Eye } from "../../../static/icons/small-eye.svg";
@@ -41,6 +42,11 @@ export const Card = ({
   const [updateCookBookLikes] = useUpdateCookBookLikesMutation();
   const [addCookBookClone] = useAddCookBookCloneMutation();
   const { user } = useContext(UserContext);
+
+  const toggleModal = () => {
+    setShowModal((prev) => !prev);
+  };
+
   const handleOption = (event) => {
     event.stopPropagation();
     setOptionMenu((prev) => !prev);
@@ -60,19 +66,21 @@ export const Card = ({
     setOptionMenu(false);
   };
 
+  const successNotify = (msg) => {
+    return toast.success(msg);
+  };
+
   const onClone = (event) => {
     event.stopPropagation();
     addCookBookClone(_id);
+    successNotify("cookbook copied to your cookbooks collection");
+
     setOptionMenu(false);
   };
 
   const handleLikes = (event) => {
     event.stopPropagation();
     updateCookBookLikes({ _id });
-  };
-
-  const toggleModal = () => {
-    setShowModal((prev) => !prev);
   };
 
   return (

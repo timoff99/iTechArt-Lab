@@ -30,7 +30,7 @@ const Image = styled(Box)`
   ${mediaQueries.large} {
     min-width: 440px;
   }
-  border-radius: 50px 0px 10px;
+  border-radius: 10px;
   object-fit: cover;
 `;
 

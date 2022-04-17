@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { toast } from "react-toastify";
 
 import { FlexBetween, FlexCenter, FlexAlignCenter, FlexColumn } from "../../helpers/Flex";
 import { ReactComponent as Eye } from "../../../static/icons/small-eye.svg";
@@ -39,9 +40,14 @@ export const VerticalRecipesCard = ({
     setOptionMenu((prev) => !prev);
   };
 
+  const successNotify = (msg) => {
+    return toast.success(msg);
+  };
+
   const onClone = (event) => {
     event.stopPropagation();
     addCookBookClone(_id);
+    successNotify("cookbook copied to your cookbooks collection");
     setOptionMenu(false);
   };
 

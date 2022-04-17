@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { toast } from "react-toastify";
+import * as yup from "yup";
 
 import { Box } from "../../shared/helpers/Box";
 import { Flex } from "../../shared/helpers/Flex";
@@ -10,6 +11,7 @@ import { Button } from "../../shared/ui-kit/Button";
 import UserService from "../../services/user.service";
 import { UserContext } from "../../shared/ui-kit/UserProvider";
 import theme from "../../theme";
+import { ErrorMessage, Formik } from "formik";
 
 const InfoBlock = styled(Box)`
   box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.08);
@@ -20,6 +22,18 @@ const InfoBlock = styled(Box)`
 const ProfileInfo = styled(Paragraph)`
   font-size: ${theme.fontSizes[2]};
 `;
+
+const changePasswordSchema = yup.object().shape({
+  oldPassword: yup.string().trim().required(),
+  newPassword: yup
+    .string()
+    .trim()
+    .required("Please enter new password")
+    .matches(
+      /^.*(?=.{5,})(?=.*[!@#$%^&*()\-_=+{};:,<.>])(?=.*\d)(?=.*[a-z,A-Z])/,
+      "New pass must contain at least 5 characters, one uppercase, one number and one special case character"
+    ),
+});
 
 export const SettingsTab = () => {
   const [personName, setPersonName] = useState(false);
@@ -70,15 +84,12 @@ export const SettingsTab = () => {
     }
   };
 
-  const saveNewUserPassword = async (e) => {
+  const saveNewUserPassword = async (values) => {
     try {
-      e.preventDefault();
-      const updatedFiled = { oldPassword: e.target[0].value, newPassword: e.target[1].value };
+      const updatedFiled = { oldPassword: values.oldPassword, newPassword: values.newPassword };
       const data = await UserService.updateUser(updatedFiled);
       if (data?.response?.data) throw data;
       setUser(data.data.updateUser);
-      e.target[0].value = "";
-      e.target[1].value = "";
       setPersonPassword(false);
       successNotify("user password updated");
     } catch (err) {
@@ -148,7 +159,7 @@ export const SettingsTab = () => {
             </Button>
           </Flex>
 
-          <Flex alignItems="center">
+          <Flex alignItems="center" position="relative">
             <ProfileInfo fontSize={2}>Password</ProfileInfo>
 
             {!personPassword ? (
@@ -156,11 +167,67 @@ export const SettingsTab = () => {
                 *********
               </ProfileInfo>
             ) : (
-              <Flex as="form" onSubmit={saveNewUserPassword} flexDirection={["column", "row", "row"]} mr={5}>
-                <Input ml={5} mb={4} labelSize="sm" name="password" noForm placeholder="Old Password" />
-                <Input ml={5} labelSize="sm" name="password" noForm placeholder="New Password" />
-                <Input type="submit" display="none" />
-              </Flex>
+              <Formik
+                initialValues={{
+                  oldPassword: "",
+                  newPassword: "",
+                }}
+                validationSchema={changePasswordSchema}
+                onSubmit={saveNewUserPassword}
+              >
+                {({ handleChange, handleSubmit, values }) => (
+                  <>
+                    <Flex as="form" onSubmit={handleSubmit} flexDirection={"column"} mr={5}>
+                      <Box>
+                        <Input
+                          ml={5}
+                          mb={4}
+                          labelSize="sm"
+                          handleChange={handleChange}
+                          name="oldPassword"
+                          noForm
+                          placeholder="Old Password"
+                        />
+                      </Box>
+
+                      <Box>
+                        <Input
+                          ml={5}
+                          labelSize="sm"
+                          handleChange={handleChange}
+                          name="newPassword"
+                          noForm
+                          placeholder="New Password"
+                        />
+
+                        {!values.oldPassword && (
+                          <>
+                            <Box color="red" position="absolute">
+                              <ErrorMessage name={"oldPassword"} />
+                            </Box>
+                          </>
+                        )}
+                        {values.oldPassword && !values.newPassword && (
+                          <>
+                            <Box color="red" position="absolute">
+                              <ErrorMessage name={"newPassword"} />
+                            </Box>
+                          </>
+                        )}
+                        {values.oldPassword && values.newPassword && (
+                          <>
+                            <Box color="red" position="absolute" left={"30px"}>
+                              <ErrorMessage name={"newPassword"} />
+                            </Box>
+                          </>
+                        )}
+                      </Box>
+
+                      <Input type="submit" display="none" />
+                    </Flex>
+                  </>
+                )}
+              </Formik>
             )}
 
             <Button variant="settings" size="link" ml={5} alignItems="center" onClick={handleOpenPasswordInput}>

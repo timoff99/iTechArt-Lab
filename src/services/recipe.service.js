@@ -110,7 +110,6 @@ export const {
   useAddRecipeCloneWithoutTagMutation,
   useLazyGetUserRecipesQuery,
   useLazyGetRecipeQuery,
-  useGetRecipeQuery,
   useGetRecipeWithoutCookBookQuery,
   useLazyGetFilteredRecipesQuery,
   useGetRecipesForMainQuery,
