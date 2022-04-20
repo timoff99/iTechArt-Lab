@@ -29,7 +29,18 @@ const Image = styled(Box)`
   object-fit: cover;
 `;
 
-export const CookBook = ({ _id, recipes, title, description, author, likes, comments, image, withoutTag }) => {
+export const CookBook = ({
+  _id,
+  recipes,
+  title,
+  description,
+  author,
+  likes,
+  comments,
+  image,
+  withoutTag,
+  cookbookProfile,
+}) => {
   const [showModal, setShowModal] = useState(false);
   const [createCookBookComments] = useCreateCookBookCommentsMutation();
   const [updateCookBookComments] = useUpdateCookBookCommentsMutation();
@@ -72,11 +83,13 @@ export const CookBook = ({ _id, recipes, title, description, author, likes, comm
             {author}
           </Paragraph>
         </FlexColumn>
-        <Box>
-          <Button size="md" variant="primary" onClick={onClone}>
-            Clone to My CookBook
-          </Button>
-        </Box>
+        {!cookbookProfile && (
+          <Box>
+            <Button size="md" variant="primary" onClick={onClone}>
+              Clone to My CookBook
+            </Button>
+          </Box>
+        )}
       </Flex>
       <Flex mb={12} flexWrap={["wrap", "nowrap", "nowrap"]} justifyContent={["center", "stretch", "stretch"]}>
         <Box mr={[0, 9, 9]}>
@@ -120,6 +133,7 @@ export const CookBook = ({ _id, recipes, title, description, author, likes, comm
                   modalCookBook
                   withoutTag={withoutTag}
                   place={"no-rates"}
+                  cookbookProfile={cookbookProfile}
                   {...props}
                 />
               );
@@ -137,7 +151,7 @@ export const CookBook = ({ _id, recipes, title, description, author, likes, comm
       </FlexColumn>
       {showModal && (
         <Modal showModal={showModal} setShowModal={toggleModal}>
-          <Recipes {...recipe} withoutTag={withoutTag} />}
+          {<Recipes {...recipe} withoutTag={withoutTag} cookbookProfile={cookbookProfile} />}
         </Modal>
       )}
     </Box>

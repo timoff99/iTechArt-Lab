@@ -88,6 +88,9 @@ export const Form = ({
       }
       Cookies.set("token", loginData.data.token);
       const user = await UserService.getUser();
+      if (user.request.status === 403) {
+        throw user;
+      }
       setUser(user.data.user);
       successNotify("user login");
       setTimeout(() => {

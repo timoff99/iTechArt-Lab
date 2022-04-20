@@ -115,7 +115,7 @@ export const CreateCookBook = memo(
       try {
         setLoading(true);
         let newImage;
-        if (oldImage?.includes("http")) {
+        if (values.file === oldImage) {
           newImage = "";
         } else if (values.file) {
           newImage = await createImage(values.file);

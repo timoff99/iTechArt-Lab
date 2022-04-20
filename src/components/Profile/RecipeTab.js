@@ -22,8 +22,8 @@ export const RecipeTab = ({ query }) => {
   const [recipeAction, { data: recipe }] = useLazyGetRecipeQuery();
 
   useEffect(() => {
-    userRecipeAction({ page: currentPage, search }, true);
-  }, [currentPage, search]);
+    userRecipeAction({ page: currentPage, search });
+  }, [currentPage, search, recipe]);
 
   const toggleModal = () => {
     setShowModal((prev) => !prev);
@@ -44,7 +44,7 @@ export const RecipeTab = ({ query }) => {
         <Col>
           {data?.recipes ? (
             data?.recipes.map((props, index) => {
-              return <RecipesCard openRecipe={openRecipe} key={index} {...props} profile={"profile"} />;
+              return <RecipesCard openRecipe={openRecipe} key={index} {...props} recipeProfile={"recipeProfile"} />;
             })
           ) : (
             <Box display="flex" justifyContent="center">
@@ -54,7 +54,7 @@ export const RecipeTab = ({ query }) => {
         </Col>
         {showModal && (
           <Modal showModal={showModal} setShowModal={toggleModal}>
-            <Recipes {...recipe} />
+            <Recipes {...recipe} recipeProfile={"recipeProfile"} />
           </Modal>
         )}
       </Grid>

@@ -12,6 +12,10 @@
 
 .slick-initialized .slick-slide {
   display: flex;
+  > div {
+    width: 100%;
+    text-align: -webkit-center;
+  }
 }
 
 .slick-slide {
@@ -26,4 +30,8 @@
     margin-right: 1px;
     margin-left: 1px;
   }
+}
+
+.slick-dots {
+  bottom: -50px;
 }

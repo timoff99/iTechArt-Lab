@@ -113,6 +113,7 @@ export const {
   useGetRecipeWithoutCookBookQuery,
   useLazyGetFilteredRecipesQuery,
   useGetRecipesForMainQuery,
+  useLazyGetRecipesForMainQuery,
   useUpdateRecipeCommentsMutation,
   useUpdateRecipeCookBookIdMutation,
   useUpdateRecipeMutation,

@@ -25,11 +25,12 @@ import { ROUTE_NAMES } from "../../router/routeNames";
 import pear from "../../static/icons/pear.svg";
 import homeBg from "../../static/images/homeBg.png";
 
-import { useGetRecipesForMainQuery, useLazyGetRecipeQuery } from "../../services/recipe.service";
+import { useLazyGetRecipesForMainQuery, useLazyGetRecipeQuery } from "../../services/recipe.service";
 import {
   useGetFourCookbookCollectionQuery,
   useLazyGetOneCookbookCollectionQuery,
 } from "../../services/cookbookCollection.service";
+import { useEffect } from "react";
 
 const StyledLinkRenderer = styled(LinkRenderer)`
   color: ${theme.colors.background.main};
@@ -58,8 +59,8 @@ export const Home = () => {
   const [showRecipeModal, setShowRecipeModal] = useState(false);
   const [showCookBookModal, setShowCookBookModal] = useState(false);
 
-  const { data: likesRecipes } = useGetRecipesForMainQuery({ limit: 4, type: "likes" });
-  const { data: viewsRecipes } = useGetRecipesForMainQuery({ limit: 9, type: "views" });
+  const [likesRecipesAction, { data: likesRecipes }] = useLazyGetRecipesForMainQuery();
+  const [viewsRecipesAction, { data: viewsRecipes }] = useLazyGetRecipesForMainQuery();
   const { data: fourCookbookCollection } = useGetFourCookbookCollectionQuery();
   const [action, { data: recipe }] = useLazyGetRecipeQuery();
   const [cookbookCollectionAction, { data: oneCookbookCollection }] = useLazyGetOneCookbookCollectionQuery();
@@ -77,6 +78,11 @@ export const Home = () => {
   const toggleCookBookModal = () => {
     setShowCookBookModal((prev) => !prev);
   };
+
+  useEffect(() => {
+    likesRecipesAction({ limit: 4, type: "likes" });
+    viewsRecipesAction({ limit: 9, type: "views" });
+  }, [recipe]);
 
   const openRecipe = (_id) => {
     action({ _id }, true);
@@ -126,7 +132,7 @@ export const Home = () => {
           users choice
         </Paragraph>
         <Heading as={"h2"} bold mb={8} color="secondary.main">
-          20 Highest-Rated Recipes
+          4 Highest-Rated Recipes
         </Heading>
         <Grid nested mt={10}>
           {likesRecipes?.recipes ? (
@@ -138,7 +144,7 @@ export const Home = () => {
                     sizes="sm"
                     openRecipe={openRecipe}
                     place="no-rates"
-                    maxWidth={"288px"}
+                    maxWidth={"500px"}
                   />
                 </Col>
               );
@@ -171,7 +177,7 @@ export const Home = () => {
       </Container>
       <SwiperBox mb={8} mx={[0, 9, 9]} px={["16px", "16px", "150px"]}>
         <Paragraph uppercase fontSize={1} pt={13} color="background.main">
-          top 10
+          top 9
         </Paragraph>
         <Heading as={"h2"} bold mt={8} color="secondary.main">
           Trending Recipes

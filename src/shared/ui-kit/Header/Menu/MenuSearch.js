@@ -17,7 +17,7 @@ const StyledMenu = styled(Box)`
   border-radius: 10px;
 `;
 
-export const Menu = ({ open, setOpen, as }) => {
+export const MenuSearch = ({ open, setOpen, as }) => {
   return (
     <StyledMenu as={as} open={open}>
       <Ul textAlign="center" pl={0} width="96vw">
@@ -36,6 +36,6 @@ export const Menu = ({ open, setOpen, as }) => {
   );
 };
 
-Menu.defaultProps = {
+MenuSearch.defaultProps = {
   as: "nav",
 };

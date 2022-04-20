@@ -1,7 +1,8 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { toast } from "react-toastify";
+import debounce from "lodash/debounce";
 
 import { Box } from "../../shared/helpers/Box";
 import { Flex, FlexBetween } from "../../shared/helpers/Flex";
@@ -23,6 +24,7 @@ import { RecipeTab } from "../../components/Profile/RecipeTab";
 import { useUrl } from "../../hooks/useUrl";
 import { Loader } from "../../shared/ui-kit/Loader";
 import { colors } from "../../theme";
+import { Input } from "../../shared/ui-kit/Input";
 
 const UserImage = styled(Box)`
   width: 100%;
@@ -53,7 +55,7 @@ export const Profile = () => {
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const { user, setUser } = useContext(UserContext);
-  const { query } = useUrl();
+  const { query, updateQuery } = useUrl();
 
   const navigation = useNavigate();
   const location = useLocation();
@@ -88,9 +90,23 @@ export const Profile = () => {
     }
   };
 
+  const debouncedChange = debounce((value) => {
+    if (value === "") {
+      return updateQuery(value);
+    }
+    updateQuery({ search: value });
+  }, 500);
+
+  const handleChange = useCallback(
+    (e) => {
+      debouncedChange(e.target.value);
+    },
+    [debouncedChange]
+  );
+
   return (
     <Container my={[6, 50, 104]}>
-      <Flex mb={11} alignItems="center">
+      <Flex mb={10} alignItems="center">
         <label htmlFor="lable-input">
           <FileUploader as="input" type="file" id="lable-input" name="img" onChange={setImage} />
           <Box
@@ -120,16 +136,30 @@ export const Profile = () => {
           </Paragraph>
         </Box>
       </Flex>
+      {currentTab?.path !== tabs[2].path && (
+        <Input
+          display={["flex", "none", null]}
+          alignItems="center"
+          type="text"
+          name="smallSearch"
+          variantLabel="labelInput"
+          variantInput="searchInput"
+          inputSize="sm"
+          labelSize="md"
+          defaultValue={query.search}
+          handleChange={handleChange}
+        />
+      )}
       <FlexBetween mb={5} flexWrap={["wrap", "nowrap", "nowrap"]}>
         <TabBar tabs={tabs} currentTab={currentTab} onChange={(tab) => onTabChange(tab)} />
         {currentTab?.path === tabs[0].path && (
           <Button size="md" variant="primary" onClick={toggleModal}>
-            Create New CookBook
+            Create New
           </Button>
         )}
         {currentTab?.path === tabs[1].path && (
           <Button size="md" variant="primary" onClick={toggleModal}>
-            Create New Recipe
+            Create New
           </Button>
         )}
       </FlexBetween>

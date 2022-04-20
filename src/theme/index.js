@@ -64,6 +64,7 @@ export const colors = {
     dark: "#EDEDED",
     contrast: "#DADADA",
     grey: "#BFBFBF",
+    dialog: "#757575",
   },
 };
 

@@ -22,6 +22,8 @@ const LabelStyle = styled(Box)`
     switch (props.labelSize) {
       case "sm":
         return `margin-bottom: ${theme.space[0]};`;
+      case "smx":
+        return `margin-bottom: ${theme.space[4]};`;
       case "md":
         return `margin-bottom: ${theme.space[9]};`;
       case "lg":

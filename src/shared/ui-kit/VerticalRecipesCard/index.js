@@ -58,7 +58,7 @@ export const VerticalRecipesCard = ({
 
   return (
     <StyledCard place={place} mb={3} {...props} onClick={() => openRecipe(_id)}>
-      <FlexColumn p={8}>
+      <FlexColumn p={8} flex={1}>
         <FlexAlignCenter pb={5} justifyContent="space-between">
           <FlexAlignCenter>
             <Eye />
