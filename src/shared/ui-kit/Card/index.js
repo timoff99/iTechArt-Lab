@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { toast } from "react-toastify";
 
 import { FlexBetween, FlexCenter, FlexAlignCenter, Flex, FlexColumn } from "../../helpers/Flex";
 import { ReactComponent as Eye } from "../../../static/icons/small-eye.svg";
@@ -17,6 +18,7 @@ import { Modal } from "../Modal";
 import { CreateCookBook } from "../ModalContent/CreateCookBook";
 import UserService from "../../../services/user.service";
 import { UserContext } from "../UserProvider";
+import { Dialog } from "../Dialog";
 
 export const Card = ({
   _id,
@@ -37,10 +39,21 @@ export const Card = ({
   const [showModal, setShowModal] = useState(false);
   const [update, setUpdate] = useState(false);
   const [optionMenu, setOptionMenu] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
   const [deleteCookBook] = useDeleteCookBookMutation();
   const [updateCookBookLikes] = useUpdateCookBookLikesMutation();
   const [addCookBookClone] = useAddCookBookCloneMutation();
   const { user } = useContext(UserContext);
+
+  const toggleModal = () => {
+    setShowModal((prev) => !prev);
+  };
+
+  const handleClose = () => {
+    setOpenDialog(false);
+    setOptionMenu((prev) => !prev);
+  };
+
   const handleOption = (event) => {
     event.stopPropagation();
     setOptionMenu((prev) => !prev);
@@ -60,9 +73,15 @@ export const Card = ({
     setOptionMenu(false);
   };
 
+  const successNotify = (msg) => {
+    return toast.success(msg);
+  };
+
   const onClone = (event) => {
     event.stopPropagation();
     addCookBookClone(_id);
+    successNotify("cookbook copied to your cookbooks collection");
+
     setOptionMenu(false);
   };
 
@@ -71,13 +90,9 @@ export const Card = ({
     updateCookBookLikes({ _id });
   };
 
-  const toggleModal = () => {
-    setShowModal((prev) => !prev);
-  };
-
   return (
     <StyledCard place={place} mb={3} {...props} onClick={() => openCookBook(_id)}>
-      <FlexColumn p={8}>
+      <FlexColumn p={8} flex="1">
         <FlexAlignCenter pb={5} justifyContent="space-between">
           <FlexAlignCenter>
             <Eye />
@@ -85,20 +100,34 @@ export const Card = ({
           </FlexAlignCenter>
           <FlexAlignCenter onClick={handleOption} height={20} position="relative">
             <Options />
-            {optionMenu && props.profile && (
+            {optionMenu && props.cookbookProfile && (
               <OptionMenu>
                 <Button variant="secondary" variantMenu="secondaryMenu" size="box" onClick={onEdit}>
                   <Paragraph as={"pre"} fontWeight={"normal"}>
                     Edit CookBook
                   </Paragraph>
                 </Button>
-                <Button variant="secondary" variantMenu="secondaryMenu" size="box" onClick={onDelete}>
+                <Button
+                  variant="secondary"
+                  variantMenu="secondaryMenu"
+                  size="box"
+                  onClick={() => {
+                    setOpenDialog(true);
+                  }}
+                >
                   <Paragraph as={"pre"} fontWeight={"normal"}>
                     Delete CookBook
                   </Paragraph>
                 </Button>
               </OptionMenu>
             )}
+            <Dialog
+              open={openDialog}
+              onClose={handleClose}
+              title={"Delete Cookbook"}
+              content={"Are you sure?"}
+              yesHandle={onDelete}
+            />
             {optionMenu && props.search && (
               <OptionMenu>
                 <Button variant="secondary" variantMenu="secondaryMenu" size="box" onClick={onClone}>

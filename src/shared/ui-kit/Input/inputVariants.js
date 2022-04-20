@@ -5,6 +5,14 @@ export default () => ({
     maxHeight: "40px",
     maxWidth: "284px",
   },
+  searchInput: {
+    borderRadius: "10px",
+    maxHeight: "40px",
+    maxWidth: "284px",
+  },
+  labelInput: {
+    alignItems: "center",
+  },
   middleInput: {
     height: "50px",
     maxHeight: "50px",

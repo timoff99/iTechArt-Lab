@@ -22,8 +22,8 @@ export const CookBookTab = ({ query }) => {
   const [cookBookAction, { data: cookBook }] = useLazyGetCookBookQuery();
 
   useEffect(() => {
-    userCookBooksAction({ page: currentPage, search }, true);
-  }, [currentPage, search]);
+    userCookBooksAction({ page: currentPage, search });
+  }, [currentPage, search, cookBook]);
 
   const toggleModal = () => {
     setShowModal((prev) => !prev);
@@ -48,7 +48,7 @@ export const CookBookTab = ({ query }) => {
                 key={index}
                 spanList={[4, 6, 3]}
                 {...props}
-                profile={"profile"}
+                cookbookProfile={"cookbookProfile"}
               />
             );
           })
@@ -67,7 +67,7 @@ export const CookBookTab = ({ query }) => {
 
       {showModal && (
         <Modal showModal={showModal} setShowModal={toggleModal}>
-          <CookBook {...cookBook} />
+          <CookBook {...cookBook} cookbookProfile={"cookbookProfile"} />
         </Modal>
       )}
     </Box>

@@ -1,4 +1,4 @@
-import React, { useState, useRef, memo } from "react";
+import React, { useState, useEffect, memo } from "react";
 import styled from "styled-components";
 import { Formik, Form, ErrorMessage } from "formik";
 import * as yup from "yup";
@@ -50,11 +50,17 @@ export const CreateRecipes = memo(
     const [steps, setSteps] = useState(oldSteps || []);
     const [time, setTime] = useState(oldCooking_time || 0);
     const [loading, setLoading] = useState(false);
+    const [image, setImage] = useState(oldImage ? oldImage : "");
 
     const [addRecipe] = useAddRecipeMutation();
     const [updateRecipe] = useUpdateRecipeMutation();
     const formData = new FormData();
-    const refFileInput = useRef();
+
+    useEffect(() => {
+      return () => {
+        setIngredients([]);
+      };
+    }, []);
     const createImage = async (fileImage) => {
       try {
         formData.append("image", fileImage);
@@ -70,8 +76,8 @@ export const CreateRecipes = memo(
       try {
         setLoading(true);
         let newImage;
-        if (!oldImage?.includes("http")) {
-          newImage = await createImage(values.file);
+        if (values.file === oldImage) {
+          newImage = "";
         } else if (values.file) {
           newImage = await createImage(values.file);
         }
@@ -101,10 +107,7 @@ export const CreateRecipes = memo(
       }
       return true;
     };
-    const handleClickFileUploader = (e) => {
-      e.preventDefault();
-      refFileInput.current.click();
-    };
+
     const handleAdd = (e) => {
       if (e.key === "Enter") {
         e.preventDefault();
@@ -130,17 +133,18 @@ export const CreateRecipes = memo(
       <Formik
         initialValues={{
           title: oldTitle || "",
-          file: "",
+          file: oldImage || "",
           description: oldDescription || "",
-          steps: "",
-          ingredients: "",
+          time: oldCooking_time || 0,
+          steps: oldSteps || "",
+          ingredients: oldIngredients || "",
         }}
         validationSchema={recipeSchema}
         onSubmit={async (values) => {
           await createRecipe(values);
         }}
       >
-        {({ values, handleChange, setFieldValue }) => (
+        {({ values, initialValues, handleChange, setFieldValue }) => (
           <Form>
             <Box px={[4, 56, 56]} py={[10, 72, 72]}>
               <Heading as={"h2"} bold mb={10}>
@@ -158,17 +162,36 @@ export const CreateRecipes = memo(
                 {<ErrorMessage name={"title"} />}
               </Box>
 
-              <FileUploader
-                as="input"
-                ref={refFileInput}
-                type="file"
-                id="file"
-                name="file"
-                onChange={(e) => setFieldValue("file", e.currentTarget.files[0])}
-              />
-              <Button size="md" variant="primary" onClick={handleClickFileUploader}>
-                Upload Recipe Image
-              </Button>
+              <label htmlFor="contained-button-file" style={{ display: "inline-flex", flexDirection: "column" }}>
+                <FileUploader
+                  as="input"
+                  id="contained-button-file"
+                  type="file"
+                  name="img"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    setFieldValue("file", file);
+                    setImage(URL.createObjectURL(file));
+                  }}
+                />
+                <Box
+                  as="img"
+                  style={{
+                    objectFit: "cover",
+                    cursor: "pointer",
+                  }}
+                  maxWidth="210px"
+                  maxHeight="210px"
+                  width="100%"
+                  borderRadius="8px"
+                  mb="2"
+                  alt=""
+                  src={image}
+                />
+                <Button size="md" variant="primary" id="contained-button-file" as="span">
+                  Upload Recipe Image
+                </Button>
+              </label>
               <Box color="red" mb={10}>
                 {<ErrorMessage name={"file"} />}
               </Box>
@@ -178,7 +201,12 @@ export const CreateRecipes = memo(
                 <Paragraph mb={2} ml={1} semiBold fontSize={1} fontFamily={theme.fonts.header} color="secondary.main">
                   Cooking Time
                 </Paragraph>
-                <Slider timeRange={time} setTimeRange={setTime} type="create" />
+                <Slider
+                  timeRange={time}
+                  onChange={() => setFieldValue("time", time)}
+                  setTimeRange={setTime}
+                  type="create"
+                />
               </Box>
               <Input
                 labelBold="labelBold"
@@ -216,7 +244,13 @@ export const CreateRecipes = memo(
                 <Button size="md" variant="outlined" mr={10} onClick={setShowModal}>
                   Cancel
                 </Button>
-                <Button size="md" variant="primary" type="submit" loading={+loading}>
+                <Button
+                  disabled={values === initialValues}
+                  size="md"
+                  variant="primary"
+                  type="submit"
+                  loading={+loading}
+                >
                   Confirm
                 </Button>
               </Flex>

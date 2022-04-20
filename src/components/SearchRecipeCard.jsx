@@ -24,8 +24,8 @@ export const SearchRecipeCard = ({ query, timeRange }) => {
   const search = query.search || "";
 
   useEffect(() => {
-    filteredRecipesAction({ timeRange, sort, search, page: currentPage }, true);
-  }, [timeRange, sort, search, currentPage]);
+    filteredRecipesAction({ timeRange, sort, search, page: currentPage });
+  }, [timeRange, sort, search, currentPage, recipe]);
 
   const toggleModal = () => {
     setShowModal((prev) => !prev);

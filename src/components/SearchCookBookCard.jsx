@@ -23,8 +23,8 @@ export const SearchCookBookCard = ({ query }) => {
   const [filteredCookBooksAction, { data }] = useLazyGetFilteredCookBookQuery();
   const [action, { data: cookBook }] = useLazyGetCookBookQuery();
   useEffect(() => {
-    filteredCookBooksAction({ type, sort, search, page: currentPage }, true);
-  }, [type, sort, search, currentPage]);
+    filteredCookBooksAction({ type, sort, search, page: currentPage });
+  }, [type, sort, search, currentPage, cookBook]);
 
   const toggleModal = () => {
     setShowModal((prev) => !prev);

@@ -24,13 +24,16 @@ import { UserContext } from "../../UserProvider";
 const Image = styled(Box)`
   width: 100%;
   max-height: 660px;
+  ${mediaQueries.small} {
+    max-height: 360px;
+  }
   ${mediaQueries.medium} {
     min-width: 340px;
   }
   ${mediaQueries.large} {
     min-width: 440px;
   }
-  border-radius: 50px 0px 10px;
+  border-radius: 10px;
   object-fit: cover;
 `;
 
@@ -54,6 +57,8 @@ export const Recipes = ({
   steps,
   ingredients,
   withoutTag,
+  recipeProfile,
+  cookbookProfile,
 }) => {
   const [createRecipeComments] = useCreateRecipeCommentsMutation();
   const [updateRecipeComments] = useUpdateRecipeCommentsMutation();
@@ -94,11 +99,13 @@ export const Recipes = ({
             <Heading as={"h2"} bold mb={5} maxWidth={427}>
               {title}
             </Heading>
-            <Box>
-              <Button size="box" variant="outlined" onClick={onClone}>
-                +
-              </Button>
-            </Box>
+            {!recipeProfile && !cookbookProfile && (
+              <Box>
+                <Button size="box" variant="outlined" onClick={onClone}>
+                  +
+                </Button>
+              </Box>
+            )}
           </FlexBetween>
           <Paragraph color="primary.main" fontSize={2} mb={9}>
             {author}

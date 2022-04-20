@@ -2,6 +2,7 @@ import React, { useState, memo } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { variant } from "styled-system";
+import { ErrorMessage } from "formik";
 
 import variants from "./inputVariants";
 import theme, { colors, mediaQueries } from "../../../theme";
@@ -11,7 +12,6 @@ import smallSearch from "../../../static/icons/smallSearch.svg";
 import bigSearch from "../../../static/icons/bigSearch.svg";
 import { Box } from "../../helpers/Box";
 import { LinkRenderer, Paragraph } from "../../helpers/Text";
-import { ErrorMessage } from "formik";
 import { ROUTE_NAMES } from "../../../router/routeNames";
 
 const LabelStyle = styled(Box)`
@@ -22,6 +22,8 @@ const LabelStyle = styled(Box)`
     switch (props.labelSize) {
       case "sm":
         return `margin-bottom: ${theme.space[0]};`;
+      case "smx":
+        return `margin-bottom: ${theme.space[4]};`;
       case "md":
         return `margin-bottom: ${theme.space[9]};`;
       case "lg":

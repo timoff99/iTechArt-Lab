@@ -28,7 +28,7 @@ export const Content = styled(Box)`
   bottom: 0px;
   background: ${theme.colors.background.main};
   overflow: auto;
-  border-radius: 50px 10px 10px 10px;
+  border-radius: 10px;
   box-shadow: 0px 18px 60px rgba(24, 24, 24, 0.7);
   outline: none;
 `;

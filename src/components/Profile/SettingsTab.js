@@ -1,6 +1,8 @@
 import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { toast } from "react-toastify";
+import * as yup from "yup";
+import { ErrorMessage, Formik } from "formik";
 
 import { Box } from "../../shared/helpers/Box";
 import { Flex } from "../../shared/helpers/Flex";
@@ -20,6 +22,18 @@ const InfoBlock = styled(Box)`
 const ProfileInfo = styled(Paragraph)`
   font-size: ${theme.fontSizes[2]};
 `;
+
+const changePasswordSchema = yup.object().shape({
+  oldPassword: yup.string().trim().required(),
+  newPassword: yup
+    .string()
+    .trim()
+    .required("Please enter new password")
+    .matches(
+      /^.*(?=.{5,})(?=.*[!@#$%^&*()\-_=+{};:,<.>])(?=.*\d)(?=.*[a-z,A-Z])/,
+      "New pass must contain at least 5 characters, one uppercase, one number and one special case character"
+    ),
+});
 
 export const SettingsTab = () => {
   const [personName, setPersonName] = useState(false);
@@ -52,33 +66,28 @@ export const SettingsTab = () => {
 
   const saveNewUserInfo = async (e) => {
     try {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        const updatedValue = e.target.value;
-        const inputName = e.target.name;
-        const updatedFiled = { [inputName]: updatedValue };
-        const { data } = await UserService.updateUser(updatedFiled);
-        setUser(data.updateUser);
-        e.target.value = "";
-        setPersonName(false);
-        setPersonEmail(false);
-        setPersonStatus(false);
-        successNotify(`user ${inputName} updated`);
-      }
+      e.preventDefault();
+      const updatedValue = e.target[0].value;
+      const inputName = e.target[0].name;
+      const updatedFiled = { [inputName]: updatedValue };
+      const { data } = await UserService.updateUser(updatedFiled);
+      setUser(data.updateUser);
+      e.target[0].value = "";
+      setPersonName(false);
+      setPersonEmail(false);
+      setPersonStatus(false);
+      successNotify(`user ${inputName} updated`);
     } catch (e) {
       return errorNotify(e?.response?.data);
     }
   };
 
-  const saveNewUserPassword = async (e) => {
+  const saveNewUserPassword = async (values) => {
     try {
-      e.preventDefault();
-      const updatedFiled = { oldPassword: e.target[0].value, newPassword: e.target[1].value };
+      const updatedFiled = { oldPassword: values.oldPassword, newPassword: values.newPassword };
       const data = await UserService.updateUser(updatedFiled);
       if (data?.response?.data) throw data;
       setUser(data.data.updateUser);
-      e.target[0].value = "";
-      e.target[1].value = "";
       setPersonPassword(false);
       successNotify("user password updated");
     } catch (err) {
@@ -93,80 +102,193 @@ export const SettingsTab = () => {
       </Heading>
       <Flex>
         <Box>
-          <Flex alignItems="center" flexWrap="wrap" mb={8}>
-            <ProfileInfo fontSize={2}>Name</ProfileInfo>
-            <ProfileInfo ml={5} fontSize={2}>
-              {user.username && !personName ? (
-                user.username
-              ) : (
-                <Box mr={5}>
-                  <Input
-                    ml={5}
-                    labelSize="sm"
-                    name="username"
-                    defaultValue={user.username}
-                    onKeyPress={saveNewUserInfo}
-                  />
+          {user.username && !personName ? (
+            <Flex alignItems={["flex-start", "center", "center"]} flexDirection={["column", "row", "row"]} mb={8}>
+              <ProfileInfo fontSize={2}>Name</ProfileInfo>
+              <ProfileInfo ml={[0, "84px", "84px"]} fontSize={2}>
+                {user.username}
+              </ProfileInfo>
+              <Button variant="settings" size="link" ml={[0, 5, 5]} alignItems="center" onClick={handleOpenNameInput}>
+                Edit
+              </Button>
+            </Flex>
+          ) : (
+            <Flex alignItems="flex-start" flexWrap="wrap" mb={8} flexDirection="column">
+              <ProfileInfo fontSize={2}>Name</ProfileInfo>
+              <Flex as="form" mr={5} onSubmit={saveNewUserInfo} flexDirection={["column", "row", "row"]}>
+                <Input labelSize="sm" name="username" defaultValue={user.username} />
+                <Box alignSelf="center" mt={[2, 0, 0]}>
+                  <Button variant="secondaryMenu" size="box" ml={2} type="reset" onClick={handleOpenNameInput}>
+                    Cancel
+                  </Button>
+                  <Button variant="link" size="box" ml={2} type="submit">
+                    Submit
+                  </Button>
                 </Box>
-              )}
-            </ProfileInfo>
-            <Button variant="settings" size="link" ml={5} alignItems="center" onClick={handleOpenNameInput}>
-              Edit
-            </Button>
-          </Flex>
+              </Flex>
+            </Flex>
+          )}
 
-          <Flex alignItems="center" flexWrap="wrap" mb={8}>
-            <ProfileInfo fontSize={2}>Email</ProfileInfo>
-            <ProfileInfo ml={5} fontSize={2}>
-              {user.email && !personEmail ? (
-                user.email
-              ) : (
-                <Box mr={5}>
-                  <Input ml={5} labelSize="sm" name="email" defaultValue={user.email} onKeyPress={saveNewUserInfo} />
+          {user.email && !personEmail ? (
+            <Flex alignItems={["flex-start", "center", "center"]} flexDirection={["column", "row", "row"]} mb={8}>
+              <ProfileInfo fontSize={2}>Email</ProfileInfo>
+              <ProfileInfo ml={[0, "88px", "88px"]} fontSize={2}>
+                {user.email}
+              </ProfileInfo>
+              <Button variant="settings" size="link" ml={[0, 5, 5]} alignItems="center" onClick={handleOpenEmailInput}>
+                Edit
+              </Button>
+            </Flex>
+          ) : (
+            <Flex alignItems="flex-start" flexWrap="wrap" mb={8} flexDirection="column">
+              <ProfileInfo fontSize={2}>Email</ProfileInfo>
+              <Flex as="form" mr={5} onSubmit={saveNewUserInfo} flexDirection={["column", "row", "row"]}>
+                <Input labelSize="sm" name="email" type="email" defaultValue={user.email} />
+                <Box alignSelf="center" mt={[2, 0, 0]}>
+                  <Button variant="secondaryMenu" size="box" ml={2} type="reset" onClick={handleOpenEmailInput}>
+                    Cancel
+                  </Button>
+                  <Button variant="link" size="box" ml={2} type="submit">
+                    Submit
+                  </Button>
                 </Box>
-              )}
-            </ProfileInfo>
-            <Button variant="settings" size="link" ml={5} alignItems="center" onClick={handleOpenEmailInput}>
-              Edit
-            </Button>
-          </Flex>
+              </Flex>
+            </Flex>
+          )}
 
-          <Flex alignItems="center" flexWrap="wrap" mb={8}>
-            <ProfileInfo fontSize={2}>Status</ProfileInfo>
-            <ProfileInfo ml={5} fontSize={2}>
-              {user.status && !personStatus ? (
-                user.status
+          {user.status && !personStatus ? (
+            <Flex alignItems={["flex-start", "center", "center"]} flexDirection={["column", "row", "row"]} mb={8}>
+              <ProfileInfo fontSize={2}>Status</ProfileInfo>
+              {user.status.length > 50 ? (
+                <ProfileInfo ml={[0, "82px", "82px"]} fontSize={2} width="70%">
+                  {user.status}
+                </ProfileInfo>
               ) : (
-                <Box mr={5}>
-                  <Input ml={5} labelSize="sm" name="status" defaultValue={user.status} onKeyPress={saveNewUserInfo} />
-                </Box>
+                <ProfileInfo ml={[0, "82px", "82px"]} fontSize={2}>
+                  {user.status}
+                </ProfileInfo>
               )}
-            </ProfileInfo>
+              <Button variant="settings" size="link" ml={[0, 5, 5]} alignItems="center" onClick={handleOpenStatusInput}>
+                Edit
+              </Button>
+            </Flex>
+          ) : (
+            <Flex alignItems="flex-start" flexWrap="wrap" mb={8} flexDirection="column">
+              <ProfileInfo fontSize={2}>Status</ProfileInfo>
+              <Flex as="form" mr={5} onSubmit={saveNewUserInfo} flexDirection={["column", "row", "row"]}>
+                <Input labelSize="sm" name="status" defaultValue={user.status} />
+                <Box alignSelf="center" mt={[2, 0, 0]}>
+                  <Button variant="secondaryMenu" size="box" ml={2} type="reset" onClick={handleOpenStatusInput}>
+                    Cancel
+                  </Button>
+                  <Button variant="link" size="box" ml={2} type="submit">
+                    Submit
+                  </Button>
+                </Box>
+              </Flex>
+            </Flex>
+          )}
 
-            <Button variant="settings" size="link" ml={5} alignItems="center" onClick={handleOpenStatusInput}>
-              Edit
-            </Button>
-          </Flex>
+          {!personPassword ? (
+            <Flex
+              alignItems={["flex-start", "center", "center"]}
+              flexDirection={["column", "row", "row"]}
+              mb={8}
+              position="relative"
+            >
+              <ProfileInfo fontSize={2} mb={[1, 0, 0]}>
+                Password
+              </ProfileInfo>
 
-          <Flex alignItems="center">
-            <ProfileInfo fontSize={2}>Password</ProfileInfo>
-
-            {!personPassword ? (
-              <ProfileInfo ml={5} fontSize={2}>
+              <ProfileInfo ml={[0, 11, 11]} fontSize={2}>
                 *********
               </ProfileInfo>
-            ) : (
-              <Flex as="form" onSubmit={saveNewUserPassword} flexDirection={["column", "row", "row"]} mr={5}>
-                <Input ml={5} mb={4} labelSize="sm" name="password" noForm placeholder="Old Password" />
-                <Input ml={5} labelSize="sm" name="password" noForm placeholder="New Password" />
-                <Input type="submit" display="none" />
-              </Flex>
-            )}
 
-            <Button variant="settings" size="link" ml={5} alignItems="center" onClick={handleOpenPasswordInput}>
-              Change Password
-            </Button>
-          </Flex>
+              <Button
+                variant="settings"
+                size="link"
+                ml={[0, 5, 5]}
+                alignItems="center"
+                onClick={handleOpenPasswordInput}
+              >
+                Change Password
+              </Button>
+            </Flex>
+          ) : (
+            <Formik
+              initialValues={{
+                oldPassword: "",
+                newPassword: "",
+              }}
+              validationSchema={changePasswordSchema}
+              onSubmit={saveNewUserPassword}
+            >
+              {({ handleChange, handleSubmit, values }) => (
+                <>
+                  <Flex alignItems="flex-start" flexWrap="wrap" flexDirection="column">
+                    <ProfileInfo fontSize={2}>Password</ProfileInfo>
+                    <Flex as="form" mr={5} onSubmit={handleSubmit} flexDirection={["column", "row", "row"]}>
+                      <Box mb={[2, 0, 0]}>
+                        <Input
+                          labelSize="sm"
+                          handleChange={handleChange}
+                          name="oldPassword"
+                          noForm
+                          placeholder="Old Password"
+                        />
+                      </Box>
+
+                      <Box>
+                        <Input
+                          labelSize="sm"
+                          handleChange={handleChange}
+                          name="newPassword"
+                          noForm
+                          placeholder="New Password"
+                        />
+                      </Box>
+
+                      <Box alignSelf="center" mt={[2, 0, 0]}>
+                        <Button
+                          variant="secondaryMenu"
+                          size="box"
+                          ml={2}
+                          type="reset"
+                          onClick={handleOpenPasswordInput}
+                        >
+                          Cancel
+                        </Button>
+                        <Button variant="link" size="box" ml={2} type="submit">
+                          Submit
+                        </Button>
+                      </Box>
+                    </Flex>
+                  </Flex>
+                  {!values.oldPassword && (
+                    <>
+                      <Box color="red" position="absolute">
+                        <ErrorMessage name={"oldPassword"} />
+                      </Box>
+                    </>
+                  )}
+                  {values.oldPassword && !values.newPassword && (
+                    <>
+                      <Box color="red" position="absolute">
+                        <ErrorMessage name={"newPassword"} />
+                      </Box>
+                    </>
+                  )}
+                  {values.oldPassword && values.newPassword && (
+                    <>
+                      <Box color="red" position="absolute" width={["auto", 600, "auto"]}>
+                        <ErrorMessage name={"newPassword"} />
+                      </Box>
+                    </>
+                  )}
+                </>
+              )}
+            </Formik>
+          )}
         </Box>
       </Flex>
     </InfoBlock>

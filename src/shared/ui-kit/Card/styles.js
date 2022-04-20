@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
 import { Box } from "../../helpers/Box";
-import { Heading } from "../../helpers/Text";
 import { BORDER_RADIUS } from "../../../theme";
 import theme from "../../../theme";
 
 export const StyledCard = styled(Box)`
   display: flex;
+  flex: 1;
   background: ${theme.colors.background.main};
   box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.08);
   border-radius: ${BORDER_RADIUS}px;

@@ -21,6 +21,7 @@ import {
 } from "../../../services/recipe.service";
 import UserService from "../../../services/user.service";
 import { UserContext } from "../UserProvider";
+import { Dialog } from "../Dialog";
 
 export const HorizontalCard = ({
   title,
@@ -43,6 +44,7 @@ export const HorizontalCard = ({
   const [showModal, setShowModal] = useState(false);
   const [update, setUpdate] = useState(false);
   const [optionMenu, setOptionMenu] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
   const [deleteRecipe] = useDeleteRecipeMutation();
   const [updateRecipeLikes] = useUpdateRecipeLikesMutation();
   const [addRecipeClone] = useAddRecipeCloneMutation();
@@ -51,6 +53,11 @@ export const HorizontalCard = ({
 
   const successNotify = (msg) => {
     return toast.success(msg);
+  };
+
+  const handleClose = () => {
+    setOpenDialog(false);
+    setOptionMenu((prev) => !prev);
   };
 
   const handleOption = (event) => {
@@ -75,6 +82,7 @@ export const HorizontalCard = ({
   const onClone = async (event) => {
     event.stopPropagation();
     addRecipeClone(_id);
+    successNotify("recipe copied to your recipes collection");
     setOptionMenu(false);
   };
 
@@ -101,29 +109,43 @@ export const HorizontalCard = ({
     return (
       <>
         <Paragraph alignSelf="center">{author}</Paragraph>
-        {modalCookBook ? (
+        {modalCookBook && !props.cookbookProfile ? (
           <Button variant="outlined" ml={5} onClick={save}>
             Save
           </Button>
-        ) : collection ? (
+        ) : collection || props.cookbookProfile ? (
           <></>
         ) : (
           <FlexAlignCenter onClick={handleOption} height={20} position="relative">
             <Options />
-            {optionMenu && props.profile && (
+            {optionMenu && props.recipeProfile && (
               <OptionMenu>
                 <Button variant="secondary" variantMenu="secondaryMenu" size="box" onClick={onEdit}>
                   <Paragraph as={"pre"} fontWeight={"normal"}>
                     Edit Recipe
                   </Paragraph>
                 </Button>
-                <Button variant="secondary" variantMenu="secondaryMenu" size="box" onClick={onDelete}>
+                <Button
+                  variant="secondary"
+                  variantMenu="secondaryMenu"
+                  size="box"
+                  onClick={() => {
+                    setOpenDialog(true);
+                  }}
+                >
                   <Paragraph as={"pre"} fontWeight={"normal"}>
                     Delete Recipe
                   </Paragraph>
                 </Button>
               </OptionMenu>
             )}
+            <Dialog
+              open={openDialog}
+              onClose={handleClose}
+              title={"Delete Recipe"}
+              content={"Are you sure?"}
+              yesHandle={onDelete}
+            />
             {optionMenu && props.search && (
               <OptionMenu>
                 <Button variant="secondary" variantMenu="secondaryMenu" size="box" onClick={onClone}>

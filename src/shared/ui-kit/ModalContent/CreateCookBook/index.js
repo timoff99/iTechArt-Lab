@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, memo } from "react";
+import React, { useState, useEffect, memo } from "react";
 import styled from "styled-components";
 import { Formik, Form, ErrorMessage } from "formik";
 import * as yup from "yup";
@@ -43,6 +43,7 @@ export const CreateCookBook = memo(
     const [oldCookbookRecipes, SetOldCookbookRecipes] = useState("");
     const [checkbox, setCheckbox] = useState(CheckboxData);
     const [loading, setLoading] = useState(false);
+    const [image, setImage] = useState(oldImage ? oldImage : "");
 
     const [addCookBook] = useAddCookBookMutation();
     const [updateCookBook] = useUpdateCookBookMutation();
@@ -50,6 +51,7 @@ export const CreateCookBook = memo(
     const [deleteRecipesCookBookId] = useDeleteRecipesCookBookIdMutation();
     const { data: recipeWithCookbook } = useGetRecipeWithoutCookBookQuery();
     const [action, { data: recipe }] = useLazyGetRecipeQuery();
+
     const openRecipe = (_id) => {
       action({ _id }, true);
       recipeToggleModal();
@@ -60,7 +62,6 @@ export const CreateCookBook = memo(
     };
 
     const formData = new FormData();
-    const refFileInput = useRef();
 
     const loadRecipes = () => {
       const listOfRecipes = recipeWithCookbook?.map((el) => {
@@ -80,6 +81,9 @@ export const CreateCookBook = memo(
     };
     useEffect(() => {
       loadRecipes();
+      return () => {
+        SetOldCookbookRecipes("");
+      };
     }, [recipeWithCookbook]);
 
     useEffect(() => {
@@ -111,8 +115,8 @@ export const CreateCookBook = memo(
       try {
         setLoading(true);
         let newImage;
-        if (!oldImage?.includes("http")) {
-          newImage = await createImage(values.file);
+        if (values.file === oldImage) {
+          newImage = "";
         } else if (values.file) {
           newImage = await createImage(values.file);
         }
@@ -135,10 +139,9 @@ export const CreateCookBook = memo(
           await deleteRecipesCookBookId({ selectedRecipes: oldCookbookRecipes, _id });
           await updateCookBook(cookbookData);
           updateRecipesCookBookId({ selectedRecipes, _id });
-
           await UserService.updateUserCookBooks(_id);
           setShowModal();
-          return setUpdate(false);
+          setUpdate(false);
         } else {
           const recept = await addCookBook(cookbookData);
           const { _id } = recept.data;
@@ -155,11 +158,6 @@ export const CreateCookBook = memo(
       return true;
     };
 
-    const handleClickFileUploader = (e) => {
-      e.preventDefault();
-      refFileInput.current.click();
-    };
-
     const handleTypeChange = (e) => {
       setCheckbox((prev) =>
         prev.map((el) => {
@@ -173,15 +171,16 @@ export const CreateCookBook = memo(
         <Formik
           initialValues={{
             title: oldTitle || "",
-            file: "",
+            file: oldImage || "",
             description: oldDescription || "",
+            recipes: oldRecipes || [],
           }}
           validationSchema={cookbookSchema}
           onSubmit={async (values) => {
             await createCookBook(values);
           }}
         >
-          {({ handleChange, setFieldValue }) => (
+          {({ handleChange, setFieldValue, values, initialValues }) => (
             <Form>
               <Box px={[4, 56, 56]} py={[10, 72, 72]}>
                 <Heading as={"h2"} bold mb={10}>
@@ -198,17 +197,36 @@ export const CreateCookBook = memo(
                 <Box color="red" mb={10}>
                   {<ErrorMessage name={"title"} />}
                 </Box>
-                <FileUploader
-                  as="input"
-                  ref={refFileInput}
-                  type="file"
-                  id="img"
-                  name="img"
-                  onChange={(e) => setFieldValue("file", e.currentTarget.files[0])}
-                />
-                <Button size="md" variant="primary" onClick={handleClickFileUploader}>
-                  Upload CookBook Image
-                </Button>
+                <label htmlFor="contained-button-file" style={{ display: "inline-flex", flexDirection: "column" }}>
+                  <FileUploader
+                    as="input"
+                    id="contained-button-file"
+                    type="file"
+                    name="img"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      setFieldValue("file", file);
+                      setImage(URL.createObjectURL(file));
+                    }}
+                  />
+                  <Box
+                    as="img"
+                    style={{
+                      objectFit: "cover",
+                      cursor: "pointer",
+                    }}
+                    maxWidth="210px"
+                    maxHeight="210px"
+                    width="100%"
+                    borderRadius="8px"
+                    mb="2"
+                    alt=""
+                    src={image}
+                  />
+                  <Button size="md" variant="primary" id="contained-button-file" as="span">
+                    Upload CookBook Image
+                  </Button>
+                </label>
                 <Box color="red" mb={10}>
                   {<ErrorMessage name={"file"} />}
                 </Box>
@@ -243,7 +261,10 @@ export const CreateCookBook = memo(
                 <MultiSelect
                   options={allAvailableRecipes}
                   value={selectedRecipes}
-                  onChange={handleSelectedRecipes}
+                  onChange={(recipes) => {
+                    handleSelectedRecipes(recipes);
+                    setFieldValue("recipes", recipes);
+                  }}
                   placeholder={"Recipe Title"}
                 />
 
@@ -255,7 +276,14 @@ export const CreateCookBook = memo(
                   <Button size="md" variant="outlined" mr={[0, 10, 10]} onClick={setShowModal}>
                     Cancel
                   </Button>
-                  <Button size="md" variant="primary" mr={[0, 10, 10]} type="submit" loading={+loading}>
+                  <Button
+                    disabled={values === initialValues}
+                    size="md"
+                    variant="primary"
+                    mr={[0, 10, 10]}
+                    type="submit"
+                    loading={+loading}
+                  >
                     Confirm
                   </Button>
                 </Flex>

@@ -16,13 +16,15 @@ import { UserContext } from "../UserProvider";
 import { useUrl } from "../../../hooks/useUrl";
 import { ROUTE_NAMES } from "../../../router/routeNames";
 import { Burger } from "./Burger";
-import { Menu } from "./Menu";
+import { MenuSearch } from "./Menu/MenuSearch";
+import { MenuProfile } from "./Menu/MenuProfile";
 
 import UserService from "../../../services/user.service";
 
 export const Header = memo(({ mainPage }) => {
   const [showModal, setShowModal] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [openSearchMenu, setOpenSearchMenu] = useState(false);
+  const [openProfileMenu, setOpenProfileMenu] = useState(false);
   const { user, setUser } = useContext(UserContext);
   const { query, updateQuery } = useUrl();
   const navigation = useNavigate();
@@ -62,8 +64,8 @@ export const Header = memo(({ mainPage }) => {
     <Box boxShadow="0px 0px 16px rgba(0, 0, 0, 0.08)">
       <StyledContainer>
         <Box display={["flex", "none", "none"]}>
-          <Burger display={["flex", "none", "none"]} open={open} setOpen={setOpen} />
-          <Menu open={open} setOpen={setOpen} />
+          <Burger display={["flex", "none", "none"]} open={openSearchMenu} setOpen={setOpenSearchMenu} />
+          <MenuSearch open={openSearchMenu} setOpen={setOpenSearchMenu} />
         </Box>
         <LinkRenderer href={ROUTE_NAMES.HOME} inline>
           <Logo />
@@ -100,14 +102,15 @@ export const Header = memo(({ mainPage }) => {
           Create cookBook
         </Button>
         {user.username ? (
-          <LinkRenderer href={ROUTE_NAMES.PROFILETABCOOKBOOKS} color="secondary.main" inline>
-            <User>
+          <Box position="relative">
+            <User onClick={() => setOpenProfileMenu(!openProfileMenu)}>
               <img src={person} alt="person" />
               <Paragraph fontSize={1} color="secondary.main" overflow="hidden" height="26px" width="76px">
                 {user.username}
               </Paragraph>
             </User>
-          </LinkRenderer>
+            <MenuProfile open={openProfileMenu} setOpen={setOpenProfileMenu} />
+          </Box>
         ) : (
           <LinkRenderer href={ROUTE_NAMES.LOGIN} color="secondary.main" inline>
             <Paragraph fontSize={1} color="secondary.main">
