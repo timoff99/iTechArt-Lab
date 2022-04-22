@@ -29,9 +29,11 @@ const Image = styled(Box)`
   }
   ${mediaQueries.medium} {
     min-width: 340px;
+    max-width: 440px;
   }
   ${mediaQueries.large} {
     min-width: 440px;
+    max-width: 500px;
   }
   border-radius: 10px;
   object-fit: cover;
@@ -165,12 +167,14 @@ export const Recipes = ({
       </Flex>
       <Box px={[3, 11, 11]} pt={72}>
         <FlexColumn mb={10}>
-          <Comments
-            id={_id}
-            createComments={createRecipeComments}
-            comments={comments}
-            updateComments={updateRecipeComments}
-          />
+          {_id && (
+            <Comments
+              id={_id}
+              createComments={createRecipeComments}
+              updateComments={updateRecipeComments}
+              comments={comments}
+            />
+          )}
         </FlexColumn>
       </Box>
     </Box>

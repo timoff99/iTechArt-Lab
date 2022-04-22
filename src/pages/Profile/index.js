@@ -30,6 +30,7 @@ const UserImage = styled(Box)`
   width: 100%;
   height: 100%;
   object-fit: cover;
+  cursor: pointer;
 `;
 
 const FileUploader = styled(Box)`

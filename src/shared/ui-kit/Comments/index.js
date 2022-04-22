@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { Flex } from "../../helpers/Flex";
@@ -8,6 +8,8 @@ import { Input } from "../Input";
 import { ReactComponent as Send } from "../../../static/icons/send.svg";
 import { Box } from "../../helpers/Box";
 import { CommentsCard } from "./CommentsCard";
+import { socket } from "../../../Socket";
+import { UserContext } from "../UserProvider";
 
 const StyledSend = styled(Send)`
   display: flex;
@@ -15,15 +17,59 @@ const StyledSend = styled(Send)`
   justify-content: center;
 `;
 
-export const Comments = ({ id, createComments, comments, updateComments }) => {
+export const Comments = ({
+  id,
+  createComments,
+  updateComments,
+  comments,
+  setCurrentComments,
+  refreshCookbooks,
+  getCookBook,
+  currentCollection,
+}) => {
+  console.log(comments);
+  const [typing, setTyping] = useState("");
+  const { user } = useContext(UserContext);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (e.target[0].value.trim()) {
-      const comment = await createComments({ message: e.target[0].value, id });
-      updateComments({ card_id: id, comment_id: comment.data._id }); // missing focus from input and go to the top
+      socket.emit("comment:send", { message: e.target[0].value, parent_id: id, user_id: user._id });
       e.target[0].value = "";
     }
   };
+  useEffect(() => {
+    socket.emit("join:room", id);
+    return () => {
+      if (currentCollection) {
+        refreshCookbooks(currentCollection);
+      } else {
+        refreshCookbooks && refreshCookbooks();
+      }
+      getCookBook && getCookBook(id);
+      socket.emit("leave:room", id);
+    };
+  }, [socket]);
+
+  useEffect(() => {
+    socket.on("comment_receive", (cookBook) => {
+      setCurrentComments(cookBook.comments);
+    });
+    return () => {
+      setCurrentComments([]);
+    };
+  }, [socket]);
+
+  const onTyping = () => {
+    socket.emit("user:typing", user.username);
+  };
+
+  socket.on("user:typing", (typerNik) => {
+    setTyping(`${typerNik} typing...`);
+    setTimeout(() => {
+      setTyping("");
+    }, 3000);
+  });
+
   const reverseComments = comments?.slice()?.reverse();
   return (
     <>
@@ -39,6 +85,7 @@ export const Comments = ({ id, createComments, comments, updateComments }) => {
             variantInput="commentsInput"
             variantLabel="commentsLabel"
             labelSize="sm"
+            onKeyDown={onTyping}
           />
 
           <Button size="sm" ml={5}>
@@ -46,11 +93,10 @@ export const Comments = ({ id, createComments, comments, updateComments }) => {
           </Button>
         </Flex>
       </form>
+      <Paragraph>{typing}</Paragraph>
       <Box>
         {comments?.length ? (
-          reverseComments.map((props, index) => {
-            return <CommentsCard key={index} {...props} />;
-          })
+          reverseComments.map((props, index) => <CommentsCard key={index} {...props} />)
         ) : (
           <Box mt={4}>
             <Paragraph fontSize={2}>No comments, be the first</Paragraph>

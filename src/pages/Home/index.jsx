@@ -58,6 +58,7 @@ const SwiperBox = styled(Box)`
 export const Home = () => {
   const [showRecipeModal, setShowRecipeModal] = useState(false);
   const [showCookBookModal, setShowCookBookModal] = useState(false);
+  const [currentCollection, setCurrentCollection] = useState("");
 
   const [likesRecipesAction, { data: likesRecipes }] = useLazyGetRecipesForMainQuery();
   const [viewsRecipesAction, { data: viewsRecipes }] = useLazyGetRecipesForMainQuery();
@@ -79,6 +80,9 @@ export const Home = () => {
     setShowCookBookModal((prev) => !prev);
   };
 
+  const refreshCookbooks = async (_id, caching) => {
+    await cookbookCollectionAction({ id: _id }, caching);
+  };
   useEffect(() => {
     likesRecipesAction({ limit: 4, type: "likes" });
     viewsRecipesAction({ limit: 9, type: "views" });
@@ -88,8 +92,9 @@ export const Home = () => {
     action({ _id }, true);
     toggleRecipeModal();
   };
-  const openCookBook = (_id) => {
-    cookbookCollectionAction({ id: _id }, true);
+  const openCookBook = async (_id) => {
+    setCurrentCollection(_id);
+    await refreshCookbooks(_id, true);
     toggleCookBookModal();
   };
 
@@ -218,7 +223,11 @@ export const Home = () => {
       )}
       {showCookBookModal && (
         <Modal showModal={showCookBookModal} setShowModal={setShowCookBookModal}>
-          <CookbookCollection {...oneCookbookCollection} />
+          <CookbookCollection
+            {...oneCookbookCollection}
+            refreshCookbooks={refreshCookbooks}
+            currentCollection={currentCollection}
+          />
         </Modal>
       )}
     </>

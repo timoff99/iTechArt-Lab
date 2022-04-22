@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { toast } from "react-toastify";
 
@@ -16,7 +16,6 @@ import { Modal } from "../../Modal";
 import { useLazyGetRecipeQuery } from "../../../../services/recipe.service";
 import { useCreateCookBookCommentsMutation } from "../../../../services/comments.service";
 import { useAddCookBookCloneMutation, useUpdateCookBookCommentsMutation } from "../../../../services/cookbook.service";
-import { Col } from "../../../helpers/Grid/Col";
 import { Loader } from "../../Loader";
 import { colors } from "../../../../theme";
 import { UserContext } from "../../UserProvider";
@@ -40,14 +39,22 @@ export const CookBook = ({
   image,
   withoutTag,
   cookbookProfile,
+  refreshCookbooks,
+  getCookBook,
+  currentCollection,
 }) => {
   const [showModal, setShowModal] = useState(false);
+  const [currentComments, setCurrentComments] = useState(comments || []);
   const [createCookBookComments] = useCreateCookBookCommentsMutation();
   const [updateCookBookComments] = useUpdateCookBookCommentsMutation();
   const [action, { data: recipe }] = useLazyGetRecipeQuery();
   const [addCookBookClone] = useAddCookBookCloneMutation();
   const { user } = useContext(UserContext);
+  const scrollRef = useRef();
 
+  useEffect(() => {
+    scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
+  }, [currentComments]);
   const toggleModal = () => {
     setShowModal((prev) => !prev);
   };
@@ -108,7 +115,7 @@ export const CookBook = ({
             </FlexAlignCenter>
             <FlexAlignCenter>
               <Comment />
-              <Paragraph ml={2}>{comments?.length || 0} comments</Paragraph>
+              <Paragraph ml={2}>{currentComments?.length || 0} comments</Paragraph>
             </FlexAlignCenter>
           </FlexAlignCenter>
         </Box>
@@ -141,13 +148,19 @@ export const CookBook = ({
           </FlexColumn>
         </>
       )}
-      <FlexColumn mb={10}>
-        <Comments
-          id={_id}
-          createComments={createCookBookComments}
-          comments={comments}
-          updateComments={updateCookBookComments}
-        />
+      <FlexColumn mb={10} ref={scrollRef}>
+        {_id && (
+          <Comments
+            id={_id}
+            createComments={createCookBookComments}
+            updateComments={updateCookBookComments}
+            comments={currentComments}
+            setCurrentComments={setCurrentComments}
+            refreshCookbooks={refreshCookbooks}
+            getCookBook={getCookBook}
+            currentCollection={currentCollection}
+          />
+        )}
       </FlexColumn>
       {showModal && (
         <Modal showModal={showModal} setShowModal={toggleModal}>

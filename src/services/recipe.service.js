@@ -46,10 +46,11 @@ export const recipeApi = createApi({
         providesTags: [{ type: "Recipe", id: "RECIPE" }],
       }),
       getFilteredRecipes: builder.query({
-        query: (timeRange, page, sort, search) => ({
+        query: (type, timeRange, page, sort, search) => ({
           url: `get-filtered-recipes`,
           method: "get",
-          params: timeRange,
+          params: type,
+          timeRange,
           page,
           sort,
           search,

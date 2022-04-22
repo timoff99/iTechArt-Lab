@@ -22,16 +22,25 @@ export const SearchCookBookCard = ({ query }) => {
   const search = query.search || "";
   const [filteredCookBooksAction, { data }] = useLazyGetFilteredCookBookQuery();
   const [action, { data: cookBook }] = useLazyGetCookBookQuery();
-  useEffect(() => {
+
+  const refreshCookbooks = () => {
     filteredCookBooksAction({ type, sort, search, page: currentPage });
+  };
+
+  const getCookBook = async (_id, caching) => {
+    await action({ _id }, caching);
+  };
+
+  useEffect(() => {
+    refreshCookbooks();
   }, [type, sort, search, currentPage, cookBook]);
 
   const toggleModal = () => {
     setShowModal((prev) => !prev);
   };
 
-  const openCookBook = (_id) => {
-    action({ _id }, true);
+  const openCookBook = async (_id) => {
+    await getCookBook(_id, true);
     toggleModal();
   };
 
@@ -63,7 +72,7 @@ export const SearchCookBookCard = ({ query }) => {
 
       {showModal && (
         <Modal showModal={showModal} setShowModal={toggleModal}>
-          <CookBook {...cookBook} />
+          <CookBook {...cookBook} refreshCookbooks={refreshCookbooks} getCookBook={getCookBook} />
         </Modal>
       )}
     </Box>

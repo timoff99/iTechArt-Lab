@@ -21,16 +21,24 @@ export const CookBookTab = ({ query }) => {
   const [userCookBooksAction, { data }] = useLazyGetUserCookBooksQuery();
   const [cookBookAction, { data: cookBook }] = useLazyGetCookBookQuery();
 
-  useEffect(() => {
+  const refreshCookbooks = () => {
     userCookBooksAction({ page: currentPage, search });
+  };
+
+  const getCookBook = async (_id, caching) => {
+    await cookBookAction({ _id }, caching);
+  };
+
+  useEffect(() => {
+    refreshCookbooks();
   }, [currentPage, search, cookBook]);
 
   const toggleModal = () => {
     setShowModal((prev) => !prev);
   };
 
-  const openCookBook = (_id) => {
-    cookBookAction({ _id }, true);
+  const openCookBook = async (_id) => {
+    await getCookBook(_id, true);
     toggleModal();
   };
 
@@ -67,7 +75,12 @@ export const CookBookTab = ({ query }) => {
 
       {showModal && (
         <Modal showModal={showModal} setShowModal={toggleModal}>
-          <CookBook {...cookBook} cookbookProfile={"cookbookProfile"} />
+          <CookBook
+            {...cookBook}
+            cookbookProfile={"cookbookProfile"}
+            refreshCookbooks={refreshCookbooks}
+            getCookBook={getCookBook}
+          />
         </Modal>
       )}
     </Box>

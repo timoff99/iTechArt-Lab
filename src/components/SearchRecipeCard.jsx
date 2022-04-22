@@ -20,12 +20,13 @@ export const SearchRecipeCard = ({ query, timeRange }) => {
   const [filteredRecipesAction, { data }] = useLazyGetFilteredRecipesQuery();
   const [action, { data: recipe }] = useLazyGetRecipeQuery();
 
+  const type = query.type || "";
   const sort = query.sort || "";
   const search = query.search || "";
 
   useEffect(() => {
-    filteredRecipesAction({ timeRange, sort, search, page: currentPage });
-  }, [timeRange, sort, search, currentPage, recipe]);
+    filteredRecipesAction({ type, timeRange, sort, search, page: currentPage });
+  }, [type, timeRange, sort, search, currentPage, recipe]);
 
   const toggleModal = () => {
     setShowModal((prev) => !prev);

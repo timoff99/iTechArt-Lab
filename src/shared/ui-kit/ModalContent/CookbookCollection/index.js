@@ -11,7 +11,7 @@ import { colors } from "../../../../theme";
 
 import { useLazyGetCookBookQuery } from "../../../../services/cookbook.service";
 
-export const CookbookCollection = ({ collection_arr, title }) => {
+export const CookbookCollection = ({ collection_arr, title, refreshCookbooks, currentCollection }) => {
   const [showModal, setShowModal] = useState(false);
   const [action, { data: cookbook }] = useLazyGetCookBookQuery();
   const withoutTag = true;
@@ -19,8 +19,12 @@ export const CookbookCollection = ({ collection_arr, title }) => {
     setShowModal((prev) => !prev);
   };
 
-  const openCookbook = (_id) => {
-    action({ _id }, true);
+  const getCookBook = async (_id, caching) => {
+    await action({ _id }, caching);
+  };
+
+  const openCookbook = async (_id) => {
+    await getCookBook(_id, true);
     toggleModal();
   };
 
@@ -55,7 +59,13 @@ export const CookbookCollection = ({ collection_arr, title }) => {
       )}
       {showModal && (
         <Modal showModal={showModal} setShowModal={toggleModal}>
-          <CookBook {...cookbook} withoutTag={withoutTag} />
+          <CookBook
+            {...cookbook}
+            withoutTag={withoutTag}
+            refreshCookbooks={refreshCookbooks}
+            getCookBook={getCookBook}
+            currentCollection={currentCollection}
+          />
         </Modal>
       )}
     </Box>

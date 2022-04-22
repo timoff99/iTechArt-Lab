@@ -1,11 +1,12 @@
 import React from "react";
-import { Router } from "./router/Router";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
-import theme from "./theme";
 import { UserProvider } from "./shared/ui-kit/UserProvider";
-import { store } from "./store";
 import { Provider } from "react-redux";
 import { ToastContainer } from "react-toastify";
+
+import { Router } from "./router/Router";
+import theme from "./theme";
+import { store } from "./store";
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -23,7 +24,7 @@ function App() {
           <UserProvider>
             <Router />
           </UserProvider>
-          <ToastContainer theme="colored" />
+          <ToastContainer theme="colored" position="bottom-right" />
         </div>
       </ThemeProvider>
     </Provider>
