@@ -37,6 +37,9 @@ export const cookBookApi = createApi({
         query: (_id) => ({ url: `get`, method: "get", params: _id }),
         providesTags: [{ type: "CookBook", id: "COOKBOOK" }],
       }),
+      getCookBookWithoutViewsPlusOne: builder.query({
+        query: (_id) => ({ url: `get-cookbooks-without-views-plus-one`, method: "get", params: _id }),
+      }),
       getFilteredCookBook: builder.query({
         query: (query) => ({
           url: `get-filtered-cookbooks`,
@@ -80,7 +83,7 @@ export const {
   useAddCookBookMutation,
   useAddCookBookCloneMutation,
   useLazyGetUserCookBooksQuery,
-  useGetCookBookQuery,
+  useLazyGetCookBookWithoutViewsPlusOneQuery,
   useLazyGetCookBookQuery,
   useGetFilteredCookBookQuery,
   useLazyGetFilteredCookBookQuery,

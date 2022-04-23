@@ -19,21 +19,19 @@ const StyledSend = styled(Send)`
 
 export const Comments = ({
   id,
-  createComments,
-  updateComments,
   comments,
   setCurrentComments,
-  refreshCookbooks,
-  getCookBook,
+  refreshData,
   currentCollection,
+  getDataWithoutViewsPlusOneQuery,
+  flag,
 }) => {
-  console.log(comments);
   const [typing, setTyping] = useState("");
   const { user } = useContext(UserContext);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (e.target[0].value.trim()) {
-      socket.emit("comment:send", { message: e.target[0].value, parent_id: id, user_id: user._id });
+      socket.emit("comment:send", { message: e.target[0].value, parent_id: id, user_id: user._id, flag });
       e.target[0].value = "";
     }
   };
@@ -41,11 +39,11 @@ export const Comments = ({
     socket.emit("join:room", id);
     return () => {
       if (currentCollection) {
-        refreshCookbooks(currentCollection);
+        refreshData(currentCollection);
       } else {
-        refreshCookbooks && refreshCookbooks();
+        refreshData && refreshData();
       }
-      getCookBook && getCookBook(id);
+      getDataWithoutViewsPlusOneQuery(id);
       socket.emit("leave:room", id);
     };
   }, [socket]);

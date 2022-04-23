@@ -41,6 +41,9 @@ export const recipeApi = createApi({
         query: (_id) => ({ url: `get`, method: "get", params: _id }),
         providesTags: [{ type: "Recipe", id: "RECIPE" }],
       }),
+      getRecipeWithoutViewsPlusOne: builder.query({
+        query: (_id) => ({ url: `get-recipe-without-views-plus-one`, method: "get", params: _id }),
+      }),
       getRecipeWithoutCookBook: builder.query({
         query: () => ({ url: `get-recipe-without-cookbook`, method: "get" }),
         providesTags: [{ type: "Recipe", id: "RECIPE" }],
@@ -111,6 +114,7 @@ export const {
   useAddRecipeCloneWithoutTagMutation,
   useLazyGetUserRecipesQuery,
   useLazyGetRecipeQuery,
+  useLazyGetRecipeWithoutViewsPlusOneQuery,
   useGetRecipeWithoutCookBookQuery,
   useLazyGetFilteredRecipesQuery,
   useGetRecipesForMainQuery,

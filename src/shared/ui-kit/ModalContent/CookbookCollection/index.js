@@ -9,23 +9,36 @@ import { CookBook } from "../CookBook";
 import { Loader } from "../../Loader";
 import { colors } from "../../../../theme";
 
-import { useLazyGetCookBookQuery } from "../../../../services/cookbook.service";
+import {
+  useLazyGetCookBookQuery,
+  useLazyGetCookBookWithoutViewsPlusOneQuery,
+} from "../../../../services/cookbook.service";
 
 export const CookbookCollection = ({ collection_arr, title, refreshCookbooks, currentCollection }) => {
   const [showModal, setShowModal] = useState(false);
-  const [action, { data: cookbook }] = useLazyGetCookBookQuery();
+  const [action, { data: cookBook }] = useLazyGetCookBookQuery();
+  const [actionGetCookBookWithoutViewsPlusOneQuery, { data: cookBookWithoutViewsPlusOneQuery }] =
+    useLazyGetCookBookWithoutViewsPlusOneQuery();
+
   const withoutTag = true;
   const toggleModal = () => {
     setShowModal((prev) => !prev);
   };
-
-  const getCookBook = async (_id, caching) => {
-    await action({ _id }, caching);
+  const getCookBookWithoutViewsPlusOneQuery = async (_id) => {
+    await actionGetCookBookWithoutViewsPlusOneQuery({ _id });
   };
 
   const openCookbook = async (_id) => {
-    await getCookBook(_id, true);
+    await action({ _id }, true);
     toggleModal();
+  };
+
+  const checkCookbook = () => {
+    if (cookBookWithoutViewsPlusOneQuery?._id === cookBook?._id) {
+      return cookBookWithoutViewsPlusOneQuery;
+    } else {
+      return cookBook;
+    }
   };
 
   return (
@@ -60,10 +73,10 @@ export const CookbookCollection = ({ collection_arr, title, refreshCookbooks, cu
       {showModal && (
         <Modal showModal={showModal} setShowModal={toggleModal}>
           <CookBook
-            {...cookbook}
+            {...checkCookbook()}
             withoutTag={withoutTag}
             refreshCookbooks={refreshCookbooks}
-            getCookBook={getCookBook}
+            getCookBookWithoutViewsPlusOneQuery={getCookBookWithoutViewsPlusOneQuery}
             currentCollection={currentCollection}
           />
         </Modal>

@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 
-import { useLazyGetRecipeQuery, useLazyGetUserRecipesQuery } from "../../services/recipe.service";
+import {
+  useLazyGetRecipeQuery,
+  useLazyGetRecipeWithoutViewsPlusOneQuery,
+  useLazyGetUserRecipesQuery,
+} from "../../services/recipe.service";
 
 import { Pagination } from "../../shared/ui-kit/Pagination";
 import { RecipesCard } from "../../shared/ui-kit/RecipesCard";
@@ -20,22 +24,37 @@ export const RecipeTab = ({ query }) => {
 
   const [userRecipeAction, { data }] = useLazyGetUserRecipesQuery();
   const [recipeAction, { data: recipe }] = useLazyGetRecipeQuery();
+  const [actionGetRecipeWithoutViewsPlusOneQuery, { data: recipeWithoutViewsPlusOneQuery }] =
+    useLazyGetRecipeWithoutViewsPlusOneQuery();
 
-  useEffect(() => {
+  const refreshRecipes = () => {
     userRecipeAction({ page: currentPage, search });
+  };
+  useEffect(() => {
+    refreshRecipes();
   }, [currentPage, search, recipe]);
 
   const toggleModal = () => {
     setShowModal((prev) => !prev);
   };
-
-  const openRecipe = (_id) => {
-    recipeAction({ _id }, true);
+  const getRecipeWithoutViewsPlusOneQuery = async (_id) => {
+    await actionGetRecipeWithoutViewsPlusOneQuery({ _id });
+  };
+  const openRecipe = async (_id) => {
+    await recipeAction({ _id }, true);
     toggleModal();
   };
 
   const handlePageClick = (data) => {
     setCurrentPage(data.selected);
+  };
+
+  const checkRecipe = () => {
+    if (recipeWithoutViewsPlusOneQuery?._id === recipe?._id) {
+      return recipeWithoutViewsPlusOneQuery;
+    } else {
+      return recipe;
+    }
   };
 
   return (
@@ -54,7 +73,12 @@ export const RecipeTab = ({ query }) => {
         </Col>
         {showModal && (
           <Modal showModal={showModal} setShowModal={toggleModal}>
-            <Recipes {...recipe} recipeProfile={"recipeProfile"} />
+            <Recipes
+              {...checkRecipe()}
+              recipeProfile={"recipeProfile"}
+              refreshRecipes={refreshRecipes}
+              getRecipeWithoutViewsPlusOneQuery={getRecipeWithoutViewsPlusOneQuery}
+            />
           </Modal>
         )}
       </Grid>
