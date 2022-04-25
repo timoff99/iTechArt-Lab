@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
+import Tippy, { useSingleton } from "@tippyjs/react/headless";
+import "tippy.js/dist/tippy.css";
 
 import { Flex } from "../../helpers/Flex";
 import { Heading, Paragraph } from "../../helpers/Text";
@@ -28,6 +30,8 @@ export const Comments = ({
 }) => {
   const [typing, setTyping] = useState("");
   const { user } = useContext(UserContext);
+  const [source, target] = useSingleton();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (e.target[0].value.trim()) {
@@ -67,30 +71,42 @@ export const Comments = ({
       setTyping("");
     }, 3000);
   });
-
   const reverseComments = comments?.slice()?.reverse();
   return (
     <>
       <Heading as={"h3"} semiBold mb={8}>
         Comments ({comments?.length})
       </Heading>
-      <form onSubmit={(e) => handleSubmit(e)}>
-        <Flex>
-          <Input
-            type="text"
-            name="comments"
-            placeholder="Express yourself..."
-            variantInput="commentsInput"
-            variantLabel="commentsLabel"
-            labelSize="sm"
-            onKeyDown={onTyping}
-          />
+      {user.user_status === "blocked" && (
+        <Tippy
+          singleton={source}
+          render={(attrs) => (
+            <Paragraph {...attrs} style={{ color: "white", background: "#DC143C" }} p={2} borderRadius="8px">
+              User blocked, contact the admin
+            </Paragraph>
+          )}
+        />
+      )}
+      <Tippy singleton={target}>
+        <form onSubmit={(e) => handleSubmit(e)}>
+          <Flex>
+            <Input
+              type="text"
+              name="comments"
+              placeholder="Express yourself..."
+              variantInput="commentsInput"
+              variantLabel="commentsLabel"
+              labelSize="sm"
+              onKeyDown={onTyping}
+              disabled={user.user_status === "blocked"}
+            />
 
-          <Button size="sm" ml={5}>
-            <StyledSend />
-          </Button>
-        </Flex>
-      </form>
+            <Button size="sm" ml={5} disabled={user.user_status === "blocked"}>
+              <StyledSend />
+            </Button>
+          </Flex>
+        </form>
+      </Tippy>
       <Paragraph>{typing}</Paragraph>
       <Box>
         {comments?.length ? (

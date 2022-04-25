@@ -29,12 +29,12 @@ export const CommentsCard = ({ message, time, user_id }) => {
   return (
     <Flex mt={10}>
       <ImageBox>
-        <Image as="img" src={user_id.image} alt="person Image" />
+        <Image as="img" src={user_id?.image} alt="person Image" />
       </ImageBox>
       <Box ml={5} width={"100%"}>
         <FlexBetween>
           <Paragraph fontSize={2} semiBold>
-            {user_id.username}
+            {user_id?.username}
           </Paragraph>
           <Paragraph>{moment(time).fromNow()}</Paragraph>
         </FlexBetween>
