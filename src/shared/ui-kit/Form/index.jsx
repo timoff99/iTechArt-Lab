@@ -70,7 +70,7 @@ export const Form = ({
         Cookies.set("token", signinData.data.token);
         const user = await UserService.getUser();
         setUser(user.data.user);
-        successNotify("user signup");
+        successNotify("User signup.");
         setTimeout(() => {
           navigation(ROUTE_NAMES.PROFILETABCOOKBOOKS, { replace: true });
         }, 1000);
@@ -92,7 +92,7 @@ export const Form = ({
         throw user;
       }
       setUser(user.data.user);
-      successNotify("user login");
+      successNotify("User login.");
       setTimeout(() => {
         navigation(ROUTE_NAMES.PROFILETABCOOKBOOKS, { replace: true });
       }, 1000);

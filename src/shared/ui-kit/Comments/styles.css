@@ -1,0 +1,8 @@
+.tippy-box[data-theme~="error"] {
+  background-color: #dc143c;
+  color: white;
+}
+
+.tippy-box[data-theme~="error"][data-placement^="top"] > .tippy-arrow::before {
+  border-top-color: #dc143c;
+}

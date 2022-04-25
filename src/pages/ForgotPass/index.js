@@ -50,7 +50,7 @@ export const ForgotPass = () => {
     try {
       const email = values.email;
       const a = await MailService.forgotPassword(email);
-      successNotify(`message send to ${email}`);
+      successNotify(`Message send to ${email}.`);
     } catch (error) {
       errorNotify(error);
     }

@@ -80,7 +80,7 @@ export const Recipes = ({
     } else {
       addRecipeClone(_id);
     }
-    successNotify("recipe copied to your recipes collection");
+    successNotify("Recipe copied to your recipes collection.");
   };
   return (
     <Box>

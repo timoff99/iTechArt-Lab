@@ -76,7 +76,7 @@ export const SettingsTab = () => {
       setPersonName(false);
       setPersonEmail(false);
       setPersonStatus(false);
-      successNotify(`user ${inputName} updated`);
+      successNotify(`User ${inputName} updated.`);
     } catch (e) {
       return errorNotify(e?.response?.data);
     }
@@ -89,7 +89,7 @@ export const SettingsTab = () => {
       if (data?.response?.data) throw data;
       setUser(data.data.updateUser);
       setPersonPassword(false);
-      successNotify("user password updated");
+      successNotify("User password updated.");
     } catch (err) {
       return errorNotify(err?.response?.data);
     }

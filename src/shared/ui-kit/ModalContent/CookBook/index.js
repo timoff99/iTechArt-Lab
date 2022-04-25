@@ -74,7 +74,7 @@ export const CookBook = ({
 
   const onClone = async () => {
     addCookBookClone(_id);
-    successNotify("cookbook copied to your cookbooks collection");
+    successNotify("Cookbook copied to your cookbooks collection.");
   };
 
   const checkRecipe = () => {

@@ -47,7 +47,7 @@ export const VerticalRecipesCard = ({
   const onClone = (event) => {
     event.stopPropagation();
     addCookBookClone(_id);
-    successNotify("cookbook copied to your cookbooks collection");
+    successNotify("Cookbook copied to your cookbooks collection.");
     setOptionMenu(false);
   };
 

@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import Tippy, { useSingleton } from "@tippyjs/react/headless";
+import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
+import "./styles.css";
 
 import { Flex } from "../../helpers/Flex";
 import { Heading, Paragraph } from "../../helpers/Text";
@@ -30,7 +31,6 @@ export const Comments = ({
 }) => {
   const [typing, setTyping] = useState("");
   const { user } = useContext(UserContext);
-  const [source, target] = useSingleton();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -72,22 +72,41 @@ export const Comments = ({
     }, 3000);
   });
   const reverseComments = comments?.slice()?.reverse();
-  return (
-    <>
-      <Heading as={"h3"} semiBold mb={8}>
-        Comments ({comments?.length})
-      </Heading>
-      {user.user_status === "blocked" && (
+
+  const tooltipForm = () => {
+    if (user.user_status === "blocked") {
+      return (
         <Tippy
-          singleton={source}
-          render={(attrs) => (
-            <Paragraph {...attrs} style={{ color: "white", background: "#DC143C" }} p={2} borderRadius="8px">
+          offset={[0, 20]}
+          theme="error"
+          content={
+            <Paragraph p={2} borderRadius="8px">
               User blocked, contact the admin
             </Paragraph>
-          )}
-        />
-      )}
-      <Tippy singleton={target}>
+          }
+        >
+          <form onSubmit={(e) => handleSubmit(e)}>
+            <Flex>
+              <Input
+                type="text"
+                name="comments"
+                placeholder="Express yourself..."
+                variantInput="commentsInput"
+                variantLabel="commentsLabel"
+                labelSize="sm"
+                onKeyDown={onTyping}
+                disabled
+              />
+
+              <Button size="sm" ml={5} disabled>
+                <StyledSend />
+              </Button>
+            </Flex>
+          </form>
+        </Tippy>
+      );
+    } else {
+      return (
         <form onSubmit={(e) => handleSubmit(e)}>
           <Flex>
             <Input
@@ -98,15 +117,23 @@ export const Comments = ({
               variantLabel="commentsLabel"
               labelSize="sm"
               onKeyDown={onTyping}
-              disabled={user.user_status === "blocked"}
             />
 
-            <Button size="sm" ml={5} disabled={user.user_status === "blocked"}>
+            <Button size="sm" ml={5}>
               <StyledSend />
             </Button>
           </Flex>
         </form>
-      </Tippy>
+      );
+    }
+  };
+
+  return (
+    <>
+      <Heading as={"h3"} semiBold mb={8}>
+        Comments ({comments?.length})
+      </Heading>
+      {tooltipForm()}
       <Paragraph>{typing}</Paragraph>
       <Box>
         {comments?.length ? (
