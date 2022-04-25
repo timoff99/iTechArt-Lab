@@ -80,7 +80,7 @@ export const Card = ({
   const onClone = (event) => {
     event.stopPropagation();
     addCookBookClone(_id);
-    successNotify("cookbook copied to your cookbooks collection");
+    successNotify("Cookbook copied to your cookbooks collection.");
 
     setOptionMenu(false);
   };
@@ -143,11 +143,13 @@ export const Card = ({
           <ImgBox image={image} />
         </FlexCenter>
 
-        <FlexBetween pt={5} alignItems="center">
-          <Heading as={"h3"} semiBold overflow="hidden" height="20px">
+        <FlexBetween pt={5} flexDirection="column" alignItems="flex-start">
+          <Heading as={"h3"} semiBold noWrap width="100%" overflow="hidden" height="20px">
             {title}
           </Heading>
-          <Paragraph>{author}</Paragraph>
+          <Paragraph noWrap mt={1} overflow="hidden" color="background.dialog">
+            {author}
+          </Paragraph>
         </FlexBetween>
 
         {description && (

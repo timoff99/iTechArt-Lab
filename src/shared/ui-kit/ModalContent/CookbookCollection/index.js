@@ -9,19 +9,36 @@ import { CookBook } from "../CookBook";
 import { Loader } from "../../Loader";
 import { colors } from "../../../../theme";
 
-import { useLazyGetCookBookQuery } from "../../../../services/cookbook.service";
+import {
+  useLazyGetCookBookQuery,
+  useLazyGetCookBookWithoutViewsPlusOneQuery,
+} from "../../../../services/cookbook.service";
 
-export const CookbookCollection = ({ collection_arr, title }) => {
+export const CookbookCollection = ({ collection_arr, title, refreshCookbooks, currentCollection }) => {
   const [showModal, setShowModal] = useState(false);
-  const [action, { data: cookbook }] = useLazyGetCookBookQuery();
+  const [action, { data: cookBook }] = useLazyGetCookBookQuery();
+  const [actionGetCookBookWithoutViewsPlusOneQuery, { data: cookBookWithoutViewsPlusOneQuery }] =
+    useLazyGetCookBookWithoutViewsPlusOneQuery();
+
   const withoutTag = true;
   const toggleModal = () => {
     setShowModal((prev) => !prev);
   };
+  const getCookBookWithoutViewsPlusOneQuery = async (_id) => {
+    await actionGetCookBookWithoutViewsPlusOneQuery({ _id });
+  };
 
-  const openCookbook = (_id) => {
-    action({ _id }, true);
+  const openCookbook = async (_id) => {
+    await action({ _id }, true);
     toggleModal();
+  };
+
+  const checkCookbook = () => {
+    if (cookBookWithoutViewsPlusOneQuery?._id === cookBook?._id) {
+      return cookBookWithoutViewsPlusOneQuery;
+    } else {
+      return cookBook;
+    }
   };
 
   return (
@@ -55,7 +72,13 @@ export const CookbookCollection = ({ collection_arr, title }) => {
       )}
       {showModal && (
         <Modal showModal={showModal} setShowModal={toggleModal}>
-          <CookBook {...cookbook} withoutTag={withoutTag} />
+          <CookBook
+            {...checkCookbook()}
+            withoutTag={withoutTag}
+            refreshCookbooks={refreshCookbooks}
+            getCookBookWithoutViewsPlusOneQuery={getCookBookWithoutViewsPlusOneQuery}
+            currentCollection={currentCollection}
+          />
         </Modal>
       )}
     </Box>

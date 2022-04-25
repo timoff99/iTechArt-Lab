@@ -47,7 +47,10 @@ const signupSchema = yup.object().shape({
     .trim()
     .required("Please enter your password")
     .matches(/^.*(?=.{5,})(?=.*[!@#$%^&*()\-_=+{};:,<.>])(?=.*\d)(?=.*[a-z,A-Z])/, "Incorrect, read down below"),
-  confirmPassword: yup.string().oneOf([yup.ref("password"), null], "Passwords must match"),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password"), null], "Passwords must match")
+    .required(),
 });
 
 export const SignUp = () => {

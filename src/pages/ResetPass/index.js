@@ -60,7 +60,7 @@ export const ResetPass = () => {
         navigation(`${ROUTE_NAMES.LOGIN}`, { replace: true });
       }, 1000);
 
-      successNotify("new password created");
+      successNotify("New password created.");
     } catch (error) {
       errorNotify(error);
     }

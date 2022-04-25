@@ -25,7 +25,11 @@ import { ROUTE_NAMES } from "../../router/routeNames";
 import pear from "../../static/icons/pear.svg";
 import homeBg from "../../static/images/homeBg.png";
 
-import { useLazyGetRecipesForMainQuery, useLazyGetRecipeQuery } from "../../services/recipe.service";
+import {
+  useLazyGetRecipesForMainQuery,
+  useLazyGetRecipeQuery,
+  useLazyGetRecipeWithoutViewsPlusOneQuery,
+} from "../../services/recipe.service";
 import {
   useGetFourCookbookCollectionQuery,
   useLazyGetOneCookbookCollectionQuery,
@@ -58,11 +62,14 @@ const SwiperBox = styled(Box)`
 export const Home = () => {
   const [showRecipeModal, setShowRecipeModal] = useState(false);
   const [showCookBookModal, setShowCookBookModal] = useState(false);
+  const [currentCollection, setCurrentCollection] = useState("");
 
   const [likesRecipesAction, { data: likesRecipes }] = useLazyGetRecipesForMainQuery();
   const [viewsRecipesAction, { data: viewsRecipes }] = useLazyGetRecipesForMainQuery();
   const { data: fourCookbookCollection } = useGetFourCookbookCollectionQuery();
   const [action, { data: recipe }] = useLazyGetRecipeQuery();
+  const [actionGetRecipeWithoutViewsPlusOneQuery, { data: recipeWithoutViewsPlusOneQuery }] =
+    useLazyGetRecipeWithoutViewsPlusOneQuery();
   const [cookbookCollectionAction, { data: oneCookbookCollection }] = useLazyGetOneCookbookCollectionQuery();
   const navigation = useNavigate();
 
@@ -79,18 +86,34 @@ export const Home = () => {
     setShowCookBookModal((prev) => !prev);
   };
 
+  const getRecipeWithoutViewsPlusOneQuery = async (_id) => {
+    await actionGetRecipeWithoutViewsPlusOneQuery({ _id });
+  };
+
+  const refreshCookbooks = async (_id, caching) => {
+    await cookbookCollectionAction({ id: _id }, caching);
+  };
   useEffect(() => {
     likesRecipesAction({ limit: 4, type: "likes" });
     viewsRecipesAction({ limit: 9, type: "views" });
-  }, [recipe]);
+  }, [recipe, recipeWithoutViewsPlusOneQuery]);
 
-  const openRecipe = (_id) => {
-    action({ _id }, true);
+  const openRecipe = async (_id) => {
+    await action({ _id }, true);
     toggleRecipeModal();
   };
-  const openCookBook = (_id) => {
-    cookbookCollectionAction({ id: _id }, true);
+  const openCookBook = async (_id) => {
+    setCurrentCollection(_id);
+    await refreshCookbooks(_id, true);
     toggleCookBookModal();
+  };
+
+  const checkRecipe = () => {
+    if (recipeWithoutViewsPlusOneQuery?._id === recipe?._id) {
+      return recipeWithoutViewsPlusOneQuery;
+    } else {
+      return recipe;
+    }
   };
 
   return (
@@ -213,12 +236,16 @@ export const Home = () => {
       </SwiperBox>
       {showRecipeModal && (
         <Modal showModal={showRecipeModal} setShowModal={setShowRecipeModal}>
-          <Recipes {...recipe} />
+          <Recipes {...checkRecipe()} getRecipeWithoutViewsPlusOneQuery={getRecipeWithoutViewsPlusOneQuery} />
         </Modal>
       )}
       {showCookBookModal && (
         <Modal showModal={showCookBookModal} setShowModal={setShowCookBookModal}>
-          <CookbookCollection {...oneCookbookCollection} />
+          <CookbookCollection
+            {...oneCookbookCollection}
+            refreshCookbooks={refreshCookbooks}
+            currentCollection={currentCollection}
+          />
         </Modal>
       )}
     </>

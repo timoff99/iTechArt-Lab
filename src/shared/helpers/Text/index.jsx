@@ -21,6 +21,7 @@ export const Text = styled("span")`
   ${(props) => (props.noWrap ? "white-space: nowrap" : "")};
   ${(props) => (props.capitalize ? "text-transform: capitalize;" : "")};
   ${(props) => (props.inline ? "display: inline-block;" : "display: block")};
+  text-overflow: ellipsis;
 `;
 
 export const Heading = ({ children, as, ...props }) => {

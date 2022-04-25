@@ -30,6 +30,7 @@ const UserImage = styled(Box)`
   width: 100%;
   height: 100%;
   object-fit: cover;
+  cursor: pointer;
 `;
 
 const FileUploader = styled(Box)`
@@ -82,7 +83,7 @@ export const Profile = () => {
       const updatedFiled = { image: image.data.secure_url, cloudinary_id: image.data.public_id };
       const { data } = await UserService.updateUser(updatedFiled);
       setUser(data.updateUser);
-      successNotify("image upload successfully");
+      successNotify("Image upload successfully.");
     } catch (err) {
       throw err;
     } finally {

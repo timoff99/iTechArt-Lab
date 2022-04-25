@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 
-import { useLazyGetCookBookQuery, useLazyGetUserCookBooksQuery } from "../../services/cookbook.service";
+import {
+  useLazyGetCookBookQuery,
+  useLazyGetCookBookWithoutViewsPlusOneQuery,
+  useLazyGetUserCookBooksQuery,
+} from "../../services/cookbook.service";
 
 import { Box } from "../../shared/helpers/Box";
 import { Grid } from "../../shared/helpers/Grid";
@@ -21,21 +25,40 @@ export const CookBookTab = ({ query }) => {
   const [userCookBooksAction, { data }] = useLazyGetUserCookBooksQuery();
   const [cookBookAction, { data: cookBook }] = useLazyGetCookBookQuery();
 
-  useEffect(() => {
+  const [actionGetCookBookWithoutViewsPlusOneQuery, { data: cookBookWithoutViewsPlusOneQuery }] =
+    useLazyGetCookBookWithoutViewsPlusOneQuery();
+
+  const getCookBookWithoutViewsPlusOneQuery = async (_id) => {
+    await actionGetCookBookWithoutViewsPlusOneQuery({ _id });
+  };
+
+  const refreshCookbooks = () => {
     userCookBooksAction({ page: currentPage, search });
+  };
+
+  useEffect(() => {
+    refreshCookbooks();
   }, [currentPage, search, cookBook]);
 
   const toggleModal = () => {
     setShowModal((prev) => !prev);
   };
 
-  const openCookBook = (_id) => {
-    cookBookAction({ _id }, true);
+  const openCookBook = async (_id) => {
+    await cookBookAction({ _id }, true);
     toggleModal();
   };
 
   const handlePageClick = (data) => {
     setCurrentPage(data.selected);
+  };
+
+  const checkCookbook = () => {
+    if (cookBookWithoutViewsPlusOneQuery?._id === cookBook?._id) {
+      return cookBookWithoutViewsPlusOneQuery;
+    } else {
+      return cookBook;
+    }
   };
   return (
     <Box display="flex" flexDirection="column">
@@ -67,7 +90,12 @@ export const CookBookTab = ({ query }) => {
 
       {showModal && (
         <Modal showModal={showModal} setShowModal={toggleModal}>
-          <CookBook {...cookBook} cookbookProfile={"cookbookProfile"} />
+          <CookBook
+            {...checkCookbook()}
+            cookbookProfile={"cookbookProfile"}
+            refreshCookbooks={refreshCookbooks}
+            getCookBookWithoutViewsPlusOneQuery={getCookBookWithoutViewsPlusOneQuery}
+          />
         </Modal>
       )}
     </Box>

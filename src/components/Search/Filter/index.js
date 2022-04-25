@@ -5,7 +5,7 @@ import { FlexBetween, FlexColumn } from "../../../shared/helpers/Flex";
 import { Slider } from "../../../shared/ui-kit/Slider";
 import { Label, Title, Wrapper, Checkbox, Clear } from "./styles";
 import { Box } from "../../../shared/helpers/Box";
-import { CheckboxData } from "./mockData";
+import { CheckboxData, CheckboxDataRecipe } from "./mockData";
 import { Select } from "../../../shared/ui-kit/Select";
 import { useUrl } from "../../../hooks/useUrl";
 
@@ -88,6 +88,33 @@ export const Filter = ({ label, options, value, onChange, timeRange, setTimeRang
           <Box mb={9}>
             <Slider timeRange={timeRange} setTimeRange={setTimeRange} onChange={handleCookingTime} />
           </Box>
+          <Heading as={"h3"} semiBold mb={5}>
+            Recipe type
+          </Heading>
+
+          {CheckboxDataRecipe.map(({ value, children }, index) => {
+            const isChecked = (() => {
+              return query.type ? query.type.includes(value) : false;
+            })();
+
+            return (
+              <Box key={index}>
+                <FlexColumn>
+                  <Label as="label">
+                    <Checkbox
+                      as="input"
+                      onChange={(e) => handleTypeChange(e)}
+                      type="checkbox"
+                      name="fruit"
+                      value={value}
+                      checked={isChecked}
+                    />
+                    {children}
+                  </Label>
+                </FlexColumn>
+              </Box>
+            );
+          })}
         </>
       )}
     </Wrapper>

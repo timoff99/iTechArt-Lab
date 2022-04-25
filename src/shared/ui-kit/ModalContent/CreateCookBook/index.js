@@ -8,9 +8,11 @@ import {
   useDeleteRecipesCookBookIdMutation,
   useGetRecipeWithoutCookBookQuery,
   useLazyGetRecipeQuery,
+  useLazyGetRecipeWithoutViewsPlusOneQuery,
 } from "../../../../services/recipe.service";
 import { useAddCookBookMutation, useUpdateCookBookMutation } from "../../../../services/cookbook.service";
 import ImageService from "../../../../services/image.service";
+import UserService from "../../../../services/user.service";
 
 import { Box } from "../../../helpers/Box";
 import { Heading } from "../../../helpers/Text";
@@ -24,7 +26,6 @@ import { MultiSelect } from "../../MultiSelect";
 import { createCookBookData, CheckboxData } from "./mockData";
 import { Modal } from "../../Modal";
 import { Recipes } from "../Recipes";
-import UserService from "../../../../services/user.service";
 
 const FileUploader = styled(Box)`
   display: none;
@@ -51,10 +52,16 @@ export const CreateCookBook = memo(
     const [deleteRecipesCookBookId] = useDeleteRecipesCookBookIdMutation();
     const { data: recipeWithCookbook } = useGetRecipeWithoutCookBookQuery();
     const [action, { data: recipe }] = useLazyGetRecipeQuery();
+    const [actionGetRecipeWithoutViewsPlusOneQuery, { data: recipeWithoutViewsPlusOneQuery }] =
+      useLazyGetRecipeWithoutViewsPlusOneQuery();
 
     const openRecipe = (_id) => {
       action({ _id }, true);
       recipeToggleModal();
+    };
+
+    const getRecipeWithoutViewsPlusOneQuery = async (_id) => {
+      await actionGetRecipeWithoutViewsPlusOneQuery({ _id });
     };
 
     const recipeToggleModal = () => {
@@ -164,6 +171,14 @@ export const CreateCookBook = memo(
           return el.value === e.target.value ? { ...el, checked: !el.checked } : el;
         })
       );
+    };
+
+    const checkRecipe = () => {
+      if (recipeWithoutViewsPlusOneQuery?._id === recipe?._id) {
+        return recipeWithoutViewsPlusOneQuery;
+      } else {
+        return recipe;
+      }
     };
 
     return (
@@ -293,7 +308,7 @@ export const CreateCookBook = memo(
         </Formik>
         {recipeShowModal && (
           <Modal showModal={recipeShowModal} setShowModal={recipeToggleModal}>
-            <Recipes {...recipe} />
+            <Recipes {...checkRecipe()} getRecipeWithoutViewsPlusOneQuery={getRecipeWithoutViewsPlusOneQuery} />
           </Modal>
         )}
       </>

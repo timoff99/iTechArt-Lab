@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 
-import { useLazyGetFilteredRecipesQuery, useLazyGetRecipeQuery } from "../services/recipe.service";
+import {
+  useLazyGetFilteredRecipesQuery,
+  useLazyGetRecipeQuery,
+  useLazyGetRecipeWithoutViewsPlusOneQuery,
+} from "../services/recipe.service";
 
 import { RecipesCard } from "../shared/ui-kit/RecipesCard";
 import { Modal } from "../shared/ui-kit/Modal";
@@ -19,25 +23,44 @@ export const SearchRecipeCard = ({ query, timeRange }) => {
 
   const [filteredRecipesAction, { data }] = useLazyGetFilteredRecipesQuery();
   const [action, { data: recipe }] = useLazyGetRecipeQuery();
+  const [actionGetRecipeWithoutViewsPlusOneQuery, { data: recipeWithoutViewsPlusOneQuery }] =
+    useLazyGetRecipeWithoutViewsPlusOneQuery();
 
+  const type = query.type || "";
   const sort = query.sort || "";
   const search = query.search || "";
 
+  const refreshRecipes = () => {
+    filteredRecipesAction({ type, timeRange, sort, search, page: currentPage });
+  };
+
+  const getRecipeWithoutViewsPlusOneQuery = async (_id) => {
+    await actionGetRecipeWithoutViewsPlusOneQuery({ _id });
+  };
+
   useEffect(() => {
-    filteredRecipesAction({ timeRange, sort, search, page: currentPage });
-  }, [timeRange, sort, search, currentPage, recipe]);
+    refreshRecipes();
+  }, [type, timeRange, sort, search, currentPage, recipe]);
 
   const toggleModal = () => {
     setShowModal((prev) => !prev);
   };
 
-  const openRecipe = (_id) => {
-    action({ _id }, true);
+  const openRecipe = async (_id) => {
+    await action({ _id }, true);
     toggleModal();
   };
 
   const handlePageClick = (data) => {
     setCurrentPage(data.selected);
+  };
+
+  const checkRecipe = () => {
+    if (recipeWithoutViewsPlusOneQuery?._id === recipe?._id) {
+      return recipeWithoutViewsPlusOneQuery;
+    } else {
+      return recipe;
+    }
   };
 
   return (
@@ -61,7 +84,11 @@ export const SearchRecipeCard = ({ query, timeRange }) => {
       {data?.totalPages > 1 && <Pagination totalPages={data?.totalPages} handlePageClick={handlePageClick} />}
       {showModal && (
         <Modal showModal={showModal} setShowModal={toggleModal}>
-          <Recipes {...recipe} />
+          <Recipes
+            {...checkRecipe()}
+            refreshRecipes={refreshRecipes}
+            getRecipeWithoutViewsPlusOneQuery={getRecipeWithoutViewsPlusOneQuery}
+          />
         </Modal>
       )}
     </Box>

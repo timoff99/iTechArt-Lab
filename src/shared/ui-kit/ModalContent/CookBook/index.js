@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { toast } from "react-toastify";
 
@@ -13,10 +13,8 @@ import { Comments } from "../../Comments";
 import { Recipes } from "../Recipes";
 import { Modal } from "../../Modal";
 
-import { useLazyGetRecipeQuery } from "../../../../services/recipe.service";
-import { useCreateCookBookCommentsMutation } from "../../../../services/comments.service";
-import { useAddCookBookCloneMutation, useUpdateCookBookCommentsMutation } from "../../../../services/cookbook.service";
-import { Col } from "../../../helpers/Grid/Col";
+import { useLazyGetRecipeQuery, useLazyGetRecipeWithoutViewsPlusOneQuery } from "../../../../services/recipe.service";
+import { useAddCookBookCloneMutation } from "../../../../services/cookbook.service";
 import { Loader } from "../../Loader";
 import { colors } from "../../../../theme";
 import { UserContext } from "../../UserProvider";
@@ -40,16 +38,29 @@ export const CookBook = ({
   image,
   withoutTag,
   cookbookProfile,
+  refreshCookbooks,
+  currentCollection,
+  getCookBookWithoutViewsPlusOneQuery,
 }) => {
   const [showModal, setShowModal] = useState(false);
-  const [createCookBookComments] = useCreateCookBookCommentsMutation();
-  const [updateCookBookComments] = useUpdateCookBookCommentsMutation();
+  const [currentComments, setCurrentComments] = useState(comments || []);
   const [action, { data: recipe }] = useLazyGetRecipeQuery();
+  const [actionGetRecipeWithoutViewsPlusOneQuery, { data: recipeWithoutViewsPlusOneQuery }] =
+    useLazyGetRecipeWithoutViewsPlusOneQuery();
   const [addCookBookClone] = useAddCookBookCloneMutation();
   const { user } = useContext(UserContext);
+  const scrollRef = useRef();
+
+  useEffect(() => {
+    scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
+  }, [currentComments]);
 
   const toggleModal = () => {
     setShowModal((prev) => !prev);
+  };
+
+  const getRecipeWithoutViewsPlusOneQuery = async (_id) => {
+    await actionGetRecipeWithoutViewsPlusOneQuery({ _id });
   };
 
   const openRecipe = (_id) => {
@@ -63,7 +74,15 @@ export const CookBook = ({
 
   const onClone = async () => {
     addCookBookClone(_id);
-    successNotify("cookbook copied to your cookbooks collection");
+    successNotify("Cookbook copied to your cookbooks collection.");
+  };
+
+  const checkRecipe = () => {
+    if (recipeWithoutViewsPlusOneQuery?._id === recipe?._id) {
+      return recipeWithoutViewsPlusOneQuery;
+    } else {
+      return recipe;
+    }
   };
 
   return (
@@ -108,7 +127,7 @@ export const CookBook = ({
             </FlexAlignCenter>
             <FlexAlignCenter>
               <Comment />
-              <Paragraph ml={2}>{comments?.length || 0} comments</Paragraph>
+              <Paragraph ml={2}>{currentComments?.length || 0} comments</Paragraph>
             </FlexAlignCenter>
           </FlexAlignCenter>
         </Box>
@@ -141,17 +160,29 @@ export const CookBook = ({
           </FlexColumn>
         </>
       )}
-      <FlexColumn mb={10}>
-        <Comments
-          id={_id}
-          createComments={createCookBookComments}
-          comments={comments}
-          updateComments={updateCookBookComments}
-        />
+      <FlexColumn mb={10} ref={scrollRef}>
+        {_id && (
+          <Comments
+            id={_id}
+            comments={currentComments}
+            setCurrentComments={setCurrentComments}
+            refreshData={refreshCookbooks}
+            currentCollection={currentCollection}
+            getDataWithoutViewsPlusOneQuery={getCookBookWithoutViewsPlusOneQuery}
+            flag="cookbook"
+          />
+        )}
       </FlexColumn>
       {showModal && (
         <Modal showModal={showModal} setShowModal={toggleModal}>
-          {<Recipes {...recipe} withoutTag={withoutTag} cookbookProfile={cookbookProfile} />}
+          {
+            <Recipes
+              {...checkRecipe()}
+              withoutTag={withoutTag}
+              cookbookProfile={cookbookProfile}
+              getRecipeWithoutViewsPlusOneQuery={getRecipeWithoutViewsPlusOneQuery}
+            />
+          }
         </Modal>
       )}
     </Box>

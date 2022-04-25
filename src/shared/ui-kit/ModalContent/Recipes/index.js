@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { toast } from "react-toastify";
 
@@ -13,11 +13,7 @@ import { Comments } from "../../Comments";
 import theme, { colors, mediaQueries } from "../../../../theme";
 import { Loader } from "../../Loader";
 
-import { useCreateRecipeCommentsMutation } from "../../../../services/comments.service";
-import {
-  useAddRecipeCloneWithoutTagMutation,
-  useUpdateRecipeCommentsMutation,
-} from "../../../../services/recipe.service";
+import { useAddRecipeCloneWithoutTagMutation } from "../../../../services/recipe.service";
 import { useAddRecipeCloneMutation } from "../../../../services/recipe.service";
 import { UserContext } from "../../UserProvider";
 
@@ -29,9 +25,11 @@ const Image = styled(Box)`
   }
   ${mediaQueries.medium} {
     min-width: 340px;
+    max-width: 440px;
   }
   ${mediaQueries.large} {
     min-width: 440px;
+    max-width: 500px;
   }
   border-radius: 10px;
   object-fit: cover;
@@ -59,12 +57,18 @@ export const Recipes = ({
   withoutTag,
   recipeProfile,
   cookbookProfile,
+  refreshRecipes,
+  getRecipeWithoutViewsPlusOneQuery,
 }) => {
-  const [createRecipeComments] = useCreateRecipeCommentsMutation();
-  const [updateRecipeComments] = useUpdateRecipeCommentsMutation();
+  const [currentComments, setCurrentComments] = useState(comments || []);
   const [addRecipeClone] = useAddRecipeCloneMutation();
   const [addRecipeCloneWithoutTag] = useAddRecipeCloneWithoutTagMutation();
   const { user } = useContext(UserContext);
+  const scrollRef = useRef();
+
+  useEffect(() => {
+    scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
+  }, [currentComments]);
 
   const successNotify = (msg) => {
     return toast.success(msg);
@@ -76,7 +80,7 @@ export const Recipes = ({
     } else {
       addRecipeClone(_id);
     }
-    successNotify("recipe copied to your recipes collection");
+    successNotify("Recipe copied to your recipes collection.");
   };
   return (
     <Box>
@@ -158,19 +162,23 @@ export const Recipes = ({
             </FlexAlignCenter>
             <FlexAlignCenter>
               <Comment />
-              <Paragraph ml={2}>{comments?.length || 0} comments</Paragraph>
+              <Paragraph ml={2}>{currentComments?.length || 0} comments</Paragraph>
             </FlexAlignCenter>
           </FlexAlignCenter>
         </FlexColumn>
       </Flex>
       <Box px={[3, 11, 11]} pt={72}>
-        <FlexColumn mb={10}>
-          <Comments
-            id={_id}
-            createComments={createRecipeComments}
-            comments={comments}
-            updateComments={updateRecipeComments}
-          />
+        <FlexColumn mb={10} ref={scrollRef}>
+          {_id && (
+            <Comments
+              id={_id}
+              comments={currentComments}
+              setCurrentComments={setCurrentComments}
+              refreshData={refreshRecipes}
+              getDataWithoutViewsPlusOneQuery={getRecipeWithoutViewsPlusOneQuery}
+              flag="recipe"
+            />
+          )}
         </FlexColumn>
       </Box>
     </Box>

@@ -23,6 +23,15 @@ const StyledButton = styled(Box)`
   transition: all 0.2s ease;
   text-decoration: none !important;
   position: relative;
+  ${(props) =>
+    props.loading &&
+    `span {
+  color: transparent;
+  cursor: default;
+  position:relative;
+    }
+`}
+
   :active {
     span {
       transform: translateY(1px);
@@ -67,9 +76,20 @@ const StyledButton = styled(Box)`
   }}
 `;
 
-export const Button = memo(({ children, ...props }) => {
-  return <StyledButton {...props}>{props.loading ? <Loader /> : <span>{children}</span>}</StyledButton>;
-});
+export const Button = memo(({ children, ...props }) => (
+  <StyledButton {...props}>
+    {
+      <>
+        {props.loading ? (
+          <Box position="absolute" top="26%" left="42%">
+            <Loader />
+          </Box>
+        ) : null}
+        <span>{children}</span>
+      </>
+    }
+  </StyledButton>
+));
 
 Button.defaultProps = {
   as: "button",

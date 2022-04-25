@@ -66,6 +66,15 @@ const InputStyle = styled(Box)`
       variants: variants(),
     });
   }}
+  ${mediaQueries.small} {
+    ${(props) => {
+      if (props.inputSize === "lg") {
+        return `
+      background: url(${bigSearch}) ${theme.colors.background.main} no-repeat 2%;
+      padding: ${theme.space[5]} 104px ${theme.space[5]} ${theme.space[11]};`;
+      }
+    }}
+  }
 
   ${(props) => {
     switch (props.inputSize) {
